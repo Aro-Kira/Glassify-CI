@@ -1,0 +1,162 @@
+<link rel="stylesheet" href="<?php echo base_url('assets/css/general-customer/pages/projects_style.css'); ?>">
+
+
+
+<!-- Projects Intro -->
+<section class="projects-intro">
+    <h1>Our Projects</h1>
+    <p class="tagline">Innovating Spaces, Building Dreams.</p>
+    <p class="description">
+        Explore a selection of our completed glass and aluminum fabrication projects across Caloocan City and
+        beyond.
+    </p>
+</section>
+<style>
+    /* Featured Projects Section */
+    .featured-projects {
+        background: #083c5d;
+        color: white;
+        padding: 5rem 1rem;
+        text-align: center;
+        max-width: 1400px;
+        height: 14 00px;
+        margin: 0 auto 1rem auto;
+        -webkit-mask-image: url('<?php echo base_url('assets/images/img-page/jagged\ rectangle.svg'); ?>');
+        mask-image: url('<?php echo base_url('assets/images/img-page/jagged\ rectangle.svg'); ?>');
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: 100% auto;
+        mask-size: 100% auto;
+
+    }
+</style>
+
+<!-- Featured Projects -->
+<section class="featured-projects">
+    <h2>Featured Projects</h2>
+    <div class="projects-wrapper">
+        <!-- Left Column -->
+        <div class="projects-left">
+            <div class="project-card">
+                <img src="<?php echo base_url('assets/images/img-page/Gab.svg'); ?>" alt="GAB Chairman’s Office">
+            </div>
+            <h3>SM Caloocan City</h3>
+            <p class="date">May 16, 2024</p>
+            <div class="project-card">
+                <img src="<?php echo base_url('assets/images/img-page/Residential.svg'); ?>" alt="Residential Project">
+            </div>
+
+        </div>
+
+        <!-- Divider Line -->
+        <div class="divider"></div>
+
+        <!-- Right Column -->
+        <div class="projects-right">
+            <h3>GAB - Chairman’s Office</h3>
+            <p class="date">September 06, 2024</p>
+            <div class="project-card">
+                <img src="<?php echo base_url('assets/images/img-page/sm-caloocan.svg'); ?>" alt="SM Caloocan City">
+            </div>
+            <h3>Residential Project</h3>
+            <p class="date">October 19, 2024</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- Before & After -->
+<section class="before-after">
+    <div class="before">
+        <div class="border-box">
+            <img src="<?php echo base_url('assets/images/img-page/mdi_pen.svg'); ?>" alt="topLeft-Dec"
+                class="top-left-decor">
+            <img src="<?php echo base_url('assets/images/img-page/before.svg'); ?>" alt="Before Design"
+                class="img-panel">
+            <img src="<?php echo base_url('assets/images/img-page/scroll.svg'); ?>" alt="topLeft-Dec"
+                class="bottom-left-decor">
+        </div>
+        <p>Before</p>
+    </div>
+
+    <div class="after">
+        <div class="border-box">
+            <img src="<?php echo base_url('assets/images/img-page/fling-top.svg'); ?>" alt="topLeft-Dec"
+                class="top-right-decor">
+            <img src="<?php echo base_url('assets/images/img-page/after.svg'); ?>" alt="After Outcome" class="img-panel">
+            <img src="<?php echo base_url('assets/images/img-page/fling-bottom.svg'); ?>" alt="topLeft-Dec"
+                class="bottom-right-decor">
+        </div>
+        <p>After</p>
+    </div>
+</section>
+
+
+<!-- Contact -->
+<section class="contact-section">
+    <div class="contact-content">
+        <!-- Left Side: Info -->
+        <div class="contact-info">
+            <h2>Contact Us!</h2>
+            <p>
+                We're eager to discuss your next glass or aluminum project.
+                Our team is ready to assist you!
+            </p>
+
+            <div class="info-item">
+                <span class="icon"><img src="<?php echo base_url('assets/images/img-page/gg_phone.svg'); ?>"
+                        alt="phone_icon"></span>
+                <div>
+                    <p>0906 464 9709 / 0927 519 3800 <br> 0976 165 3506</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <span class="icon"><img src="<?php echo base_url('assets/images/img-page/ic_outline-facebook.svg'); ?>"
+                        alt="fb-icon"></span>
+                <a href="#">GlassWorth Builders</a>
+            </div>
+
+            <div class="info-item">
+                <span class="icon"><img src="<?php echo base_url('assets/images/img-page/weui_email-filled.svg'); ?>"
+                        alt="email-icon"></span>
+                <p>glassworthbuilders@gmail.com</p>
+            </div>
+        </div>
+
+        <!-- Right Side: Form -->
+        <form class="contact-form">
+            <div class="form-group half">
+                <label for="first-name">First Name</label>
+                <input type="text" id="first-name" name="first-name">
+            </div>
+
+            <div class="form-group half">
+                <label for="last-name">Last Name</label>
+                <input type="text" id="last-name" name="last-name">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" name="phone">
+            </div>
+
+            <div class="form-group">
+                <label for="needs">Briefly describe your needs</label>
+                <input type="text" id="needs" name="needs">
+            </div>
+
+            <div class="form-group">
+                <textarea id="message" name="message" placeholder="Message"></textarea>
+            </div>
+
+            <button type="submit">Get My Quote</button>
+        </form>
+
+    </div>
+</section>

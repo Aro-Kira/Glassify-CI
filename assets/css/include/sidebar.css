@@ -1,0 +1,222 @@
+/* Overall admin page layout */
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f4f6f9;
+}
+    
+/* Push main content beside the sidebar */
+.main-content {
+    flex: 1;
+    margin-left: 220px;
+    /* must match sidebar width */
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+/* When sidebar is collapsed */
+
+
+
+/* === Menu Notch (Toggle Button) === */
+.menu-notch {
+  position: absolute;
+  right: -50px; /* sits outside the sidebar */
+  width: 50px;
+  height: 50px;
+  background-color: #FDC103; /* yellow */
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 101;
+  transition: right 0.3s ease;
+}
+
+/* Icon inside the notch */
+.menu-notch i {
+  font-size: 22px;
+  color: #01374C; /* dark teal to match sidebar */
+}
+
+/* Move notch closer when sidebar collapses */
+.sidebar.collapsed .menu-notch {
+  right: -50px;
+}
+
+/* Optional hover glow effect */
+.menu-notch:hover {
+  background-color: #ffda47;
+  box-shadow: 0 0 6px rgba(253, 193, 3, 0.6);
+}
+
+
+/* Sidebar */
+.sidebar {
+    width: 220px;
+    background-color: #01374C;
+    color: #fff;
+    transition: width 0.3s ease, padding 0.3s ease;
+    /* Added padding transition */
+    flex-shrink: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+overflow: visible; /* ✅ allow the notch to stick out */
+
+    z-index: 100;
+}
+
+.sidebar li.active a {
+    background-color: #FDC103;
+    color: #fff;
+}
+
+.sidebar.collapsed {
+    width: 65px;
+    /* Reduced horizontal padding for collapsed state */
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding-left: 10px;
+    justify-content: center;
+    transition: justify-content 0.3s ease, padding-left 0.3s ease;
+}
+
+.sidebar.collapsed .logo-container {
+    justify-content: center;
+    padding-left: 0;
+}
+
+.logo {
+    width: 150px;
+    height: 150px;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+    /* Added transition for smooth sizing/margin */
+}
+
+.sidebar.collapsed .logo {
+    /* Minimize the logo image itself */
+    width: 37px;
+    height: 37px;
+    margin-right: 0;
+    /* Remove margin when collapsed */
+}
+
+/* Grouped selectors for collapsing elements */
+.sidebar.collapsed .general-section span,
+.sidebar.collapsed .user-section span {
+    display: none;
+}
+
+/* --- Navigation Link Text Hiding --- */
+/* Grouped selectors for link text span transition */
+.sidebar-nav ul li a span,
+.general-section ul li a span,
+.user-section ul li a span {
+    transition: opacity 0.3s ease;
+}
+
+/* Grouped selectors for hiding link text span on collapse */
+.sidebar.collapsed .sidebar-nav ul li a span,
+.sidebar.collapsed .general-section ul li a span,
+.sidebar.collapsed .user-section ul li a span {
+    display: none;
+    /* Hide the text */
+}
+
+/* Grouped selectors for UL structure */
+.sidebar-nav ul,
+.general-section ul,
+.user-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Grouped selectors for LI margin */
+.sidebar-nav ul li,
+.general-section ul li,
+.user-section ul li {
+    margin-bottom: 2px;
+}
+
+/* Grouped selectors for Anchor/Link base styles */
+.sidebar-nav ul li a,
+.general-section ul li a,
+.user-section ul li a {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s, padding 0.3s;
+    justify-content: flex-start;
+    background-color: #02455F;
+}
+
+/* Grouped selectors for Collapsed link styles */
+.sidebar.collapsed .sidebar-nav ul li a,
+.sidebar.collapsed .general-section ul li a,
+.sidebar.collapsed .user-section ul li a {
+    justify-content: center;
+    padding: 12px;
+}
+
+/* Grouped selectors for Active and Hover states */
+.sidebar-nav ul li.active a,
+.sidebar-nav ul li a:hover,
+.general-section ul li a:hover,
+.user-section ul li a:hover {
+    background-color: #1a273b;
+    color: #fff;
+}
+
+.sidebar-nav ul li.active a {
+    background-color: #FDC103;
+    color: #fff;
+}
+
+/* Grouped selectors for Icon base styles */
+.sidebar-nav ul li a img,
+.general-section ul li a img,
+.user-section ul li a img {
+    margin-right: 15px;
+    width: 20px;
+    transition: margin-right 0.3s ease, width 0.3s ease;
+}
+
+/* Grouped selectors for Collapsed Icon styles */
+.sidebar.collapsed .sidebar-nav ul li a img,
+.sidebar.collapsed .general-section ul li a img,
+.sidebar.collapsed .user-section ul li a img {
+    margin-right: 0;
+    width: auto;
+}
+
+/* Individual Section containers */
+.general-section,
+.user-section {
+    margin-top: 10px;
+    padding-top: 20px;
+}
+
+/* Individual Section Title (span) styles */
+/* Applying the previous .general-section span styles to the new .section-title class */
+.section-title {
+    color: white;
+    font-weight: 500;
+    margin-left: 20px;
+    display: block;
+    margin-bottom: 15px;
+}

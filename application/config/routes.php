@@ -1,0 +1,142 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+/*
+| -------------------------------------------------------------------------
+| URI ROUTING
+| -------------------------------------------------------------------------
+| This file lets you re-map URI requests to specific controller functions.
+|
+| Typically there is a one-to-one relationship between a URL string
+| and its corresponding controller class/method. The segments in a
+| URL normally follow this pattern:
+|
+|	example.com/class/method/id/
+|
+| In some instances, however, you may want to remap this relationship
+| so that a different class/function is called than the one
+| corresponding to the URL.
+|
+| Please see the user guide for complete details:
+|
+|	https://codeigniter.com/userguide3/general/routing.html
+|
+| -------------------------------------------------------------------------
+| RESERVED ROUTES
+| -------------------------------------------------------------------------
+|
+| There are three reserved routes:
+|
+|	$route['default_controller'] = 'welcome';
+|
+| This route indicates which controller class should be loaded if the
+| URI contains no data. In the above example, the "welcome" class
+| would be loaded.
+|
+|	$route['404_override'] = 'errors/page_missing';
+|
+| This route will tell the Router which controller/method to use if those
+| provided in the URL cannot be matched to a valid route.
+|
+|	$route['translate_uri_dashes'] = FALSE;
+|
+| This is not exactly a route, but allows you to automatically route
+| controller and method names that contain dashes. '-' isn't a valid
+| class or method name character, so it requires translation.
+| When you set this option to TRUE, it will replace ALL dashes in the
+| controller and method URI segments.
+|
+| Examples:	my-controller/index	-> my_controller/index
+|		my-controller/my-method	-> my_controller/my_method
+*/
+
+/* 
+======================================
+=============Pages Routes===============
+======================================
+ */
+
+
+$route['default_controller'] = 'pages/home';
+$route['about'] = 'pages/about';
+$route['contact'] = 'pages/contact';
+$route['projects'] = 'pages/projects';
+$route['home-login'] = 'pages/home_login';
+
+
+/* 
+======================================
+=============FAQ Routes===============
+======================================
+ */
+
+$route['faq'] = 'FaqCon/faq';
+$route['faq-ordering'] = 'FaqCon/faq_ordering';
+$route['faq-payment'] = 'FaqCon/faq_payment';
+$route['faq-pricing'] = 'FaqCon/faq_pricing';
+$route['faq-warranty'] = 'FaqCon/faq_warranty';
+$route['faq-shipping'] = 'FaqCon/faq_shipping';
+$route['faq-account'] = 'FaqCon/faq_account';
+$route['report-issue'] = 'FaqCon/faq_report';
+
+/* 
+======================================
+=============Shop Routes===============
+======================================
+ */
+
+$route['products'] = 'ShopCon/products';
+$route['2DModeling'] = 'ShopCon/product_2d';
+$route['addtocart'] = 'ShopCon/addtocart';
+$route['payment'] = 'ShopCon/checkout';
+$route['paying'] = 'ShopCon/ewallet';
+$route['complete'] = 'ShopCon/complete';
+$route['terms_order'] = 'ShopCon/terms_order';
+$route['wishlist'] = 'ShopCon/wishlist';
+$route['track_order'] = 'ShopCon/order_tracking';
+
+/* 
+======================================
+=============Auth Routes===============
+======================================
+ */
+
+$route['login'] = 'auth/login';
+$route['register'] = 'auth/register';
+$route['logout'] = 'auth/logout';
+$route['auth/process_login'] = 'auth/process_login';
+$route['auth/process_register'] = 'auth/process_register';
+
+
+
+/* 
+======================================
+=============User Routes===============
+======================================
+ */
+
+$route['Profile'] = 'UserCon/profile';
+$route['fl'] = 'Auth/admin_login';
+
+
+/* 
+======================================
+=============Admin Routes===============
+======================================
+ */
+$route['admin-dashboard'] = 'AdminCon/admin_dashboard';
+$route['admin-orders'] = 'AdminCon/admin_orders';
+$route['admin-appointment'] = 'AdminCon/admin_appointment';
+$route['admin-employee'] = 'AdminCon/admin_employee';
+$route['admin-endUser'] = 'AdminCon/admin_endUser';
+$route['admin-inventory'] = 'AdminCon/admin_inventory';
+$route['admin-product'] = 'AdminCon/admin_product';
+$route['admin-payments'] = 'AdminCon/admin_payments';
+$route['admin-reports'] = 'AdminCon/admin_reports';
+$route['admin-account'] = 'AdminCon/admin_account';
+
+
+
+$route['404_override'] = '';
+$route['translate_uri_dashes'] = FALSE;
+

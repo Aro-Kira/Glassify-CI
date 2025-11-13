@@ -1,0 +1,39 @@
+/* ==============================
+   MAIN.CSS
+   Purpose: Centralized CSS imports for general-customer section
+   ============================== */
+
+/* --- Include global & layout styles --- */
+@import url("include/global_style.css");
+@import url("include/header_style.css");
+@import url("include/footer_style.css");
+
+/* --- Auth --- */
+@import url("auth/login_style.css");
+@import url("auth/register_style.css");
+
+/* --- FAQ --- */
+@import url("faq/faq_style.css");
+@import url("faq/faqRoutes_style.css");
+@import url("faq/report_issue.css");
+
+/* --- Pages --- */
+@import url("pages/home_style.css");
+@import url("pages/aboutUs_style.css");
+@import url("pages/projects_style.css");
+
+/* --- Shop --- */
+@import url("shop/2DModeling_styles.css");
+@import url("shop/addtocart_style.css");
+@import url("shop/checkout_style.css");
+@import url("shop/ewallet_style.css");
+@import url("shop/order_complete.css");
+@import url("shop/order_tracking.css");
+@import url("shop/products_style.css");
+@import url("shop/wishlist_style.css");
+
+/* --- User --- */
+@import url("user/profile.css");
+
+/* --- Others --- */
+@import url("terms_style.css");

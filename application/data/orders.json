@@ -1,0 +1,122 @@
+[
+    {
+        "order_id": "#G1001",
+        "product_name": "Tempered Glass",
+        "address": "351 Shearwood",
+        "date": "20/03/2025",
+        "price": 376,
+        "status": "Confirmed"
+    },
+    {
+        "order_id": "#G1002",
+        "product_name": "Aluminum Frame",
+        "address": "6391 Elgin",
+        "date": "21/03/2025",
+        "price": 276,
+        "status": "Pending"
+    },
+    {
+        "order_id": "#G1003",
+        "product_name": "Sliding Track",
+        "address": "8502 Preston",
+        "date": "01/05/2025",
+        "price": 300,
+        "status": "Canceled"
+    },
+    {
+        "order_id": "#G1004",
+        "product_name": "Handle Set",
+        "address": "4517 Washington",
+        "date": "02/04/2025",
+        "price": 200,
+        "status": "Pending"
+    },
+    {
+        "order_id": "#G1005",
+        "product_name": "Shower Door",
+        "address": "123 Main St",
+        "date": "05/05/2025",
+        "price": 500,
+        "status": "Confirmed"
+    },
+    {
+        "order_id": "#G1006",
+        "product_name": "Mirror Panel",
+        "address": "456 Oak St",
+        "date": "12/05/2025",
+        "price": 420,
+        "status": "Pending"
+    },
+    {
+        "order_id": "#G1007",
+        "product_name": "Glass Shelf",
+        "address": "789 Pine St",
+        "date": "18/05/2025",
+        "price": 150,
+        "status": "Canceled"
+    },
+    {
+        "order_id": "#G1008",
+        "product_name": "Aluminum Window",
+        "address": "234 Elm St",
+        "date": "22/05/2025",
+        "price": 800,
+        "status": "Confirmed"
+    },
+    {
+        "order_id": "#G1009",
+        "product_name": "Glass Table Top",
+        "address": "567 Maple St",
+        "date": "25/05/2025",
+        "price": 650,
+        "status": "Pending"
+    },
+    {
+        "order_id": "#G1010",
+        "product_name": "Sliding Door Track",
+        "address": "890 Birch St",
+        "date": "28/05/2025",
+        "price": 320,
+        "status": "Confirmed"
+    },
+    {
+        "order_id": "#G1011",
+        "product_name": "Glass Partition",
+        "address": "321 Cedar St",
+        "date": "02/06/2025",
+        "price": 700,
+        "status": "Pending"
+    },
+    {
+        "order_id": "#G1012",
+        "product_name": "Window Handle",
+        "address": "654 Spruce St",
+        "date": "06/06/2025",
+        "price": 120,
+        "status": "Canceled"
+    },
+    {
+        "order_id": "#G1013",
+        "product_name": "Glass Door Knob",
+        "address": "987 Ash St",
+        "date": "10/06/2025",
+        "price": 80,
+        "status": "Confirmed"
+    },
+    {
+        "order_id": "#G1014",
+        "product_name": "Glass Panel Frame",
+        "address": "159 Walnut St",
+        "date": "15/06/2025",
+        "price": 450,
+        "status": "Pending"
+    },
+    {
+        "order_id": "#G1015",
+        "product_name": "Tempered Shower Panel",
+        "address": "753 Chestnut St",
+        "date": "20/06/2025",
+        "price": 900,
+        "status": "Confirmed"
+    }
+]

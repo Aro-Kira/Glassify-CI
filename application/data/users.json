@@ -1,0 +1,24 @@
+[
+    {
+        "id": 1,
+        "name": "Aaron Gabriel M. Manantan",
+        "email": "admin2@example.com",
+        "phone": "09937568015",
+        "password": "$2y$10$qY6A1uK\/nt.lxC71DxMpJuJ3pgXPJboD8zuRCUFCkW\/3Z9kIE29Fq"
+    },
+    {
+        "id": 2,
+        "name": "Aaron Gabriel M. Manantan",
+        "email": "manantan.aro@gmail.com",
+        "phone": "09937568015",
+        "password": "$2y$10$g1nlhavHeGv4ucPNseW8GuFXC38dJJrW6IKuDrpVELpGuFr\/d0TY2"
+    },
+    {
+        "id": 3,
+        "name": "testAdmin A Super",
+        "email": "admin123@testing.com",
+        "phone": "0985231232323213213",
+        "password": "$2y$10$xsURBPaCEdaxr7RHABUZO.AqP9VwD8ZtAdgAhwYsTfMGhyIo\/0IgS",
+        "role": "admin"
+    }
+]

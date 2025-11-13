@@ -1,0 +1,91 @@
+
+ <link rel="stylesheet" href="<?php echo base_url('assets/css/general-customer/faq/report_issue.css'); ?>">
+
+
+  <div class="container">
+    <!-- Path -->
+    <div class="path">
+      <a href="faq.html" class="home" title="Go to FAQ Home">
+        <svg class="home-icon" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+        </svg>
+      </a>
+      <span class="separator">></span>
+      <span class="articles" onclick="window.location.href='faq.html'">All articles</span>
+      <span class="separator">></span>
+      <span class="current">Report Issue</span>
+    </div>
+
+    <!-- Page Title -->
+    <h1 class="page-title">Report an Issue</h1>
+    <p class="page-desc">Please provide details of your issue so our team can assist you promptly.</p>
+    <div class="title-underline"></div>
+
+    <!-- Report Form -->
+    <form class="report-form">
+      <h2>User Information</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name <span>*</span></label>
+          <input type="text" required placeholder="Enter your first name" title="First Name">
+        </div>
+        <div class="form-group">
+          <label>Last Name <span>*</span></label>
+          <input type="text" required placeholder="Enter your last name" title="Last Name">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email <span>*</span></label>
+          <input type="email" required placeholder="Enter your email" title="Email">
+        </div>
+        <div class="form-group">
+          <label>Contact Number <span>*</span></label>
+          <input type="text" required placeholder="Enter your contact number" title="Contact Number">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label>Order ID <span>*</span></label>
+          <input type="text" required title="Order ID" placeholder="Enter your order ID">
+        </div>
+      </div>
+
+      <h2>Issue Details</h2>
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label>Issue Category <span>*</span></label>
+          <select required title="Issue Category">
+            <option>Order Issue</option>
+            <option>Payment Issue</option>
+            <option>Delivery Issue</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label>Description <span>*</span></label>
+          <textarea placeholder="Please describe your issue in at least 2 sentences (20 to 50 words)" required></textarea>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label>Attachments (optional)</label>
+          <div class="upload-btn-wrapper">
+            <button type="button" class="upload-btn">
+                <img src="/Assets/img/attach.svg" alt="Attach" class="upload-icon">Upload Image or File
+            </button>
+            <input type="file" name="attachment" title="Attachment" placeholder="Upload Image or File" />
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit Issue</button>
+    </form>
+  </div>

@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Marianne Lizanne Placides",
+        "role": "Admin",
+        "email": "marianne@gmail.com",
+        "status": "Active"
+    },
+    {
+        "name": "Irish Queen Vasquez",
+        "role": "Sales Representative",
+        "email": "queen@gmail.com",
+        "status": "Active"
+    },
+    {
+        "name": "Kennedy Gomez",
+        "role": "Inventory Officer",
+        "email": "kenken@gmail.com",
+        "status": "Inactive"
+    },
+    {
+        "name": "Farrah Jimenez",
+        "role": "Sales Representative",
+        "email": "monah@gmail.com",
+        "status": "Active"
+    },
+    {
+        "name": "Manantan, Aaron",
+        "email": "manantan@gmail.com",
+        "role": "Admin",
+        "status": "Active"
+    }
+]

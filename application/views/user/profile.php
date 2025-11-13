@@ -1,0 +1,118 @@
+
+<link rel="stylesheet" href="<?php echo base_url('assets/css/general-customer/user/profile.css'); ?>">
+
+
+<body>
+    <my-header></my-header>
+    <main class="account-settings">
+        <h2 class="settings-title">Account Settings</h2>
+        <section class="settings-container">
+
+            <!-- Left: Form -->
+            <section class="settings-form">
+
+                <form id="accountForm">
+                    <label for="firstname">First Name</label>
+                    <input type="text" id="firstname" name="firstname" placeholder="Enter your first name">
+
+                    <label for="middlename">Middle Name</label>
+                    <input type="text" id="middlename" name="middlename" placeholder="Enter your middle name">
+
+                    <label for="surname">Surname</label>
+                    <input type="text" id="surname" name="surname" placeholder="Enter your surname">
+
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email">
+
+                    <label for="phone">Phone Number</label>
+                    <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
+
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" placeholder="Enter your address">
+
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password">
+
+                    <div class="form-buttons">
+                        <button type="button" class="btn-cancel">Cancel</button>
+                        <button type="submit" class="btn-save">Save Changes</button>
+                    </div>
+                </form>
+
+            </section>
+
+            <!-- Right: Profile Image -->
+            <section class="settings-photo">
+                <img src="../assets/img/pfp.png" alt="Profile Photo" class="profile-img">
+
+                <div class="photo-buttons">
+                    <button type="button" class="btn-photo" id="changePhotoBtn">Change Photo</button>
+                    <input type="file" id="uploadPhoto" accept="image/*" title="Upload Profile Photo">
+                    <button class="btn-delete">Delete Photo</button>
+                </div>
+            </section>
+
+
+        </section>
+
+        <section class="logout-container">
+            <button id="accountLogoutBtn" class="btn-logout">Logout</button>
+        </section>
+
+    </main>
+
+    <script>
+        // Handle form submission
+        document.getElementById("accountForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            alert("Changes saved successfully!");
+        });
+
+        // Handle cancel button
+        document.querySelector(".btn-cancel").addEventListener("click", () => {
+            document.getElementById("accountForm").reset();
+        });
+
+        // Handle photo change
+        document.getElementById("changePhotoBtn").addEventListener("click", function () {
+            document.getElementById("uploadPhoto").click();
+        });
+
+        document.getElementById("uploadPhoto").addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    document.querySelector(".profile-img").src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle photo delete
+        document.querySelector(".btn-delete").addEventListener("click", () => {
+            document.querySelector(".profile-img").src =
+                "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+        });
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const accountLogoutBtn = document.getElementById("accountLogoutBtn");
+
+            if (accountLogoutBtn) {
+                accountLogoutBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    // clear login state
+                    localStorage.setItem("isLoggedIn", "false");
+                    // redirect to guest homepage
+                    location.href = "/Glassify/index.html";
+                });
+            }
+        });
+
+
+    </script>
+    <my-footer></my-footer>
+</body>
+
+</html>

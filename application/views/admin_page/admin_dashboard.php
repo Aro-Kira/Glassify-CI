@@ -1,0 +1,204 @@
+
+  
+    <section class="order-list-section">
+      <div class="section-header">
+        <h2>Dashboard</h2>
+      </div>
+
+      <div class="box">
+
+        <div class="dash-tabs">
+          <h2>Key Stats</h2>
+        </div>
+        <!-- Key Stats -->
+        <section class="key-stats">
+          <div class="stat-card stat-blue">
+            <div class="stat-value">125</div>
+            <div class="stat-title">Total Order</div>
+          </div>
+          <div class="stat-card stat-orange">
+            <div class="stat-value">11</div>
+            <div class="stat-title">Pending Orders</div>
+          </div>
+          <div class="stat-card stat-green">
+            <div class="stat-value">₱67,704</div>
+            <div class="stat-title">Weekly Sales</div>
+            <div class="stat-percent">↑ 18% from last week</div>
+          </div>
+        </section>
+
+        <!-- Sales Revenue -->
+        <section class="sales-revenue">
+          <div class="sales-header">
+            <h3>Sales Revenue</h3>
+            <div class="chart-legend">
+              <span class="legend-weekly">Weekly Sales</span>
+              <span class="legend-monthly">Monthly Sales</span>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="salesChart"></canvas>
+          </div>
+        </section>
+
+        <!-- INVENTORY & PROJECT PROGRESS -->
+        <section class="inventory-progress">
+
+          <!-- Inventory -->
+          <div class="inventory-section">
+            <div class="dash-tabs">
+              <h2>Inventory</h2>
+            </div>
+            <div class="inventory-box">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Items</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>6mm Glass Sheets</td>
+                    <td><span class="status-badge out">Out Of Stock</span></td>
+                  </tr>
+                  <tr>
+                    <td>Aluminum Brackets</td>
+                    <td><span class="status-badge low">Low Stock</span></td>
+                  </tr>
+                  <tr>
+                    <td>Rubber Gasket</td>
+                    <td><span class="status-badge in">In Stock</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Project Progress -->
+          <div class="progress-section">
+            <div class="dash-tabs">
+              <h2>Project Progress</h2>
+            </div>
+            <div class="progress-box">
+              <div class="progress-item">
+                <span>Store Front A</span>
+                <div class="progress-bar">
+                  <div style="width:75%"></div>
+                </div>
+                <span class="percent">75%</span>
+              </div>
+              <div class="progress-item">
+                <span>Residential Glasswork</span>
+                <div class="progress-bar">
+                  <div style="width:90%"></div>
+                </div>
+                <span class="percent">90%</span>
+              </div>
+              <div class="progress-item">
+                <span>Office Partitioning</span>
+                <div class="progress-bar">
+                  <div style="width:45%"></div>
+                </div>
+                <span class="percent">45%</span>
+              </div>
+              <div class="progress-item">
+                <span>SM North Facade</span>
+                <div class="progress-bar">
+                  <div style="width:30%"></div>
+                </div>
+                <span class="percent">30%</span>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+
+        <div class="dash-tabs">
+          <h2>Today's Appointment</h2>
+        </div>
+        <!-- Today's Appointments -->
+        <section class="appointments">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Type</th>
+                <th>Client</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>9:00 AM</td>
+                <td>Ocular Visit</td>
+                <td>Client A</td>
+                <td><span class="status confirmed">Confirmed</span></td>
+              </tr>
+              <tr>
+                <td>11:30 AM</td>
+                <td>Measurement</td>
+                <td>Client B</td>
+                <td><span class="status pending">Pending</span></td>
+              </tr>
+              <tr>
+                <td>3:00 PM</td>
+                <td>Consultation</td>
+                <td>Client C</td>
+                <td><span class="status canceled">Canceled</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <div class="dash-tabs">
+          <h2>Recent Activities</h2>
+        </div>
+        <!-- Recent Activities -->
+        <section class="recent-activities">
+          <table>
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Description</th>
+                <th>Role</th>
+                <th>User</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge info">Info</span></td>
+                <td>New order created (Order #1024)</td>
+                <td>Client</td>
+                <td>Client A</td>
+                <td>5/28/2025 – 09:45 AM</td>
+              </tr>
+              <tr>
+                <td><span class="badge success">Success</span></td>
+                <td>Quotation sent to Client B</td>
+                <td>Staff</td>
+                <td>M. Lopez</td>
+                <td>5/28/2025 – 08:30 AM</td>
+              </tr>
+              <tr>
+                <td><span class="badge error">Error</span></td>
+                <td>Inventory update failed (Glass Panel)</td>
+                <td>Admin</td>
+                <td>L. Doria</td>
+                <td>5/27/2025 – 05:12 PM</td>
+              </tr>
+              <tr>
+                <td><span class="badge warning">Warning</span></td>
+                <td>Stock running low: Aluminum Brackets</td>
+                <td>System</td>
+                <td>System</td>
+                <td>5/27/2025 – 02:15 PM</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+      </div>
+
+  <script src="/Glassify/assets/js/dashboard-chart.js"></script>

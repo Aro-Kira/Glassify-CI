@@ -1,0 +1,266 @@
+
+* {
+  font-family: 'DM Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f9f9f9;
+  color: #333;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Container for Back + Progress */
+.checkout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+.back-btn{
+  margin: 5% 0 0 15%;
+}
+/* Back button */
+.back-btn a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  color: #003049;
+}
+
+.back-btn img {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  filter: brightness(0) saturate(100%) invert(73%) sepia(95%)
+          saturate(2260%) hue-rotate(12deg) brightness(97%) contrast(96%);
+}
+
+/* Progress nav */
+.progress-nav {
+  display: flex;
+  align-items: center;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #888;
+  margin: 5% auto 0px 17%; /* keeps it centered */
+}
+
+
+/* Progress Navigation */
+/* .progress-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5% 35% 0px 35%;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #888;
+}
+ */
+.progress-nav .step {
+  position: relative;
+  padding: 0 20px;
+}
+
+.progress-nav .step.active {
+  color: goldenrod;
+}
+
+.progress-nav .divider {
+  height: 2px;
+  width: 100px;
+  background-color: #ccc; /* light gray line */
+}
+
+/* Confirmation */
+.confirmation {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.checkmark {
+  font-size: 3em;
+  color: green;
+  margin-bottom: 10px;
+}
+
+.confirmation h2 {
+  font-size: 1.8em;
+  font-weight: bold;
+}
+
+.confirmation p {
+  color: #555;
+}
+
+/* Order Info */
+.order-info {
+  margin: 30px auto;
+  width: 70%;
+}
+
+.info-box {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  border: 1px solid #ccc;
+  padding: 15px;
+  background: #fff;
+  border-radius: 5px;
+}
+/* Your Order Section */
+.your-order {
+  margin: 30px auto;
+  width: 70%;
+}
+
+.your-order h3 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #000;
+  padding-bottom: 8px;
+}
+
+/* Flex Layout */
+.order-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* Left Column (Products + Summary stacked) */
+.left-col {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Right Column (Address + Button stacked) */
+.right-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Products Section */
+.products {
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0f2b46;
+  color: #fff;
+  padding: 12px 20px;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.product-table td {
+  padding: 15px;
+  vertical-align: middle;
+}
+
+.product-table img {
+  width: 80px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.product-table .price {
+  text-align: right;
+  font-weight: 600;
+}
+
+.see-more {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  font-size: 0.9em;
+  color: #000;
+  text-decoration: none;
+  border-top: 1px solid #ddd;
+}
+
+/* Summary Box */
+.summary-box {
+  border: 1px solid #0f2b46;
+  background: #fff;
+  padding: 15px;
+}
+
+.summary-box h4 {
+  background: #0f2b46;
+  color: #fff;
+  padding: 10px;
+  margin: -15px -15px 15px -15px;
+}
+
+.summary-box p {
+  display: flex;
+  justify-content: space-between;
+  margin: 40px 0;
+}
+
+.summary-box .divider {
+  height: 2px;
+  background: #333;
+  margin: 10px 0;
+}
+
+.summary-box .total {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+/* Address Boxes */
+.address-box {
+  border: 1px solid #0f2b46;
+  background: #fff;
+  padding: 15px;
+}
+
+.address-box h4 {
+  background: #0f2b46;
+  color: #fff;
+  padding: 10px;
+  margin: -15px -15px 15px -15px;
+}
+
+.address-box p {
+  margin: 5px 0;
+}
+
+/* Invoice Button */
+.invoice-btn {
+  text-align: center;
+}
+
+.invoice-btn button {
+  padding: 14px 25px;
+  background: #0f2b46;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1em;
+  width: 100%;
+}

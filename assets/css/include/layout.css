@@ -1,0 +1,37 @@
+/* ===== Admin Container ===== */
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f4f6f9;
+}
+
+/* ===== Main Content ===== */
+.main-content {
+    flex: 1;
+    transition: margin-left 0.3s ease;
+    padding: 20px;
+}
+
+/* Adjust main-content based on sidebar collapsed state */
+.admin-container:not(.sidebar-collapsed) .main-content {
+    margin-left: 220px; /* default sidebar width */
+}
+
+.admin-container.sidebar-collapsed .main-content {
+    margin-left: 65px; /* collapsed sidebar width */
+}
+
+/* Optional: smooth background for content */
+.content-area {
+    margin-top: 50px;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    min-height: 80vh;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+
+    
+}
+
+
+

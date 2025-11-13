@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "firstName": "Michael",
+        "middleInitial": "P.",
+        "lastName": "Johnson",
+        "email": "michaelj@gmail.com",
+        "phone": "+639128888888",
+        "joinedDate": "2024-04-15",
+        "lastActive": "2025-11-10"
+    },
+    {
+        "id": 2,
+        "firstName": "Sarah",
+        "middleInitial": "L.",
+        "lastName": "Reyes",
+        "email": "sreyes@example.com",
+        "phone": "+639175551111",
+        "joinedDate": "2024-07-10",
+        "lastActive": "2025-11-08"
+    }
+]

@@ -1,0 +1,239 @@
+html {
+  scroll-behavior: smooth;
+
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'DM Sans', sans-serif;
+  color: #0C2C3D;
+  overflow-x: hidden;
+}
+
+
+.hero h1 {
+  margin-top: -10px;
+  font-size: 64px;
+  font-weight: bold;
+  text-align: left;
+  padding-left: 10%;
+}
+
+/* Section Styles */
+.section {
+  padding: 60px;
+  text-align: center;
+}
+
+.faq-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 200px;
+  margin-bottom: 100px;
+  flex-wrap: wrap;
+}
+
+.faq-btn span {
+  font-size: 20px;
+  /* adjust size (px, em, rem) */
+  font-weight: 600;
+  /* 400 = normal, 600 = semi-bold, 700 = bold */
+  color: white;
+  /* optional: change text color */
+}
+
+.faq-buttons a {
+  /* Selects the <a> tags which are the direct children of the flex container */
+  flex: 1;
+  width: 100%;
+  max-width: 435px;
+}
+
+.faq-btn {
+  flex: 1;
+  max-width: 500px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 8px;
+}
+
+.faq-btn img {
+  height: 84px;
+  margin-bottom: 15px;
+}
+
+
+.faq-btn.blue {
+  background-color: #02455F;
+}
+
+.faq-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+  background-color: #FDC103;
+  color: white;
+}
+
+/* Get More Information */
+.info-title {
+  text-align: left;
+  font-size: 48px;
+  font-weight: 600;
+  margin-bottom: 80px;
+  color: #02455F;
+  padding-left: 5%;
+}
+
+.info-grid {
+  display: grid;
+  column-gap: 55px;
+  row-gap: 38px;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center;
+  max-width: 700px;
+  /* Adjust this value to control the maximum width of the grid container */
+  margin: 0 auto;
+  /* This centers the grid on the page */
+}
+
+.info-card {
+  background-color: #00455A;
+  color: white;
+  padding: 30px;
+  min-height: 70px;
+  box-shadow: -10px 10px 3px #5D727D;
+  text-align: center;
+  font-weight: 600;
+  font-size: 20px;
+  /* adjust size (px, em, rem) */
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 260px;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  background-color: #FDC103;
+  color: white;
+}
+
+
+/* Support Section */
+.support-title {
+  text-align: left;
+  font-size: 48px;
+  font-weight: bold;
+  margin: 60px 0 30px;
+  color: #02455F;
+  margin-top: 100px;
+  margin-bottom: 80px;
+  padding-left: 5%;
+}
+
+.support-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 290px;
+  margin-bottom: 180px;
+}
+
+.support-card {
+  flex: 1;
+  max-width: 550px;
+  background-color: #00455A;
+  color: white;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.support-card p img {
+  vertical-align: middle;
+  /* align with text */
+  margin-right: 30px;
+  /* space between icon and text */
+  width: 35px;
+  /* optional: control size */
+  height: auto;
+}
+
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 3px solid rgb(255, 255, 255);
+}
+
+.support-card h3 {
+  display: flex;
+  align-items: center;
+  font-size: 29px;
+  margin: 0;
+  flex: 1;
+}
+
+.support-card h3 img {
+  height: 29px;
+  width: 29px;
+  margin-right: 12px;
+}
+
+.arrow-icon {
+  height: 24px;
+  width: 24px;
+  margin-left: 15px;
+  flex-shrink: 0;
+}
+
+.support-card p {
+  font-size: 18px;
+  line-height: 1.4;
+  margin: 0;
+  font-weight: 600;
+  align-items: center;
+  margin-left: 41px;
+  margin-right: 41px;
+}
+
+.support-card p {
+  display: grid;
+  grid-template-columns: 40px auto;
+  /* icon column + text column */
+  font-size: 18px;
+  line-height: 2;
+  font-weight: 300;
+  align-items: center;
+  margin-left: 41px;
+  margin-right: 41px;
+  /* spacing between rows */
+}
+
+.support-card p img {
+  width: 24px;
+  /* adjust icon size */
+  height: auto;
+}
+
+.faq-buttons a,
+.info-grid a {
+  text-decoration: none;
+  color: inherit;
+}

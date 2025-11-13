@@ -1,0 +1,61 @@
+
+
+<link rel="stylesheet" href="<?php echo base_url('assets/css/include/footer_style.css'); ?>">
+
+<footer class="site-footer">
+    <div class="footer-container">
+
+        <!-- Logo & About -->
+        <div class="footer-section about-footer">
+            <img src="<?php echo base_url('assets/images/img-page/logo.png'); ?>" alt="GlassWorth Builders Logo" class="footer-logo">
+            <p>
+                We are glass and aluminum experts providing our clients with affordable
+                and high-quality service for 27 years and counting
+            </p>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/glassworthbuilders"><img
+                        src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg" alt="Facebook"></a>
+                <a href="https://www.instagram.com/glassworthbuilders"><img
+                        src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg" alt="Instagram"></a>
+                <a href="https://www.tiktok.com/@glassworthbuilders"><img
+                        src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/tiktok.svg" alt="TikTok"></a>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="<?php echo base_url('index.html'); ?>">Home</a></li>
+                <li><a href="<?php echo base_url('html/about_us.html'); ?>">About Us</a></li>
+                <li><a href="<?php echo base_url('html/products.html'); ?>">Products & Services</a></li>
+                <li><a href="<?php echo base_url('html/faq.html'); ?>">FAQ</a></li>
+                <li><a href="<?php echo base_url('html/projects.html'); ?>">Project Showcase</a></li>
+            </ul>
+        </div>
+
+        <!-- Location -->
+        <div class="footer-section">
+            <h3>Location</h3>
+            <p>
+                Blk 5 Lot 33 Saranay Road, Malapitan Avenue, Bagumbong North<br>
+                Caloocan City, Caloocan, Philippines
+            </p>
+            <h3>Working Hours</h3>
+            <p>
+                Monday - Saturday: 9:00 AM - 7:00 PM <br>
+                Sunday: 9:00 AM - 5:00 PM
+            </p>
+        </div>
+
+        <!-- Contact -->
+        <div class="footer-section">
+            <h3>Contact Information</h3>
+            <p><img src="<?php echo base_url('assets/images/img-page/PHONE ICON.svg'); ?>" alt="Phone_icon" class="footer-icon"> 09275193300 /
+                09761653506</p>
+            <p><img src="<?php echo base_url('assets/images/img-page/EMAIL ICON.svg'); ?>" alt="Email_icon"
+                    class="footer-icon">glassworthbuilders@gmail.com</p>
+        </div>
+
+    </div>
+</footer>
