@@ -1,5 +1,5 @@
-/* ===== Admin Container ===== */
-.admin-container {
+/* ===== layout Container ===== */
+.layout-container {
     display: flex;
     min-height: 100vh;
     background-color: #f4f6f9;
@@ -13,11 +13,11 @@
 }
 
 /* Adjust main-content based on sidebar collapsed state */
-.admin-container:not(.sidebar-collapsed) .main-content {
+.layout-container:not(.sidebar-collapsed) .main-content {
     margin-left: 220px; /* default sidebar width */
 }
 
-.admin-container.sidebar-collapsed .main-content {
+.layout-container.sidebar-collapsed .main-content {
     margin-left: 65px; /* collapsed sidebar width */
 }
 

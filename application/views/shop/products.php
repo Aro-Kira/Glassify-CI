@@ -23,13 +23,20 @@
 
       <div class="filter-group">
         <h4>Category</h4>
-        <label><input type="checkbox" value="Cabinet"> Cabinet</label>
-        <label><input type="checkbox" value="Doors"> Door</label>
-        <label><input type="checkbox" value="Mirrors"> Mirror</label>
-        <label><input type="checkbox" value="Partition"> Partition</label>
-        <label><input type="checkbox" value="Railings"> Railings</label>
-        <label><input type="checkbox" value="Windows"> Window</label>
+        <label><input type="checkbox" value="balcony"> Balcony</label>
+        <label><input type="checkbox" value="board"> Board</label>
+        <label><input type="checkbox" value="cabinet"> Cabinet</label>
+        <label><input type="checkbox" value="doors"> Doors</label>
+        <label><input type="checkbox" value="mirrors"> Mirrors</label>
+        <label><input type="checkbox" value="partition"> Partition</label>
+        <label><input type="checkbox" value="shower-enclosure"> Shower Enclosure</label>
+        <label><input type="checkbox" value="sliding-doors"> Sliding Doors</label>
+        <label><input type="checkbox" value="sliding-windows"> Sliding Windows</label>
+        <label><input type="checkbox" value="stair-railings"> Stair Railings</label>
+        <label><input type="checkbox" value="storefront"> Storefront</label>
+        <label><input type="checkbox" value="windows"> Windows</label>
       </div>
+
 
       <div class="filter-group">
         <h4>Material</h4>
@@ -56,98 +63,23 @@
 
       <script src="<?php echo base_url('assets/js/products-page/filters.js'); ?>"></script>
 
-      <div class="product-grid">
-        <div class="product" data-category="Windows" data-material="Glass,Aluminum" data-availability="In Stock">
-          <img src="<?php echo base_url('assets/images/img-page/glass-window.jpg'); ?>" alt="Glass & Aluminum Window">
-          <p>Glass & Aluminum Window</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
+        <div class="product-grid">
+
+          <?php foreach ($products as $p): ?>
+            <div class="product" data-category="<?= $p->Category ?>" data-material="<?= $p->Material ?>"
+              data-availability="<?= $p->Status ?>">
+
+              <img src="<?= base_url('uploads/products/' . $p->ImageUrl) ?>" alt="<?= $p->ProductName ?>">
+
+              <p><?= $p->ProductName ?></p>
+
+              <button onclick="window.location.href='<?= base_url('2DModeling?id=' . $p->Product_ID) ?>'">
+                Build and Buy
+              </button>
+            </div>
+          <?php endforeach; ?>
 
         </div>
-
-        <div class="product" data-category="Cabinet" data-material="Aluminum" data-availability="In Stock">
-          <img src="<?php echo base_url('assets/images/img-page/cabinet8.jpg'); ?>" alt="Aluminum Kitchen Cabinet">
-          <p>Aluminum Kitchen Cabinet</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
-        </div>
-
-        <div class="product" data-category="Windows" data-material="Aluminum,Glass" data-availability="In Stock">
-          <img src="<?php echo base_url('assets/images/img-page/798_window.png'); ?>" alt="798 Series Sliding Window">
-          <p>798 Series Sliding Window</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
-        </div>
-
-        <div class="product" data-category="Railings" data-material="Aluminum,Glass" data-availability="In Stock">
-          <img src="<?php echo base_url('assets/images/img-page/balcony railings.png'); ?>" alt="Balcony Railing">
-          <p>Balcony Railing</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
-        </div>
-
-        <div class="product" data-category="Partition" data-material="Glass,Aluminum" data-availability="In Stock">
-          <img src="<?php echo base_url('assets/images/img-page/fixed-glass.png'); ?>"
-            alt="Fixed and Swing Shower Enclosure">
-          <p>Fixed and Swing Shower Enclosure</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
-        </div>
-
-        <div class="product" data-category="Railings" data-material="Glass" data-availability="In Stock">
-          <img src="<?php echo base_url('assets/images/img-page/stair-railings.png'); ?>" alt="Stair Railings">
-          <p>Stair Railings</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
-        </div>
-
-        <div class="product" data-category="Doors" data-material="Glass,Aluminum" data-availability="In Stock">
-          <img src="<?php echo base_url('assets/images/img-page/french-sliding-door.png'); ?>"
-            alt="Traditional French Type Sliding Door with Customized Frosted Sticker">
-          <p>Traditional French Type Sliding Door with Customized Frosted Sticker</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
-        </div>
-
-        <div class="product" data-category="Doors" data-material="Glass,Aluminum" data-availability="In Stock">
-          <img src="<?php echo base_url('assets/images/img-page/2-panel-sliding-door.png'); ?>"
-            alt="2 Panel Sliding Door with 2 Fixed Glass">
-          <p>2 Panel Sliding Door with 2 Fixed Glass</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
-        </div>
-
-        <div class="product" data-category="Doors" data-material="Glass,Aluminum" data-availability="In Stock">
-          <img src="<?php echo base_url('assets/images/img-page/french-type-swing-door.png'); ?>"
-            alt="French Type Swing Door with 2 Fixed Glass">
-          <p>French Type Swing Door with 2 Fixed Glass</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
-        </div>
-
-        <!-- SHOULD STAY HIDDEN -->
-        <div class="product" data-category="Partition" data-material="Glass" data-availability="In Stock">
-          <img src="<?php echo base_url(''); ?>assets/images/img-page/glass-partition.png" alt="Glass Partition">
-          <p>Glass Partition</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
-        </div>
-
-        <div class="product" data-category="Doors" data-material="Glass,Aluminum" data-availability="In Stock">
-          <img src="<?php echo base_url('assets/images/img-page/glass-door.png'); ?>" alt="Glass Door">
-          <p>Glass & Aluminum Door</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
-        </div>
-
-        <div class="product" data-category="Mirrors" data-material="Glass" data-availability="In Stock">
-          <img src="<?php echo base_url('assets/images/img-page/frameless-whole-mirror.png'); ?>"
-            alt="Frameless Whole Body Rectangle Mirror">
-          <p>Frameless Whole Body Rectangle Mirror</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
-        </div>
-
-        <div class="product" data-category="Cabinet" data-material="Aluminum,Glass" data-availability="In Stock">
-          <img src="/Assets/images/img-page/cabinet5.jpg" alt="Kitchen Cabinet">
-          <p>Kitchen Cabinet</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
-        </div>
-
-        <div class="product" data-category="Mirrors" data-material="Glass" data-availability="In Stock">
-          <img src="<?php echo base_url('assets/images/img-page/rectangle mirror.png'); ?>" alt="Rectangle Mirror">
-          <p>Rectangle Mirror</p>
-          <button onclick="window.location.href='<?php echo base_url('2DModeling'); ?>'">Build and Buy</button>
-        </div>
-      </div>
 
 
       <!-- Pagination -->

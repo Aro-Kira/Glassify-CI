@@ -1,0 +1,187 @@
+/* ===== RESET & BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f4f6f9;
+  color: #333;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding-left: 10px;
+  justify-content: center;
+  transition: justify-content 0.3s ease, padding-left 0.3s ease;
+}
+
+
+
+/* Individual Section containers */
+.general-section,
+.user-section {
+  margin-top: 10px;
+  padding-top: 20px;
+}
+
+/* Individual Section Title (span) styles */
+.section-title {
+  color: white;
+  font-weight: 500;
+  margin-left: 20px;
+  display: block;
+  margin-bottom: 15px;
+}
+
+
+
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  margin-left: 220px;       /* match sidebar expanded width */
+  transition: margin-left 0.3s ease;
+  padding: 20px;
+  flex-grow: 1;
+  height: 100vh;
+  overflow-y: auto;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ===== ORDERS TABS COLORS FIX ===== */
+.order-tabs {
+    margin: 15px 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.order-tabs .tab-links-container {
+    display: flex; 
+    flex-grow: 1; 
+    justify-content: flex-start; 
+    gap: 30px; 
+    font-size: 20px;
+    align-items: center; 
+}
+
+.order-tabs a {
+    text-decoration: none;
+    font-weight: bold;
+    /* CHANGE: Default (inactive) tab color is now gray */
+    color: gray; 
+    flex-grow: 0; 
+    text-align: left; 
+    padding-bottom: 5px;
+}
+
+/* NEW: Rule to color only the active tab the dark blue color */
+.order-tabs a.active {
+    color: #02455F; 
+}
+
+/* FIX: Separator color should match the default (inactive) tab color */
+.order-tabs .tab-links-container a:first-child::after {
+    content: "|";
+    /* CHANGE: Separator color is now gray */
+    color: gray; 
+    font-weight: bold;
+    margin-left: 30px; 
+}
+
+/* Optional: If you want the separator to match the active color when 'All' is active */
+.order-tabs .tab-links-container a.active:first-child::after {
+    color: #02455F; 
+}
+/* ===== Orders Header ===== */
+.dash-tabs {
+    margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+.dash-tabs h2 {
+  font-size: 35px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: #02455F;
+}
+
+.dash-tabs h3 {
+    font-weight: normal;
+    color: #666;
+}
+
+/* START: New CSS required for notification list styling */
+.notifications-list {
+    margin-top: 20px;
+    background-color: #E8F0F2; 
+    border: 1px solid #ccc;
+    padding: 30px;
+    border-radius: 8px;
+}
+
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 15px 0;
+    border-bottom: 1px solid #ddd; /* Light grey separator line */
+    
+}
+
+/* Style for the icons to match the image */
+.notification-icon {
+    font-size: 30px; 
+    
+    /* FIX 2 (Optional): If you need the icon to occupy a 40px area (e.g., for background/padding) */
+    display: inline-block; /* Allows width/height to be respected */
+    width: 40px;
+    height: 40px; 
+
+    color: #02455F; 
+    margin-right: 30px;
+    
+    /* You might want to center the icon inside the 40px box */
+    text-align: center;
+    line-height: 40px;
+}
+
+/* Using a more generic icon for the Inventory Alert */
+.notification-item:nth-child(1) .notification-icon {
+    /* Using fa-box-open for inventory/product alert */
+    font-family: 'Font Awesome 5 Free';
+    content: '\f49e'; 
+}
+
+/* Using a user/person icon for the other alerts */
+.notification-item:nth-child(2) .notification-icon,
+.notification-item:nth-child(3) .notification-icon {
+    /* Using fa-user-tie or similar professional icon for employee actions */
+    font-family: 'Font Awesome 5 Free';
+    content: '\f508'; 
+}
+
+.notification-details {
+    flex-grow: 1;
+}
+
+.notification-text {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.5;
+    text-align: left;
+}
+
+/* Ensure the last item does not have a bottom border if not desired */
+.notifications-list .notification-item:last-child {
+    border-bottom: none;
+}

@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Auth extends CI_Controller
 {
-    private $use_db = false; // ← switch to true when database is ready
+    private $use_db = false;
     private $user_file;
 
     public function __construct()
@@ -12,19 +12,21 @@ class Auth extends CI_Controller
         $this->load->library('session');
         $this->load->helper(['url', 'form', 'file']);
         $this->user_file = APPPATH . 'data/users.json';
-
-        // Optional future model for DB use
-        // $this->load->model('User_model');
     }
 
-    // ===================== MAIN LOGIN PAGE =====================
+    // ===================== LOGIN PAGE =====================
     public function login()
     {
         $data['title'] = "Glassify - Login";
-        $data['role'] = 'customer'; // default login role
+
+        // Check for redirect after login
+        $redirect = $this->input->get('redirect');
+        if ($redirect) {
+            $this->session->set_userdata('redirect_after_login', $redirect);
+        }
 
         $this->load->view('includes/header', $data);
-        $this->load->view('auth/login', $data); // shared login view
+        $this->load->view('auth/login', $data);
         $this->load->view('includes/footer');
     }
 
@@ -32,14 +34,13 @@ class Auth extends CI_Controller
     public function admin_login()
     {
         $data['title'] = "Glassify - Admin Login";
-        $data['role'] = 'admin'; // flag for admin form
 
         $this->load->view('includes/header', $data);
-        $this->load->view('auth/login_admin', $data); // separate admin login view
+        $this->load->view('auth/login_admin', $data);
         $this->load->view('includes/footer');
     }
 
-    // ===================== REGISTER PAGE =====================
+    // ===================== REGISTER =====================
     public function register()
     {
         $data['title'] = "Glassify - Register";
@@ -48,23 +49,23 @@ class Auth extends CI_Controller
         $this->load->view('includes/footer');
     }
 
-    // ===================== PROCESS LOGIN =====================// ===================== PROCESS LOGIN =====================
+    // ===================== PROCESS LOGIN =====================
     public function process_login()
     {
         $email = $this->input->post('email');
         $password = $this->input->post('password');
-        $is_admin = $this->input->post('is_admin'); // hidden input flag in admin form
+        $is_admin = $this->input->post('is_admin');
 
         $user = $this->_get_user_by_email($email);
 
         if ($user && password_verify($password, $user['password'])) {
 
-            // 🚀 Admin logging in via normal login → treat as normal customer
+            // Handle admin login via customer form
             if (!$is_admin && $user['role'] === 'admin') {
-                $user['role'] = 'customer'; // temporarily treat as customer
+                $user['role'] = 'customer';
             }
 
-            // 🚫 Non-admin trying to log in via /fl
+            // Prevent non-admin accessing admin login
             if ($is_admin && $user['role'] !== 'admin') {
                 $this->session->set_flashdata('error', 'Invalid email or password.');
                 redirect(base_url('fl'));
@@ -73,13 +74,21 @@ class Auth extends CI_Controller
 
             // ✅ Set session
             $this->session->set_userdata([
-                'user_id' => $user['id'],
-                'user_name' => $user['name'],
-                'user_role' => $user['role'],
+                'user_id'      => $user['id'],
+                'user_name'    => $user['name'],
+                'user_role'    => $user['role'],
                 'is_logged_in' => true
             ]);
 
-            // ✅ Redirect based on role
+            // ⭐ Redirect to page that triggered login
+            $redirect_url = $this->session->userdata('redirect_after_login');
+            if ($redirect_url) {
+                $this->session->unset_userdata('redirect_after_login');
+                redirect(base_url($redirect_url));
+                return;
+            }
+
+            // Default redirect
             if ($user['role'] === 'admin' && $is_admin) {
                 redirect(base_url('admin-dashboard'));
             } else {
@@ -87,7 +96,6 @@ class Auth extends CI_Controller
             }
 
         } else {
-            // 🚫 Invalid login
             $this->session->set_flashdata('error', 'Invalid email or password.');
             if ($is_admin) {
                 redirect(base_url('fl'));
@@ -97,17 +105,16 @@ class Auth extends CI_Controller
         }
     }
 
-
     // ===================== PROCESS REGISTER =====================
     public function process_register()
     {
-        $first_name = $this->input->post('first_name');
+        $first_name     = $this->input->post('first_name');
         $middle_initial = $this->input->post('middle_initial');
-        $surname = $this->input->post('surname');
-        $email = $this->input->post('email');
-        $password = $this->input->post('password');
-        $confirm_pass = $this->input->post('confirm_password');
-        $phone = $this->input->post('phone');
+        $surname        = $this->input->post('surname');
+        $email          = $this->input->post('email');
+        $password       = $this->input->post('password');
+        $confirm_pass   = $this->input->post('confirm_password');
+        $phone          = $this->input->post('phone');
 
         if ($password !== $confirm_pass) {
             $this->session->set_flashdata('error', 'Passwords do not match.');
@@ -122,12 +129,12 @@ class Auth extends CI_Controller
         }
 
         $new_user = [
-            'id' => $this->_generate_user_id(),
-            'name' => trim("$first_name $middle_initial $surname"),
-            'email' => $email,
-            'phone' => $phone,
+            'id'       => $this->_generate_user_id(),
+            'name'     => trim("$first_name $middle_initial $surname"),
+            'email'    => $email,
+            'phone'    => $phone,
             'password' => password_hash($password, PASSWORD_DEFAULT),
-            'role' => 'customer', // default role
+            'role'     => 'customer',
         ];
 
         $this->_save_user($new_user);
@@ -143,14 +150,11 @@ class Auth extends CI_Controller
         redirect(base_url());
     }
 
-    // ===============================================================
-    // PRIVATE HELPERS
-    // ===============================================================
+    // ===================== PRIVATE HELPERS =====================
     private function _get_user_by_email($email)
     {
         if ($this->use_db) {
-            // Future DB query (for later use)
-            // return $this->User_model->get_user_by_email($email);
+            // For future database
         } else {
             $users = $this->_load_users_from_file();
             foreach ($users as $u) {
@@ -165,8 +169,7 @@ class Auth extends CI_Controller
     private function _save_user($user_data)
     {
         if ($this->use_db) {
-            // Future DB insert
-            // return $this->User_model->insert_user($user_data);
+            // For future database
         } else {
             $users = $this->_load_users_from_file();
             $users[] = $user_data;

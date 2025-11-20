@@ -33,13 +33,6 @@ class Pages extends CI_Controller {
     } */
 
   
-    public function product_2d () {
-        $data['title'] = "Glassify - 2D Modeling";
-        $this->load->view('includes/header', $data);
-        $this->load->view('pages/2DModeling', $data);
-        $this->load->view('includes/footer');
-    }
-
    
 
     public function projects() {

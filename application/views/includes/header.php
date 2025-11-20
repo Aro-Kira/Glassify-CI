@@ -45,18 +45,25 @@
         <?php if ($this->session->userdata('is_logged_in')): ?>
             <!-- ========== USER-ONLY ICON (TRACK ORDER) ========== -->
             <a href="<?php echo base_url('track_order'); ?>">
-                <img src="<?php echo base_url('assets/images/img-page/tracking.png'); ?>" 
-                     alt="Tracking" class="tracking-icon">
+                <img src="<?php echo base_url('assets/images/img-page/tracking.png'); ?>" alt="Tracking"
+                    class="tracking-icon">
             </a>
         <?php endif; ?>
 
-        <!-- ========== ALWAYS AVAILABLE ICONS ========== -->
-        <a href="<?php echo base_url('addtocart'); ?>">
-            <img src="<?php echo base_url('assets/images/img-page/shopping-cart.png'); ?>" alt="Shopping_cart">
+        <!-- CART ICON (Requires Login) -->
+        <a href="<?= base_url($this->session->userdata('is_logged_in') ? 'addtocart' : 'login?redirect=addtocart'); ?>"
+            class="icon-link">
+            <img src="<?= base_url('assets/images/img-page/shopping-cart.png'); ?>" alt="Shopping_cart">
         </a>
-        <a href="<?php echo base_url('wishlist'); ?>">
-            <img src="<?php echo base_url('assets/images/img-page/heart.png'); ?>" alt="Wishlist">
+
+
+        <!-- WISHLIST ICON (Requires Login) -->
+        <a href="<?= base_url($this->session->userdata('is_logged_in') ? 'wishlist' : 'login?redirect=wishlist'); ?>"
+            class="icon-link">
+            <img src="<?= base_url('assets/images/img-page/heart.png'); ?>" alt="Wishlist">
         </a>
+
+
 
         <!-- ========== PROFILE / LOGIN ICON (ALWAYS LAST) ========== -->
         <div class="header-dropdown" style="display: inline-block; position: relative;">
@@ -65,15 +72,15 @@
                 <button class="header-dropbtn" style="background: none; border: none;">
                     <img src="<?php echo base_url('assets/images/img-page/user.png'); ?>" alt="Profile">
                 </button>
-                <div class="dropdown-content" 
-                     style="display: none; position: absolute; right: 0; background: white; border: 1px solid #ddd; border-radius: 5px; padding: 10px;">
+                <div class="dropdown-content"
+                    style="display: none; position: absolute; right: 0; background: white; border: 1px solid #ddd; border-radius: 5px; padding: 10px;">
                     <a href="<?php echo base_url('Profile'); ?>">Profile</a><br>
                     <a href="<?php echo base_url('logout'); ?>">Logout</a>
                 </div>
 
                 <!-- ========== DROPDOWN TOGGLE SCRIPT ========== -->
                 <script>
-                    document.addEventListener('DOMContentLoaded', function() {
+                    document.addEventListener('DOMContentLoaded', function () {
                         const btn = document.querySelector('.header-dropbtn');
                         const dropdown = document.querySelector('.dropdown-content');
                         btn.addEventListener('click', () => {

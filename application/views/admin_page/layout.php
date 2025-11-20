@@ -35,7 +35,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <body>
 
-    <div class="admin-container" id="admin-container">
+    <div class="layout-container" id="layout-container">
 
         <!-- Sidebar -->
         <?php $this->load->view('admin_page/includes/sidebar'); ?>
@@ -45,7 +45,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <section class="content-area">
                 <?php
                 if (isset($content_view)) {
-                    $this->load->view($content_view);
+                   $this->load->view($content_view);
+
                 } else {
                     echo "<p>No content view found.</p>";
                 }

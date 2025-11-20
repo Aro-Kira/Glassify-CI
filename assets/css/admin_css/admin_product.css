@@ -278,7 +278,7 @@ body {
 .popup {
   background: #fff;
   padding: 20px 25px;
-  width: 300px;
+  width: 400px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   position: relative;
@@ -365,16 +365,27 @@ body {
   font-family: 'DM Sans', sans-serif;
 }
 .input-text {
-  width: 100%;
+  width: 50%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 14px;
   font-family: 'DM Sans', sans-serif;
 }
+
+
+.text-input {
+  width: 95%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+}
+
 .price-input {
   position: relative;
-  width: 100%;
+  width: 45%;
   display: flex;
   align-items: center;
 }
@@ -389,7 +400,6 @@ body {
 }
 
 .price-input .input-text {
-  width: 100%;
   padding: 8px 8px 8px 24px; /* push text right so it doesn’t overlap ₱ */
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -532,4 +542,20 @@ body {
 
 .popup-delete-confirm:hover {
   background: #032d3c;
+}
+
+
+.controls-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.controls-left select,
+.controls-right select {
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
 }

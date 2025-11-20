@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const sidebar = document.getElementById("sidebar");
     const toggle = document.getElementById("menu-toggle");
-    const container = document.getElementById("admin-container");
+    const container = document.getElementById("layout-container");
 
     console.log("DOM loaded");
     console.log("Sidebar element:", sidebar);

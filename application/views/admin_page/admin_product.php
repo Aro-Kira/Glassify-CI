@@ -1,9 +1,13 @@
+<link rel="stylesheet" href="<?= base_url('assets/css/admin-style.css'); ?>">
+<script src="<?= base_url('assets/js/admin-js/products.js'); ?>"></script>
+
+
 <!-- Products Section -->
 <section class="products-section-main">
   <div class="section-header">
     <h1 class="page-title">Products</h1>
     <div class="header-buttons">
-      <button class="export-btn">Export</button>
+      <!-- <button class="export-btn">Export</button> -->
       <button class="add-product-btn">+ Add New Product</button>
     </div>
   </div>
@@ -16,6 +20,7 @@
       <button class="search-button">Search</button>
     </div>
     <div class="controls-right">
+
       <select class="filter-category">
         <option value="">All Category</option>
         <option value="balcony">Balcony</option>
@@ -31,110 +36,35 @@
         <option value="storefront">Storefront</option>
         <option value="windows">Windows</option>
       </select>
-
+      <select class="sort-products" id="sortProducts">
+        <option value="recent">Recently Added</option>
+        <option value="last">Last Added</option>
+      </select>
     </div>
+
   </div>
 
-<!-- Products Table -->
-<div class="table-container">
-  <div class="product-grid">
-    <div class="product-card" data-category="cabinet">
-      <div class="product-image">
-        <img src="<?php echo base_url('assets/images/img_admin/cabinet.jpg'); ?>" alt="Cabinet">
-      </div>
-      <p class="product-name">Glass Cabinet</p>
-      <p class="product-price">₱1,100.00</p>
-      <div class="product-actions">
-        <button class="edit-btn"><i class="fas fa-pen"></i> Edit</button>
-        <button class="remove-btn" type="button"><i class="fas fa-trash"></i> Remove</button>
-      </div>
+  <!-- Products Table -->
+  <div class="table-container">
+    <div class="product-grid">
+      <?php foreach ($products as $product): ?>
+        <div class="product-card" data-id="<?= $product->Product_ID; ?>" data-category="<?= $product->Category; ?>"
+          data-material="<?= $product->Material; ?>">
+          <div class="product-image">
+            <img src="<?= base_url('uploads/products/' . ($product->ImageUrl ?? 'default.png')); ?>"
+              alt="<?= $product->ProductName; ?>">
+          </div>
+          <p class="product-name"><?= $product->ProductName; ?></p>
+          <p class="product-price">₱<?= isset($product->Price) ? number_format($product->Price, 2) : '0.00'; ?></p>
+          <div class="product-actions">
+            <button class="edit-btn"><i class="fas fa-pen"></i> Edit</button>
+            <button class="remove-btn" type="button"><i class="fas fa-trash"></i> Remove</button>
+          </div>
+        </div>
+      <?php endforeach; ?>
     </div>
 
-    <div class="product-card" data-category="shower-enclosure">
-      <div class="product-image">
-        <img src="<?php echo base_url('assets/images/img_admin/french-shower-enclosure.jpg'); ?>" alt="Shower Enclosure">
-      </div>
-      <p class="product-name">French Type Fixed Shower Enclosure</p>
-      <p class="product-price">₱5,200.00</p>
-      <div class="product-actions">
-        <button class="edit-btn"><i class="fas fa-pen"></i> Edit</button>
-        <button class="remove-btn" type="button"><i class="fas fa-trash"></i> Remove</button>
-      </div>
-    </div>
-
-    <div class="product-card" data-category="doors">
-      <div class="product-image">
-        <img src="<?php echo base_url('assets/images/img_admin/aluminum-screen.jpg'); ?>" alt="Aluminum Screen">
-      </div>
-      <p class="product-name">Aluminum Screen Door</p>
-      <p class="product-price">₱4,100.00</p>
-      <div class="product-actions">
-        <button class="edit-btn"><i class="fas fa-pen"></i> Edit</button>
-        <button class="remove-btn" type="button"><i class="fas fa-trash"></i> Remove</button>
-      </div>
-    </div>
-
-    <div class="product-card" data-category="cabinet">
-      <div class="product-image">
-        <img src="<?php echo base_url('assets/images/img_admin/aluminum-cabinet.jpg'); ?>" alt="Kitchen Cabinet">
-      </div>
-      <p class="product-name">Aluminum Kitchen Cabinet</p>
-      <p class="product-price">₱3,100.00</p>
-      <div class="product-actions">
-        <button class="edit-btn"><i class="fas fa-pen"></i> Edit</button>
-        <button class="remove-btn" type="button"><i class="fas fa-trash"></i> Remove</button>
-      </div>
-    </div>
-
-    <div class="product-card" data-category="windows">
-      <div class="product-image">
-        <img src="<?php echo base_url('assets/images/img_admin/sliding-window.jpg'); ?>" alt="Sliding Window">
-      </div>
-      <p class="product-name">Sliding Window</p>
-      <p class="product-price">₱2,000.00</p>
-      <div class="product-actions">
-        <button class="edit-btn"><i class="fas fa-pen"></i> Edit</button>
-        <button class="remove-btn" type="button"><i class="fas fa-trash"></i> Remove</button>
-      </div>
-    </div>
-
-    <div class="product-card" data-category="mirrors">
-      <div class="product-image">
-        <img src="<?php echo base_url('assets/images/img_admin/arched frameless.jpg'); ?>" alt="Arched Frameless">
-      </div>
-      <p class="product-name">Arched Frameless</p>
-      <p class="product-price">₱1,200.00</p>
-      <div class="product-actions">
-        <button class="edit-btn"><i class="fas fa-pen"></i> Edit</button>
-        <button class="remove-btn" type="button"><i class="fas fa-trash"></i> Remove</button>
-      </div>
-    </div>
-
-    <div class="product-card" data-category="windows">
-      <div class="product-image">
-        <img src="<?php echo base_url('assets/images/img_admin/corner-glass.jpg'); ?>" alt="Corner Fixed Glass">
-      </div>
-      <p class="product-name">Corner Fixed Glass</p>
-      <p class="product-price">₱10,000.00</p>
-      <div class="product-actions">
-        <button class="edit-btn"><i class="fas fa-pen"></i> Edit</button>
-        <button class="remove-btn" type="button"><i class="fas fa-trash"></i> Remove</button>
-      </div>
-    </div>
-
-    <div class="product-card" data-category="doors">
-      <div class="product-image">
-        <img src="<?php echo base_url('assets/images/img_admin/french-type-door.jpg'); ?>" alt="Sliding Door">
-      </div>
-      <p class="product-name">900 Series French Type Sliding Door</p>
-      <p class="product-price">₱5,000.00</p>
-      <div class="product-actions">
-        <button class="edit-btn"><i class="fas fa-pen"></i> Edit</button>
-        <button class="remove-btn" type="button"><i class="fas fa-trash"></i> Remove</button>
-      </div>
-    </div>
   </div>
-</div>
 
 
 
@@ -176,7 +106,35 @@
     <!-- Form Fields -->
     <div class="form-group">
       <label for="productName">Product Name</label>
-      <input type="text" id="productName" class="input-text" placeholder="Enter product name">
+      <input type="text" id="productName" class="text-input" placeholder="Enter product name">
+    </div>
+
+    <div class="form-group">
+      <label for="productCategory">Category</label>
+      <select id="productCategory" class="input-text">
+        <option value="" disabled selected>Select category</option>
+        <option value="balcony">Balcony</option>
+        <option value="board">Board</option>
+        <option value="cabinet">Cabinet</option>
+        <option value="doors">Doors</option>
+        <option value="mirrors">Mirrors</option>
+        <option value="partition">Partition</option>
+        <option value="shower-enclosure">Shower Enclosure</option>
+        <option value="sliding-doors">Sliding Doors</option>
+        <option value="sliding-windows">Sliding Windows</option>
+        <option value="stair-railings">Stair Railings</option>
+        <option value="storefront">Storefront</option>
+        <option value="windows">Windows</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="productMaterial">Material</label>
+      <select id="productMaterial" class="input-text">
+        <option value="" disabled selected>Select material</option>
+        <option value="aluminum">Aluminum</option>
+        <option value="glass">Glass</option>
+      </select>
     </div>
 
     <div class="form-group">
@@ -203,6 +161,7 @@
 
     <!-- Image Preview -->
     <div class="form-group">
+      <label>Product Image</label>
       <div class="image-preview">
         <img src="" alt="Preview">
       </div>
@@ -213,12 +172,43 @@
       </label>
     </div>
 
-    <!-- Form Fields -->
+    <!-- Product Name -->
     <div class="form-group">
       <label for="editProductName">Product Name</label>
       <input type="text" id="editProductName" class="input-text" placeholder="Enter product name">
     </div>
 
+    <!-- Category -->
+    <div class="form-group">
+      <label for="editProductCategory">Category</label>
+      <select id="editProductCategory" class="input-text">
+        <option value="" disabled>Select category</option>
+        <option value="balcony">Balcony</option>
+        <option value="board">Board</option>
+        <option value="cabinet">Cabinet</option>
+        <option value="doors">Doors</option>
+        <option value="mirrors">Mirrors</option>
+        <option value="partition">Partition</option>
+        <option value="shower-enclosure">Shower Enclosure</option>
+        <option value="sliding-doors">Sliding Doors</option>
+        <option value="sliding-windows">Sliding Windows</option>
+        <option value="stair-railings">Stair Railings</option>
+        <option value="storefront">Storefront</option>
+        <option value="windows">Windows</option>
+      </select>
+    </div>
+
+    <!-- Material -->
+    <div class="form-group">
+      <label for="editProductMaterial">Material</label>
+      <select id="editProductMaterial" class="input-text">
+        <option value="" disabled>Select material</option>
+        <option value="Aluminum">Aluminum</option>
+        <option value="Glass">Glass</option>
+      </select>
+    </div>
+
+    <!-- Price -->
     <div class="form-group">
       <label for="editProductPrice">Price</label>
       <div class="price-input">
@@ -233,6 +223,15 @@
       <button class="cancel-btn" id="cancelEdit">Cancel</button>
     </div>
   </div>
+</div>
+
+
+<!-- Action Buttons -->
+<div class="popup-actions">
+  <button class="save-btn" id="editSaveBtn">Save</button>
+  <button class="cancel-btn" id="cancelEdit">Cancel</button>
+</div>
+</div>
 </div>
 
 
@@ -255,9 +254,8 @@
 </div>
 
 
+<script>
+  const base_url = "<?= base_url(); ?>";
+</script>
 
-<script src="/Glassify/assets/js/admin-sidebar.js"></script>
-<script src="/Glassify/assets/js/product-popup.js"></script>
-<script src="/Glassify/assets/js/img-upload.js"></script>
-<script src="/Glassify/assets/js/product-delete.js"></script>
-<script src="/Glassify/assets/js/product-filter.js"></script>
+<script src="<?php echo base_url('assets/js/admin-js/products.js'); ?>"></script>

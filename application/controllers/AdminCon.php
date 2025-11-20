@@ -3,6 +3,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class AdminCon extends CI_Controller
 {
+
+    
     // Dashboard
     public function admin_dashboard()
     {
@@ -64,14 +66,21 @@ class AdminCon extends CI_Controller
     }
 
     // Products
-    public function admin_product()
-    {
-        $data['title'] = "Glassify - Products";
-        $data['active'] = 'product';
-        $data['content_view'] = 'admin_page/admin_product';
-        $data['page_css'] = 'admin_css/admin_product.css';
-        $this->load->view('admin_page/layout', $data);
-    }
+   public function admin_product()
+{
+    $this->load->model('Product_model');
+    
+    $data['title'] = "Glassify - Products";
+    $data['active'] = 'product';
+    $data['content_view'] = 'admin_page/admin_product';
+    $data['page_css'] = 'admin_css/admin_product.css';
+
+    // Fetch products from the DB
+    $data['products'] = $this->Product_model->get_products();
+
+    $this->load->view('admin_page/layout', $data);
+}
+
 
     // Payments
     public function admin_payments()

@@ -1,0 +1,116 @@
+
+<!-- Accounts -->
+<section class="account-section">
+        <div class="section-header">
+            <h1 class="page-title">Account</h1>
+            <i class="fas fa-user-circle"></i>
+        </div>
+
+  <div class="account-card">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="profile-icon">
+        <img src="/Glassify/assets/img_admin/female-user.svg" alt="Profile Icon">
+      </div>
+      <div class="profile-info">
+        <h3>Irish Queen Vasquez</h3>
+        <p>Sales Representative</p>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- Account Details -->
+    <div class="account-details">
+      <div class="form-group">
+        <label>Email</label>
+        <div class="input-box">
+          <input type="text" value="queen@gmail.com" readonly>
+          <i class="fas fa-pen"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-box">
+          <input type="password" value="************" readonly>
+          <i class="fas fa-pen"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>First Name</label>
+        <div class="input-box">
+          <input type="text" value="Irish Queen" readonly>
+          <i class="fas fa-pen"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Middle Initial</label>
+        <div class="input-box">
+          <input type="text" placeholder="(optional)" readonly>
+          <i class="fas fa-pen"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Surname</label>
+        <div class="input-box">
+          <input type="text" value="Vasquez" readonly>
+          <i class="fas fa-pen"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Title</label>
+        <div class="input-box">
+          <input type="text" value="Sales Representative" readonly>
+          <i class="fas fa-pen"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Phone Number</label>
+        <div class="input-box">
+          <input type="text" value="+639*******732" readonly>
+          <i class="fas fa-pen"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="logout">
+    <a href="../html/login.html">Log out?</a>
+  </div>
+
+<!-- Popup Overlay -->
+<div class="popup-overlay" id="editPopup">
+  <div class="popup">
+    <span class="close-btn" id="closePopup">&times;</span>
+    <h3 id="popupTitle">Edit Field</h3>
+
+    <form id="editForm">
+      <div class="form-group">
+        <label id="popupLabel"></label>
+        <input type="text" id="popupInput" class="input-text">
+      </div>
+
+      <div class="popup-actions">
+        <button type="submit" class="save-btn">Save</button>
+        <button type="button" class="cancel-btn" id="cancelPopup">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+</section>
+</main>
+    </div>
+    <script src="/Glassify/assets/js/admin-sidebar.js"></script>
+    <script src="/Glassify/assets/js/account-edit.js"></script>
+    <script src="/Glassify/assets/js/account-icon-active.js"></script>
+
+</body>
+
+</html>

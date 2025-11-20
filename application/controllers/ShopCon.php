@@ -4,13 +4,25 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class ShopCon extends CI_Controller
 {
 
-    public function products()
+
+     public function __construct()
     {
-        $data['title'] = "Glassify - Products";
-        $this->load->view('includes/header', $data);
-        $this->load->view('shop/products', $data);
-        $this->load->view('includes/footer');
+        parent::__construct();
+        $this->load->model('Product_model');  
     }
+
+public function products()
+{
+    $data['title'] = "Glassify - Products";
+
+    // Load products from database
+    $data['products'] = $this->Product_model->get_products();
+
+    $this->load->view('includes/header', $data);
+    $this->load->view('shop/products', $data);  // now has $products available
+    $this->load->view('includes/footer');
+}
+
 
 
     public function product_2d()
@@ -22,13 +34,7 @@ class ShopCon extends CI_Controller
     }
 
 
-    public function addtocart()
-    {
-        $data['title'] = "Glassify - Add to Cart";
-        $this->load->view('includes/header', $data);
-        $this->load->view('shop/addtocart', $data);
-        $this->load->view('includes/footer');
-    }
+
 
     public function checkout()
     {

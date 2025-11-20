@@ -55,10 +55,7 @@
 
         </section>
 
-        <section class="logout-container">
-            <button id="accountLogoutBtn" class="btn-logout">Logout</button>
-        </section>
-
+  
     </main>
 
     <script>

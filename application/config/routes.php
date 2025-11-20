@@ -87,7 +87,7 @@ $route['report-issue'] = 'FaqCon/faq_report';
 
 $route['products'] = 'ShopCon/products';
 $route['2DModeling'] = 'ShopCon/product_2d';
-$route['addtocart'] = 'ShopCon/addtocart';
+$route['addtocart'] = 'CartCon/addtocart';    
 $route['payment'] = 'ShopCon/checkout';
 $route['paying'] = 'ShopCon/ewallet';
 $route['complete'] = 'ShopCon/complete';
@@ -134,6 +134,21 @@ $route['admin-product'] = 'AdminCon/admin_product';
 $route['admin-payments'] = 'AdminCon/admin_payments';
 $route['admin-reports'] = 'AdminCon/admin_reports';
 $route['admin-account'] = 'AdminCon/admin_account';
+
+
+/* 
+======================================
+=============Sales Routes===============
+======================================
+ */
+
+$route['sales-dashboard'] = 'SalesCon/sales_dashboard';
+$route['sales-orders'] = 'SalesCon/sales_orders';
+$route['sales-products'] = 'SalesCon/sales_products';
+$route['sales-inventory'] = 'SalesCon/sales_inventory';
+$route['sales-endUser'] = 'SalesCon/sales_endUser';
+$route['sales-payments'] = 'SalesCon/sales_payments';
+$route['sales-issues'] = 'SalesCon/sales_issues';
 
 
 

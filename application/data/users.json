@@ -20,5 +20,13 @@
         "phone": "0985231232323213213",
         "password": "$2y$10$xsURBPaCEdaxr7RHABUZO.AqP9VwD8ZtAdgAhwYsTfMGhyIo\/0IgS",
         "role": "admin"
+    },
+    {
+        "id": 4,
+        "name": "Testing  Test",
+        "email": "test@gmail.com",
+        "phone": "09937568015",
+        "password": "$2y$10$XtCt0\/8ECfRehQxN29.XXeuYHMfymWcw9lIYK7WTtMzqyCEt\/UXRu",
+        "role": "customer"
     }
 ]
