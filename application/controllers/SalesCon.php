@@ -75,6 +75,14 @@ class SalesCon extends CI_Controller
         $this->load->view('sales_page/layout', $data);
     }
 
+    public function sales_account()
+    {
+        $data['title'] = "Glassify - Account Settings";
+        $data['active'] = 'account';
+        $data['content_view'] = 'sales_page/sales_account';
+        $data['page_css'] = 'sales_css/sales_account.css';
+        $this->load->view('sales_page/layout', $data);
+    }
 
     
 }

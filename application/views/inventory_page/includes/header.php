@@ -4,7 +4,7 @@
 <header class="header">
   <div class="header-right">
     <i class="fas fa-bell"></i>
-    <a href="<?php echo base_url('admin-account'); ?>" 
+    <a href="<?php echo base_url('inventory-account'); ?>" 
        class="user-link <?php echo (isset($active) && $active === 'account') ? 'active' : ''; ?>">
       <i class="fas fa-user-circle user-icon"></i>
     </a>

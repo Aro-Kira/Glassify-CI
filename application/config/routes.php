@@ -150,8 +150,20 @@ $route['sales-inventory'] = 'SalesCon/sales_inventory';
 $route['sales-endUser'] = 'SalesCon/sales_endUser';
 $route['sales-payments'] = 'SalesCon/sales_payments';
 $route['sales-issues'] = 'SalesCon/sales_issues';
+$route['sales-account'] = 'SalesCon/sales_account';
 
+/* 
+======================================
+=============Inventory Routes===============
+======================================
+ */
 
+$route['inventory-dashboard'] = 'InventCon/inventory_dashboard';
+$route['inventory-products'] = 'InventCon/inventory_products';
+$route['inventory-inventory'] = 'InventCon/inventory_inventory';
+$route['inventory-account'] = 'InventCon/inventory_account';
+$route['inventory-reports'] = 'InventCon/inventory_reports';
+$route['inventory-notif'] = 'InventCon/inventory_notif';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

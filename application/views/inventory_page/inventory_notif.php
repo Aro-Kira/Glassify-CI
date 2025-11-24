@@ -1,50 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notifications</title>
-    <link rel="stylesheet" href="/Glassify/assets/admin_css/admin_notif.css">
-    <script src="https://kit.fontawesome.com/fc5ceca38c.js" crossorigin="anonymous"></script>
-</head>
-
-<body>
-    <div class="container">
-     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="logo-container">
-        <img src="/Glassify/assets/img/logo.png" alt="GlassWorth Builders Logo" class="logo">
-      </div>
-      <nav class="sidebar-nav">
-        <ul>
-          <li><a href="inventory_dashboard.html"><img src="/Glassify/assets/img_admin/dashboard.svg" alt="Dashboard"> <span>Dashboard</span></a></li> 
-        </ul>
-      </nav>
-      
-      <div class="general-section">
-        <span class="section-title">General</span>
-        <ul>
-          <li><a href="inventory_inventory.html"><img src="/Glassify/assets/img_admin/inventory.svg" alt="Inventory"> <span>Inventory</span></a></li>
-          <li><a href="inventory_products.html"><img src="/Glassify/assets/img_admin/products.svg" alt="Products"> <span>Products</span></a></li>
-          <li><a href="inventory_reports.html"><img src="/Glassify/assets/img_admin/reports.svg" alt="Reports"> <span>Reports</span></a></li>
-        </ul>
-      </div>
-    </aside>
-
-        <main class="main-content">
-
-            <header class="header">
-                <div class="header-menu" id="menu-toggle"><i class="fas fa-bars"></i></div>
-                <div class="header-right">
-                    <a href="inventory_notif.html" class="nav-link" id="notification-link"> 
-                        <i class="fas fa-bell"></i>
-                    </a>
-                    <a href="inventory_account.html" class="nav-link" id="user-profile-link">
-                        <i class="fas fa-user-circle user-icon"></i>
-                    </a>
-                </div>
-            </header>
         <section id="orders" class="page">
         <div class="dash-tabs">
             <h2>Notifications</h2> 
@@ -93,13 +47,10 @@
 
         </div>
         </section>
-</main>
-</div>
+
 
     <script src="/Glassify/assets/js/account-icon-active.js"></script>
     <script src="/Glassify/assets/js/admin-sidebar.js"></script>
     <script src="/Glassify/assets/js/admin-notif-filter.js"></script>
 
-</body>
 
-</html>
