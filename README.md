@@ -28,55 +28,6 @@ Follow these steps to set up Glassify-CI on your local machine:
    git clone <repository-url>
 Or download the ZIP and extract it into your xampp/htdocs folder.
 
-Setup Database
-
-Open phpMyAdmin via http://localhost/phpmyadmin/.
-
-Create a new database (e.g., glassify_db).
-
-Import the provided SQL file (if available) to initialize tables.
-
-Configure CodeIgniter
-
-Open application/config/config.php and set:
-
-php
-Copy code
-$config['base_url'] = 'http://localhost/glassify-ci/';
-
-Open application/config/database.php and update:
-
-php
-
-Copy code
-
-$db['default'] = array(
-	 'dsn'   => '',
-	 'hostname' => 'localhost',
-	 'username' => 'root',
-	 'password' => '',
-	 'database' => 'glassify_db',
-	 'dbdriver' => 'mysqli',
-	 // ...
-
-);
-
-Access the Application
-
-Open your browser and go to:
-http://localhost/glassify-ci/
-You should now see the Glassify-CI homepage.
-
-🌟 Features
-	> 2D modeling of glass and aluminum products
-	> Product ordering and quotation system
-	> User authentication and management
-	> Admin dashboard for managing orders, products, and users
-	> Responsive and user-friendly interface
-
-📂 Documents & Diagrams
-	> For better understanding and development references, you can find the following resources:
-
 
 System Diagram / Architecture: 
 https://drive.google.com/file/d/1X9l5x7Ue_9_YK2a8cxdH1aEFTdUJwQG6/view?usp=sharing
