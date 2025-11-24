@@ -83,4 +83,3 @@ For better understanding and development references, you can find the following 
 System Diagram / Architecture: 
 https://drive.google.com/file/d/1X9l5x7Ue_9_YK2a8cxdH1aEFTdUJwQG6/view?usp=sharing
 
-(Replace the example links with actual URLs or file paths.)
