@@ -43,43 +43,53 @@ Open application/config/config.php and set:
 php
 Copy code
 $config['base_url'] = 'http://localhost/glassify-ci/';
+
 Open application/config/database.php and update:
 
 php
+
 Copy code
+
 $db['default'] = array(
-    'dsn'   => '',
-    'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => '',
-    'database' => 'glassify_db',
-    'dbdriver' => 'mysqli',
-    // ...
+
+	 'dsn'   => '',
+    
+	 'hostname' => 'localhost',
+    
+	 'username' => 'root',
+    
+	 'password' => '',
+    
+	 'database' => 'glassify_db',
+    
+	 'dbdriver' => 'mysqli',
+    
+	 // ...
+
 );
+
 Access the Application
 
 Open your browser and go to:
 
-arduino
-Copy code
 http://localhost/glassify-ci/
+
 You should now see the Glassify-CI homepage.
 
 🌟 Features
-2D modeling of glass and aluminum products
 
-Product ordering and quotation system
-
-User authentication and management
-
-Admin dashboard for managing orders, products, and users
-
-Responsive and user-friendly interface
+	2D modeling of glass and aluminum products
+	Product ordering and quotation system
+	User authentication and management
+	Admin dashboard for managing orders, products, and users
+	Responsive and user-friendly interface
 
 📂 Documents & Diagrams
-For better understanding and development references, you can find the following resources:
+
+	For better understanding and development references, you can find the following resources:
 
 
 System Diagram / Architecture: 
+
 https://drive.google.com/file/d/1X9l5x7Ue_9_YK2a8cxdH1aEFTdUJwQG6/view?usp=sharing
 
