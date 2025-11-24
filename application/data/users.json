@@ -28,5 +28,13 @@
         "phone": "09937568015",
         "password": "$2y$10$XtCt0\/8ECfRehQxN29.XXeuYHMfymWcw9lIYK7WTtMzqyCEt\/UXRu",
         "role": "customer"
+    },
+    {
+        "id": 5,
+        "name": "testSales  Rep",
+        "email": "sales123@gmail.com",
+        "phone": "09937568023",
+        "password": "$2y$10$sp.rejtTkOnjs4iQ7vmPpulyEbJ9NE\/TZFGnGr3jkZlN231V57O3u",
+        "role": "sales"
     }
 ]

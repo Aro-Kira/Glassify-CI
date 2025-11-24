@@ -40,6 +40,17 @@ class Auth extends CI_Controller
         $this->load->view('includes/footer');
     }
 
+    // ===================== SALES LOGIN PAGE =====================
+    public function sales_login()
+    {
+        $data['title'] = "Glassify - Sales Login";
+
+        // Load the sales-specific login view
+        $this->load->view('includes/header', $data);
+        $this->load->view('auth/login_sales', $data);
+        $this->load->view('includes/footer');
+    }
+
     // ===================== REGISTER =====================
     public function register()
     {
@@ -55,10 +66,20 @@ class Auth extends CI_Controller
         $email = $this->input->post('email');
         $password = $this->input->post('password');
         $is_admin = $this->input->post('is_admin');
+        $is_sales = $this->input->post('is_sales');
 
         $user = $this->_get_user_by_email($email);
 
         if ($user && password_verify($password, $user['password'])) {
+
+            // If this is a sales login attempt, require sales role
+            if ($is_sales) {
+                if ($user['role'] !== 'sales') {
+                    $this->session->set_flashdata('error', 'Invalid email or password.');
+                    redirect(base_url('auth/sales_login'));
+                    return;
+                }
+            }
 
             // Handle admin login via customer form
             if (!$is_admin && $user['role'] === 'admin') {
@@ -68,15 +89,15 @@ class Auth extends CI_Controller
             // Prevent non-admin accessing admin login
             if ($is_admin && $user['role'] !== 'admin') {
                 $this->session->set_flashdata('error', 'Invalid email or password.');
-                redirect(base_url('fl'));
+                redirect(base_url('Adlog'));
                 return;
             }
 
             // ✅ Set session
             $this->session->set_userdata([
-                'user_id'      => $user['id'],
-                'user_name'    => $user['name'],
-                'user_role'    => $user['role'],
+                'user_id' => $user['id'],
+                'user_name' => $user['name'],
+                'user_role' => $user['role'],
                 'is_logged_in' => true
             ]);
 
@@ -88,8 +109,10 @@ class Auth extends CI_Controller
                 return;
             }
 
-            // Default redirect
-            if ($user['role'] === 'admin' && $is_admin) {
+            // Default redirects: sales, admin or customer
+            if ($is_sales && $user['role'] === 'sales') {
+                redirect(base_url('sales-dashboard'));
+            } elseif ($user['role'] === 'admin' && $is_admin) {
                 redirect(base_url('admin-dashboard'));
             } else {
                 redirect(base_url('home-login'));
@@ -98,7 +121,9 @@ class Auth extends CI_Controller
         } else {
             $this->session->set_flashdata('error', 'Invalid email or password.');
             if ($is_admin) {
-                redirect(base_url('fl'));
+                redirect(base_url('Adlog'));
+            } elseif ($is_sales) {
+                redirect(base_url('SlsLog'));
             } else {
                 redirect(base_url('login'));
             }
@@ -108,13 +133,13 @@ class Auth extends CI_Controller
     // ===================== PROCESS REGISTER =====================
     public function process_register()
     {
-        $first_name     = $this->input->post('first_name');
+        $first_name = $this->input->post('first_name');
         $middle_initial = $this->input->post('middle_initial');
-        $surname        = $this->input->post('surname');
-        $email          = $this->input->post('email');
-        $password       = $this->input->post('password');
-        $confirm_pass   = $this->input->post('confirm_password');
-        $phone          = $this->input->post('phone');
+        $surname = $this->input->post('surname');
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+        $confirm_pass = $this->input->post('confirm_password');
+        $phone = $this->input->post('phone');
 
         if ($password !== $confirm_pass) {
             $this->session->set_flashdata('error', 'Passwords do not match.');
@@ -129,12 +154,12 @@ class Auth extends CI_Controller
         }
 
         $new_user = [
-            'id'       => $this->_generate_user_id(),
-            'name'     => trim("$first_name $middle_initial $surname"),
-            'email'    => $email,
-            'phone'    => $phone,
+            'id' => $this->_generate_user_id(),
+            'name' => trim("$first_name $middle_initial $surname"),
+            'email' => $email,
+            'phone' => $phone,
             'password' => password_hash($password, PASSWORD_DEFAULT),
-            'role'     => 'customer',
+            'role' => 'customer',
         ];
 
         $this->_save_user($new_user);
@@ -191,4 +216,14 @@ class Auth extends CI_Controller
         $users = $this->_load_users_from_file();
         return count($users) + 1;
     }
+    // ===================== CHECK LOGIN STATUS (AJAX) =====================
+    public function check_login_status()
+    {
+        $loggedIn = $this->session->userdata('is_logged_in') ? true : false;
+
+        echo json_encode([
+            'loggedIn' => $loggedIn
+        ]);
+    }
+
 }

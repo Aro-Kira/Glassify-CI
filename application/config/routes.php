@@ -116,7 +116,8 @@ $route['auth/process_register'] = 'auth/process_register';
  */
 
 $route['Profile'] = 'UserCon/profile';
-$route['fl'] = 'Auth/admin_login';
+$route['Adlog'] = 'Auth/admin_login';
+$route['SlsLog'] = 'Auth/sales_login';
 
 
 /* 

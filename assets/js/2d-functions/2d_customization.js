@@ -434,12 +434,30 @@ document.addEventListener('click', (e) => {
     if (e.target === uploadModal) closeUploadModal();
 });
 
-// Navigation Logic
+// Navigation Logic (single next/back handler covers standard & custom flows)
 nextBtn.addEventListener('click', () => {
+    // Standard mode: move to standard step or finalize
+    if (isStandardMode) {
+        if (currentStep < 2) {
+            goToStep(2);
+        } else {
+            // Finalize standard order
+            console.log('Finalizing Standard Order...');
+            showOrderSummary();
+        }
+        return;
+    }
+
+    // Custom mode normal flow
     if (currentStep === 1) goToStep(2);
     else if (currentStep === 2) goToStep(3);
-    else console.log("Custom Order Finalized!");
+    else {
+        // Step 3 -> Finalize custom order
+        console.log('Finalizing Custom Order...');
+        showOrderSummary();
+    }
 });
+
 
 backBtn.addEventListener('click', () => {
     if (currentStep === 2) goToStep(1);
@@ -447,14 +465,22 @@ backBtn.addEventListener('click', () => {
 });
 
 function goToStep(targetStep) {
-    step1.classList.add('hidden-step'); step2.classList.add('hidden-step'); step3.classList.add('hidden-step');
+    // Hide all steps first
+    [step1, step2, step3].forEach(s => s.classList.add('hidden-step'));
+
+    // Show the target step
     if (targetStep === 1) step1.classList.remove('hidden-step');
     if (targetStep === 2) step2.classList.remove('hidden-step');
     if (targetStep === 3) step3.classList.remove('hidden-step');
+
+    // Update UI
     updateActionArea(targetStep);
     updateBreadcrumbs(targetStep);
+
+    // Update currentStep AFTER UI
     currentStep = targetStep;
 }
+
 
 function updateActionArea(step) {
     if (step === 1) { backGroup.classList.add('hidden-step'); nextBtn.innerHTML = `Next <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>`; nextNote.innerText = 'Glass Type & Thickness'; backNote.innerText = ''; }
@@ -470,9 +496,13 @@ function updateBreadcrumbs(step) {
 }
 
 function resetBreadcrumbsToStandard() {
-    crumbMain.innerText = 'Standard'; crumbMain.classList.add('active');
-    removeCrumb('crumb-step2'); removeCrumb('crumb-step3');
+    crumbMain.innerText = 'Standard';
+    crumbMain.classList.add('active');
+    removeCrumb('crumb-step2');
+    removeCrumb('crumb-step3');
+    currentStep = 1; // Reset currentStep for Standard Mode
 }
+
 
 function addBreadcrumb(text, id, isActive) {
     if (document.getElementById(id)) return; 
@@ -744,18 +774,6 @@ function formatText(str) {
 }
 
 // --- EVENT LISTENER UPDATES ---
-
-// 1. Finalize Button (Custom Flow)
-// FIND THIS SECTION in your code and REPLACE the nextBtn listener
-nextBtn.addEventListener('click', () => {
-    if (currentStep === 1) goToStep(2);
-    else if (currentStep === 2) goToStep(3);
-    else {
-        // Step 3 -> Finalize
-        console.log("Finalizing Custom Order...");
-        showOrderSummary();
-    }
-});
 
 // 2. Finalize Button (Standard Flow)
 // FIND the onclick attribute in the HTML for the Standard finalize button

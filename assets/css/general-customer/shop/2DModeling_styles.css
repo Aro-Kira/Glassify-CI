@@ -468,17 +468,21 @@ h1 {
 /* --- NAVIGATION ACTION AREA --- */
 .action-area {
     display: flex;
-    justify-content: center; /* Center single button for Step 1 */
-    gap: 30px;
+    justify-content: center; /* Centered */
+    gap: 80px; /* Always use max gap */
     width: 100%;
     margin-top: 40px;
 }
 
-/* When back button is present (Step 2+), distribute space */
-.action-area:has(.action-group.left:not(.hidden-step)) {
-    justify-content: center;
-    gap: 80px; /* Increase gap between back and next groups */
+.action-group.left {
+    min-width: 180px; /* or width same as button */
+    visibility: hidden; /* If no back button, keep space */
 }
+
+.action-group.left:not(.hidden-step) {
+    visibility: visible; /* Show when back button exists */
+}
+
 
 .action-group {
     display: flex;
