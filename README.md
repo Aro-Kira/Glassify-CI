@@ -30,5 +30,6 @@ Or download the ZIP and extract it into your xampp/htdocs folder.
 
 
 System Diagram / Architecture: 
-https://drive.google.com/file/d/1X9l5x7Ue_9_YK2a8cxdH1aEFTdUJwQG6/view?usp=sharing
+[link](https://app.diagrams.net/#G1X9l5x7Ue_9_YK2a8cxdH1aEFTdUJwQG6#%7B"pageId"%3A"rMI93xM8LfqRf1F9micD"%7D)
+
 
