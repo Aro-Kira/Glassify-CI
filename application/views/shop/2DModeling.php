@@ -418,7 +418,7 @@
                 </svg>
             </button>
         </div>
-    </div>
+    </div>  
 </section>
 <script src="<?= base_url('assets/js/2d-functions/2d_customization.js'); ?>"></script>
 <script src="<?= base_url('assets/js/2d-functions/2d_functions.js'); ?>"></script>
@@ -452,6 +452,99 @@
         const loginUrl = '<?= site_url("auth/login") ?>' + '?redirect=' + encodeURIComponent(redirectPath);
         const go = confirm('You need to be logged in to continue. Log in now?');
         if (go) window.location.href = loginUrl;
-    }, true); // use capture so we run before other listeners
+        }, true); // use capture so we run before other listeners
+})();
+</script>
+
+<script>
+// ============ BUY NOW HANDLER ============
+(function() {
+    const buyNowBtn = document.getElementById('buy-now-btn');
+    if (!buyNowBtn) return;
+
+    buyNowBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Collect form data from the page
+        const formData = new FormData();
+        
+        // Product ID
+        const productId = buyNowBtn.getAttribute('data-product-id');
+        formData.append('product_id', productId);
+        
+        // Determine if standard or custom mode
+        const isStandardMode = document.getElementById('standard-wrapper') && 
+                               !document.getElementById('standard-wrapper').classList.contains('hidden-step');
+        formData.append('is_standard', isStandardMode ? '1' : '0');
+        
+        if (isStandardMode) {
+            // Collect standard mode data
+            const standardSize = document.querySelector('.option-card[data-height][data-width]:not(.hidden-step)')?.closest('.option-card');
+            if (standardSize) {
+                formData.append('standard_size', standardSize.textContent.trim());
+                formData.append('height', standardSize.getAttribute('data-height'));
+                formData.append('width', standardSize.getAttribute('data-width'));
+            }
+        } else {
+            // Collect custom mode data
+            const heightInput = document.getElementById('input-height');
+            const widthInput = document.getElementById('input-width');
+            const heightUnit = document.getElementById('btn-unit-height')?.getAttribute('data-current-unit') || 'in';
+            const widthUnit = document.getElementById('btn-unit-width')?.getAttribute('data-current-unit') || 'in';
+            
+            formData.append('height', heightInput?.value || '45');
+            formData.append('width', widthInput?.value || '35');
+            formData.append('height_unit', heightUnit);
+            formData.append('width_unit', widthUnit);
+            
+            // Shape
+            const activeShape = document.querySelector('.option-card[data-shape].active');
+            formData.append('shape', activeShape?.getAttribute('data-shape') || 'rectangle');
+            
+            // Glass Type
+            const activeGlassType = document.querySelector('.option-card[data-glass-type].active');
+            formData.append('glass_type', activeGlassType?.getAttribute('data-glass-type') || 'tempered');
+            
+            // Thickness
+            const activeThickness = document.querySelector('.option-card[data-thickness].active');
+            formData.append('thickness', activeThickness?.getAttribute('data-thickness') || '5mm');
+            
+            // Edge Work
+            const activeEdge = document.querySelector('.option-card[data-edge-work].active');
+            formData.append('edge_work', activeEdge?.getAttribute('data-edge-work') || 'flat-polish');
+            
+            // Frame Type
+            const activeFrame = document.querySelector('.option-card[data-frame-type].active');
+            formData.append('frame_type', activeFrame?.getAttribute('data-frame-type') || 'vinyl');
+            
+            // Engraving
+            const engravingInputs = document.querySelectorAll('.engraving-section input[type="text"]');
+            if (engravingInputs.length > 0) {
+                formData.append('engraving', engravingInputs[0].value || 'None');
+            }
+        }
+        
+        // Get price from the page
+        const priceElement = document.querySelector('.price-final') || document.querySelector('.price-value');
+        if (priceElement) {
+            formData.append('price', priceElement.textContent.trim());
+        }
+        
+        // Submit form to buy-now endpoint
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '<?= site_url("buy-now") ?>';
+        
+        for (let [key, value] of formData) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = key;
+            input.value = value;
+            form.appendChild(input);
+        }
+        
+        document.body.appendChild(form);
+        form.submit();
+    });
 })();
 </script>

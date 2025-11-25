@@ -2,8 +2,6 @@
 <link rel="stylesheet" href="<?php echo base_url('assets/css/general-customer/shop/order_tracking.css'); ?>">
 
 
-<body>
-    <my-header></my-header>
     <main class="order-status-page">
         <!-- Title -->
         <section class="order-header">
@@ -35,33 +33,33 @@
         <!-- Order Progress -->
         <section class="order-progress">
             <div class="step completed">
-                <img src="../assets/img/checkout_track.svg" class="order-icon" alt="checkout">
+                <img src="<?php echo base_url('assets/images/img-page/checkout_track.svg'); ?>" class="order-icon" alt="checkout">
                 <p>Order Placed</p>
-                <span class="icon"><img src="../assets/img/check-track.png" alt="check"></span>
+                <span class="icon"><img src="<?php echo base_url('assets/images/img-page/check-track.png'); ?>" alt="check"></span>
                 <small>May 22, 2025<br>8:00 AM</small>
             </div>
             <div class="step completed">
-                <img src="../assets/img/ocular_track.svg" class="order-icon" alt="ocular visit">
+                <img src="<?php echo base_url('assets/images/img-page/ocular_track.svg'); ?>" class="order-icon" alt="ocular visit">
                 <p>Ocular Visit</p>
-                <span class="icon"><img src="../assets/img/check-track.png" alt="check"></span>
+                <span class="icon"><img src="<?php echo base_url('assets/images/img-page/check-track.png'); ?>" alt="check"></span>
 
                 <small>May 24, 2025<br>1:23 PM</small>
             </div>
             <div class="step completed">
-                <img src="../assets/img/package_track.svg" class="order-icon" alt="fabrication">
+                <img src="<?php echo base_url('assets/images/img-page/package_track.svg'); ?>" class="order-icon" alt="fabrication">
                 <p>In Fabrication</p>
-                <span class="icon"><img src="../assets/img/check-track.png" alt="check"></span>
+                <span class="icon"><img src="<?php echo base_url('assets/images/img-page/check-track.png'); ?>" alt="check"></span>
 
                 <small>May 27, 2025<br>10:30 AM</small>
             </div>
             <div class="step pending">
-                <img src="../assets/img/window_track.svg" class="order-icon" alt="Installation">
+                <img src="<?php echo base_url('assets/images/img-page/window_track.svg'); ?>" class="order-icon" alt="Installation">
                 <p>Installed</p>
                 <span class="icon"></span>
                 <small>Expected<br>June 9, 2025</small>
             </div>
             <div class="step pending">
-                <img src="../assets/img/delivered_track.svg" class="order-icon" alt="delivery">
+                <img src="<?php echo base_url('assets/images/img-page/delivered_track.svg'); ?>" class="order-icon" alt="delivery">
                 <p>Completed</p>
                 <span class="icon"></span>
                 <small>Expected<br>June 19, 2025</small>
@@ -81,37 +79,37 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><img src="img/window.jpg" alt=""> 798 Series Sliding Window</td>
+                        <td><img src="<?php echo base_url('assets/images/img-page/798_window.png'); ?>" alt=""> 798 Series Sliding Window</td>
                         <td>₱3000.00</td>
                         <td>3</td>
                         <td>₱9,000.00</td>
                     </tr>
                     <tr>
-                        <td><img src="img/frame.jpg" alt=""> Rounded Edge Frameless</td>
+                        <td><img src="<?php echo base_url('assets/images/img-page/frameless-whole-mirror.png'); ?>" alt=""> Rounded Edge Frameless</td>
                         <td>₱3700.00</td>
                         <td>1</td>
                         <td>₱3,700.00</td>
                     </tr>
                     <tr>
-                        <td><img src="img/kitchen.jpg" alt=""> Aluminum Kitchen Cabinet</td>
+                        <td><img src="<?php echo base_url('assets/images/img-page/cabinet1.png'); ?>" alt=""> Aluminum Kitchen Cabinet</td>
                         <td>₱2500.00</td>
                         <td>2</td>
                         <td>₱2,500.00</td>
                     </tr>
                     <tr>
-                        <td><img src="img/door.jpg" alt=""> 4 Panel Sliding Door</td>
+                        <td><img src="<?php echo base_url('assets/images/img-page/french-sliding-door.png'); ?>" alt=""> 4 Panel Sliding Door</td>
                         <td>₱4500.00</td>
                         <td>1</td>
                         <td>₱9,000.00</td>
                     </tr>
                     <tr>
-                        <td><img src="img/mirror.jpg" alt=""> Frameless Rectangle Mirror</td>
+                        <td><img src="<?php echo base_url('assets/images/img-page/rectangle mirror.png'); ?>" alt=""> Frameless Rectangle Mirror</td>
                         <td>₱1500.00</td>
                         <td>1</td>
                         <td>₱1,500.00</td>
                     </tr>
                     <tr>
-                        <td><img src="img/round-mirror.jpg" alt=""> Black Framed Round Mirror</td>
+                        <td><img src="<?php echo base_url('assets/images/img-page/frameless-whole-mirror.png'); ?>" alt=""> Black Framed Round Mirror</td>
                         <td>₱700.00</td>
                         <td>1</td>
                         <td>₱700.00</td>
@@ -147,6 +145,5 @@
             </div>
         </section>
 
-    </main>
 
-    <script src="order-status.js"></script>
+    <script src="<?php echo base_url('js/order-status.js'); ?>"></script>

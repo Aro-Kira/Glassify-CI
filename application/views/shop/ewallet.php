@@ -3,8 +3,8 @@
     <!-- Back + Progress -->
     <div class="payOrder-header">
         <div class="back-btn">
-            <a href="/Glassify/html/checkout.html">
-                <img src="/Glassify/assets/img/back_button.png" alt="Back Icon">
+            <a href="<?php echo site_url('shopcon/checkout'); ?>">
+                <img src="<?php echo base_url('assets/img/back_button.png'); ?>" alt="Back Icon">
                 <span>Back</span>
             </a>
         </div>
@@ -29,7 +29,7 @@
         <section class="payment-container">
             <!-- Left: GCash QR -->
             <div class="gcash-box">
-                <img src="/Glassify/assets/img/qr.png" alt="GCash QR">
+                <img src="<?php echo base_url('assets/images/img-page/qr.png'); ?>" alt="GCash QR">
             </div>
 
             <!-- Right: Order Details -->
@@ -43,49 +43,58 @@
 
                 <div class="order-summary">
                     <div class="summary-header">Order Summary</div>
-                    <div class="summary-row"><span>Items</span><span>9</span></div>
-                    <div class="summary-row"><span>Subtotal</span><span>₱32,700.00</span></div>
-                    <div class="summary-row"><span>Shipping Fee</span><span>₱543.00</span></div>
-                    <div class="summary-row"><span>Handling Fee</span><span>₱100.00</span></div>
-                    <div class="summary-row total"><span>Total</span><span>₱33,343.00</span></div>
+                    <!-- These values can be replaced with dynamic variables from controller: $items_count, $subtotal, etc. -->
+                    <div class="summary-row"><span>Items</span><span><?php echo isset($items_count) ? $items_count : '0'; ?></span></div>
+                    <div class="summary-row"><span>Subtotal</span><span><?php echo isset($subtotal) ? $subtotal : '₱0.00'; ?></span></div>
+                    <div class="summary-row"><span>Shipping Fee</span><span><?php echo isset($shipping_fee) ? $shipping_fee : '₱0.00'; ?></span></div>
+                    <div class="summary-row"><span>Handling Fee</span><span><?php echo isset($handling_fee) ? $handling_fee : '₱0.00'; ?></span></div>
+                    <div class="summary-row total"><span>Total</span><span><?php echo isset($total) ? $total : '₱0.00'; ?></span></div>
                 </div>
 
-                <div class="upload-box">
-                    <span>*</span>
-                    <span id="file-name"></span> <!-- ✅ Display selected file -->
-                    <label for="fileUpload" class="upload-btn">📎 Attach a file</label>
-                    <input type="file" id="fileUpload">
-                    
-                </div>
+                <!-- Upload form: posts to ShopCon::ewallet_submit -->
+                <form id="ewalletForm" action="<?php echo site_url('waiting_order'); ?>" method="post" enctype="multipart/form-data">
+                    <?php if ($this->config->item('csrf_protection')): ?>
+                        <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+                    <?php endif; ?>
 
-                <button class="payment-btn" onclick="submitPayment()">Send Payment</button>
+                    <div class="upload-box">
+                        <span>*</span>
+                        <span id="file-name"></span>
+                        <label for="fileUpload" class="upload-btn">📎 Attach a file</label>
+                        <input type="file" id="fileUpload" name="receipt" accept="image/*,application/pdf">
+                    </div>
 
-                <div class="terms">
-                    <input type="checkbox" id="terms">
-                    <label for="terms">
-                        I have read and agree to Glassify’s
-                        <a href="terms_order.html">Terms and Conditions of Purchase</a>
-                    </label>
-                </div>
+                    <button type="button" class="payment-btn" onclick="submitPayment()">Send Payment</button>
+
+                    <div class="terms">
+                        <input type="checkbox" id="terms">
+                        <label for="terms">
+                            I have read and agree to Glassify’s
+                            <a href="<?php echo site_url('shopcon/terms_order'); ?>">Terms and Conditions of Purchase</a>
+                        </label>
+                    </div>
+                </form>
             </div>
         </section>
 
     </main>
 
-    <script src="/Glassify/assets/js/cart.js"></script>
+    <script src="<?php echo base_url('assets/js/cart.js'); ?>"></script>
 
     <script>
         // Show selected file name
-        const fileInput = document.getElementById('fileUpload'); // ✅ corrected ID
+        const fileInput = document.getElementById('fileUpload');
         const fileNameDisplay = document.getElementById('file-name');
 
-        fileInput.addEventListener('change', () => {
-            fileNameDisplay.textContent = fileInput.files.length > 0 ? fileInput.files[0].name : "";
-        });
+        if (fileInput) {
+            fileInput.addEventListener('change', () => {
+                fileNameDisplay.textContent = fileInput.files.length > 0 ? fileInput.files[0].name : "";
+            });
+        }
 
-        // Mock submit
+        // Submit via form POST (simple client-side checks)
         function submitPayment() {
-            if (!fileInput.files.length) {
+            if (!fileInput || !fileInput.files.length) {
                 alert("Please attach a payment receipt.");
                 return;
             }
@@ -93,8 +102,9 @@
                 alert("Please agree to the Terms and Conditions.");
                 return;
             }
-            alert("Payment submitted successfully!");
-              window.location.href = "/Glassify/html/order_complete.html";
+
+            // Optionally show a loading state here
+            document.getElementById('ewalletForm').submit();
         }
     </script>
 

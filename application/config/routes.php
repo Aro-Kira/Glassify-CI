@@ -88,12 +88,14 @@ $route['report-issue'] = 'FaqCon/faq_report';
 $route['products'] = 'ShopCon/products';
 $route['2DModeling'] = 'ShopCon/product_2d';
 $route['addtocart'] = 'CartCon/addtocart';    
+$route['buy-now'] = 'ShopCon/buy_now';
 $route['payment'] = 'ShopCon/checkout';
 $route['paying'] = 'ShopCon/ewallet';
 $route['complete'] = 'ShopCon/complete';
 $route['terms_order'] = 'ShopCon/terms_order';
 $route['wishlist'] = 'ShopCon/wishlist';
 $route['track_order'] = 'ShopCon/order_tracking';
+$route['waiting_order'] = 'ShopCon/waiting_order';
 
 /* 
 ======================================

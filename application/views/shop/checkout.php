@@ -4,8 +4,8 @@
     <div class="checkout-header">
         <!-- Back button -->
         <div class="back-btn">
-            <a href="/Glassify/html/addtocart.html">
-                <img src="/Glassify/assets/img/back_button.png" alt="Back Icon">
+            <a href="<?php echo base_url('ShopCon/cart'); ?>">
+                <img src="<?php echo base_url('assets/images/img-page/back_button.png'); ?>" alt="Back Icon">
                 <span>Back</span>
             </a>
         </div>
@@ -123,13 +123,13 @@
                     <div class="payment-method-content">
                         <h3>Payment Methods</h3>
                         <p>
-                            <img src="../assets/img/dollar.png" alt="dollaricon">
+                            <img src="<?php echo base_url('assets/images/img-page/dollar.png'); ?>" alt="dollaricon">
                             <label for="ewallet-radio">E-Wallet</label>
                             <input type="radio" id="ewallet-radio" name="payment-method"
                                 title="Select E-Wallet as payment method">
                         </p>
                         <p>
-                            <img src="../assets/img/wallet.png" alt="COD-icon">
+                            <img src="<?php echo base_url('assets/images/img-page/wallet.png'); ?>" alt="COD-icon">
                             <label for="COD-radio">Cash on Delivery</label>
                             <input type="radio" id="COD-radio" name="payment-method"
                                 title="Select COD as payment method">
@@ -153,7 +153,7 @@
     </main>
 
 
-    <script src="/Glassify/assets/js/cart.js"></script>
+    <script src="<?php echo base_url('assets/js/cart.js'); ?>"></script>
 
 
     <!-- Modal -->
@@ -257,7 +257,7 @@
     if (ewallet) {
       window.location.href = "<?php echo base_url('paying'); ?>"; // redirect to e-wallet page
     } else if (cod) {
-      window.location.href = "<?php echo base_url('complete'); ?>"; // redirect to COD page
+      window.location.href = "<?php echo base_url('waiting_order'); ?>"; // redirect to COD page
     } else {
       alert("Please select a payment method before placing order.");
     }
