@@ -88,6 +88,21 @@
 }
 
 
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 100;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
 /* Dropdown container */
 .header-dropdown {
   position: relative;

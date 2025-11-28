@@ -27,16 +27,31 @@ public function products()
 
 
 
-    public function product_2d()
-    {
-        $data['title'] = "Glassify - 2D Modeling";
-        $this->load->view('includes/header', $data);
-        $this->load->view('shop/2DModeling', $data);
-        $this->load->view('includes/footer');
+public function product_2d()
+{
+    $this->load->model('Product_model');
+
+    // Get id from GET instead of method param
+    $id = $this->input->get('id');
+
+    if ($id) {
+        $product = $this->Product_model->get_product($id);
+    } else {
+        // Get the latest product as default
+        $product = $this->Product_model->get_products()[0] ?? null;
     }
 
+    if (!$product) {
+        show_404();
+    }
 
+    $data['title'] = "Glassify - 2D Modeling";
+    $data['product'] = $product;
 
+    $this->load->view('includes/header', $data);
+    $this->load->view('shop/2DModeling', $data);
+    $this->load->view('includes/footer');
+}
 
     public function checkout()
     {
@@ -46,40 +61,6 @@ public function products()
         $this->load->view('includes/footer');
     }
 
-    public function buy_now()
-    {
-        // Check if user is logged in
-        if (!$this->session->userdata('user_id') && !$this->session->userdata('logged_in')) {
-            redirect('auth/login?redirect=' . urlencode(current_url()));
-            return;
-        }
-
-        // Get customization data from POST
-        if ($this->input->server('REQUEST_METHOD') === 'POST') {
-            $customization_data = [
-                'product_id'   => $this->input->post('product_id'),
-                'shape'        => $this->input->post('shape'),
-                'height'       => $this->input->post('height'),
-                'width'        => $this->input->post('width'),
-                'height_unit'  => $this->input->post('height_unit'),
-                'width_unit'   => $this->input->post('width_unit'),
-                'glass_type'   => $this->input->post('glass_type'),
-                'thickness'    => $this->input->post('thickness'),
-                'edge_work'    => $this->input->post('edge_work'),
-                'frame_type'   => $this->input->post('frame_type'),
-                'engraving'    => $this->input->post('engraving'),
-                'price'        => $this->input->post('price'),
-                'standard_size' => $this->input->post('standard_size'),
-                'is_standard'  => $this->input->post('is_standard')
-            ];
-
-            // Store in session
-            $this->session->set_userdata('temp_order_data', $customization_data);
-        }
-
-        // Redirect to checkout
-        redirect('payment');
-    }
 
 
     public function ewallet()
@@ -128,5 +109,4 @@ public function products()
         $this->load->view('shop/WaitingOrder', $data);
         $this->load->view('includes/footer');
     }
-
 }

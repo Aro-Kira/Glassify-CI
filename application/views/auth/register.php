@@ -25,36 +25,35 @@
 
             <!-- Flash Messages -->
             <?php if ($this->session->flashdata('error')): ?>
-                <div class="alert alert-danger">
-                    <?= $this->session->flashdata('error'); ?>
-                </div>
+                <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
             <?php elseif ($this->session->flashdata('success')): ?>
-                <div class="alert alert-success">
-                    <?= $this->session->flashdata('success'); ?>
-                </div>
+                <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
             <?php endif; ?>
 
+            <!-- Validation Errors -->
+            <?php echo validation_errors('<div class="alert alert-danger">', '</div>'); ?>
+
             <!-- Register Form -->
-            <?php echo form_open(base_url('auth/process_register'), ['class' => 'register-form']); ?>
+            <?php echo form_open('auth/process_register', ['class' => 'register-form']); ?>
 
                 <div class="register-input-group">
                     <label for="firstName">First Name <span class="required">*</span></label>
-                    <input type="text" name="first_name" id="firstName" placeholder="Enter your first name" required>
+                    <input type="text" name="first_name" id="firstName" placeholder="Enter your first name" value="<?= set_value('first_name'); ?>" required>
                 </div>
 
                 <div class="register-input-group">
                     <label for="middleInitial">Middle Initial (optional)</label>
-                    <input type="text" name="middle_initial" id="middleInitial" placeholder="Enter your middle initial">
+                    <input type="text" name="middle_initial" id="middleInitial" placeholder="Enter your middle initial" value="<?= set_value('middle_initial'); ?>">
                 </div>
 
                 <div class="register-input-group">
                     <label for="surname">Surname <span class="required">*</span></label>
-                    <input type="text" name="surname" id="surname" placeholder="Enter your surname" required>
+                    <input type="text" name="surname" id="surname" placeholder="Enter your surname" value="<?= set_value('surname'); ?>" required>
                 </div>
 
                 <div class="register-input-group">
                     <label for="email">Email Address <span class="required">*</span></label>
-                    <input type="email" name="email" id="email" placeholder="Enter your email" required>
+                    <input type="email" name="email" id="email" placeholder="Enter your email" value="<?= set_value('email'); ?>" required>
                 </div>
 
                 <div class="register-input-group password-group">
@@ -62,7 +61,6 @@
                     <div class="register-input-row">
                         <input type="password" name="password" id="password" placeholder="Enter your password" required>
                         <button type="button" class="toggle-password"><i class="fa fa-eye"></i></button>
-
                     </div>
                 </div>
 
@@ -71,17 +69,17 @@
                     <div class="register-input-row">
                         <input type="password" name="confirm_password" id="confirmPassword" placeholder="Confirm your password" required>
                         <button type="button" class="toggle-password"><i class="fa fa-eye"></i></button>
-
                     </div>
                 </div>
 
                 <div class="register-input-group">
                     <label for="phone">Phone Number <span class="required">*</span></label>
-                    <input type="tel" name="phone" id="phone" placeholder="Enter your phone number" required>
+                    <input type="tel" name="phone" id="phone" placeholder="Enter your phone number" value="<?= set_value('phone'); ?>" required>
                 </div>
 
                 <div class="register-options">
-                    <label><input type="checkbox" required> I agree to Glassify’s 
+                    <label>
+                        <input type="checkbox" required> I agree to Glassify’s 
                         <a href="<?php echo base_url('terms'); ?>">Terms and Conditions</a>
                     </label>
                     <a href="#">Need Help?</a>
@@ -95,25 +93,16 @@
     </div>
 </section>
 
-
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // Select all toggle-password buttons
     const toggles = document.querySelectorAll(".toggle-password");
 
     toggles.forEach(toggle => {
         toggle.addEventListener("click", function() {
-            // Find the related password input (the one before the button)
             const input = this.previousElementSibling;
             if (!input) return;
-
-            // Toggle between password and text
-            const isHidden = input.type === "password";
-            input.type = isHidden ? "text" : "password";
-
-            // Optional: change button icon/text
-           this.innerHTML = isHidden ? '<i class="fa fa-eye-slash"></i>' : '<i class="fa fa-eye"></i>';
-
+            input.type = input.type === "password" ? "text" : "password";
+            this.innerHTML = input.type === "password" ? '<i class="fa fa-eye"></i>' : '<i class="fa fa-eye-slash"></i>';
         });
     });
 });

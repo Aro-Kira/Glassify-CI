@@ -1,0 +1,13 @@
+Array
+(
+    [product_id] => 2
+    [dimensions] => 45 x 35
+    [shape] => rectangle
+    [type] => tempered
+    [thickness] => 5mm
+    [edge] => flat-polish
+    [frame] => vinyl
+    [engraving] => None
+    [price] => 189,000.00
+    [design_ref] => 
+)

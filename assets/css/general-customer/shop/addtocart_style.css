@@ -84,6 +84,14 @@ main {
   border-radius: 5px;
 }
 
+.cart-product-img {
+    width: 60px;       /* Adjust size as needed */
+    height: 60px;
+    object-fit: cover; /* Ensures image keeps aspect ratio */
+    border-radius: 4px; 
+}
+
+
 .quantity-btn {
   padding: 5px 10px;
   margin: 0 5px;

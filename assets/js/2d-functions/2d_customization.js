@@ -31,8 +31,8 @@ const browseFilesBtn = document.getElementById('browse-files-btn');
 const fileInput = document.getElementById('file-input');
 const uploadedFilesContainer = document.getElementById('uploaded-files-container');
 const dropzone = document.getElementById('dropzone');
-let uploadedFiles = []; 
-const MAX_FILE_SIZE_MB = 25; 
+let uploadedFiles = [];
+const MAX_FILE_SIZE_MB = 25;
 
 
 // --- APPLICATION STATE ---
@@ -40,9 +40,9 @@ let currentStep = 1;
 let isStandardMode = false;
 
 // CUSTOM STATE VARIABLES
-let currentShape = 'rectangle'; 
-let currentGlassType = 'tempered'; 
-let currentThickness = '5mm'; 
+let currentShape = 'rectangle';
+let currentGlassType = 'tempered';
+let currentThickness = '5mm';
 let currentEdgeWork = 'flat-polish';
 let currentFrameType = 'vinyl';
 let currentDimensions = {
@@ -61,26 +61,26 @@ const unitMap = {
 
 const KONVA_CONTAINER_ID = 'konva-container';
 const konvaWrapper = document.getElementById(KONVA_CONTAINER_ID);
-const STAGE_SIZE = konvaWrapper.offsetWidth; 
+const STAGE_SIZE = konvaWrapper.offsetWidth;
 
-const PADDING = 40; 
+const PADDING = 40;
 const DRAWING_SIZE = STAGE_SIZE - PADDING * 2;
-const DIM_OFFSET = 15; 
+const DIM_OFFSET = 15;
 
 // --- VISUAL CONFIGURATION ---
 const glassStyles = {
-    'tempered':  { fill: '#E0F2F1', opacity: 0.9 }, 
-    'laminated': { fill: '#CFD8DC', opacity: 0.95 }, 
-    'double':    { fill: '#B2DFDB', opacity: 0.9 }, 
-    'low-e':     { fill: '#Dcedc8', opacity: 0.85 }, 
-    'tinted':    { fill: '#546E7A', opacity: 0.7 }, 
-    'frosted':   { fill: '#FFFFFF', opacity: 0.95 }  
+    'tempered': { fill: '#E0F2F1', opacity: 0.9 },
+    'laminated': { fill: '#CFD8DC', opacity: 0.95 },
+    'double': { fill: '#B2DFDB', opacity: 0.9 },
+    'low-e': { fill: '#Dcedc8', opacity: 0.85 },
+    'tinted': { fill: '#546E7A', opacity: 0.7 },
+    'frosted': { fill: '#FFFFFF', opacity: 0.95 }
 };
 
 const frameStyles = {
-    'vinyl':    { color: '#333333', width: 4 }, 
-    'aluminum': { color: '#90A4AE', width: 3 }, 
-    'wood':     { color: '#795548', width: 6 }  
+    'vinyl': { color: '#333333', width: 4 },
+    'aluminum': { color: '#90A4AE', width: 3 },
+    'wood': { color: '#795548', width: 6 }
 };
 
 // Initialize Konva
@@ -97,16 +97,16 @@ stage.add(layer);
  * Renders the 2D window figure.
  */
 function renderWindow(widthIn, heightIn, unit, shape, glassType, thickness, edgeWork, frameType) {
-    layer.destroyChildren(); 
+    layer.destroyChildren();
 
     // Ratio and Scale
     const actualRatio = widthIn / heightIn;
     let windowWidth, windowHeight;
-    
-    if (actualRatio > 1) { 
+
+    if (actualRatio > 1) {
         windowWidth = DRAWING_SIZE;
         windowHeight = DRAWING_SIZE / actualRatio;
-    } else { 
+    } else {
         windowHeight = DRAWING_SIZE;
         windowWidth = DRAWING_SIZE * actualRatio;
     }
@@ -124,17 +124,17 @@ function renderWindow(widthIn, heightIn, unit, shape, glassType, thickness, edge
         y: offsetY,
         width: windowWidth,
         height: windowHeight,
-        fill: gStyle.fill,      
-        opacity: gStyle.opacity, 
-        stroke: fStyle.color,       
-        strokeWidth: fStyle.width, 
+        fill: gStyle.fill,
+        opacity: gStyle.opacity,
+        stroke: fStyle.color,
+        strokeWidth: fStyle.width,
         listening: false,
     });
     layer.add(frame);
-    
+
     // Draw Interior Panels
     const paneWidth = windowWidth / 3;
-    const paneStrokeWidth = Math.max(1, fStyle.width - 2); 
+    const paneStrokeWidth = Math.max(1, fStyle.width - 2);
 
     for (let i = 1; i < 3; i++) {
         const dividerX = offsetX + paneWidth * i;
@@ -205,7 +205,7 @@ function renderWindow(widthIn, heightIn, unit, shape, glassType, thickness, edge
     // Annotations
     const formatEdge = edgeWork.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     const annotationText = `Thickness: ${thickness}  |  Edge: ${formatEdge}`;
-    
+
     layer.add(new Konva.Text({
         x: offsetX + windowWidth / 2,
         y: offsetY + windowHeight + 15,
@@ -225,13 +225,13 @@ function renderWindow(widthIn, heightIn, unit, shape, glassType, thickness, edge
 function renderCustomState() {
     // 1. Draw the visual representation
     renderWindow(
-        currentDimensions.width.value, 
-        currentDimensions.height.value, 
-        currentDimensions.width.unit, 
+        currentDimensions.width.value,
+        currentDimensions.height.value,
+        currentDimensions.width.unit,
         currentShape,
-        currentGlassType, 
+        currentGlassType,
         currentThickness,
-        currentEdgeWork, 
+        currentEdgeWork,
         currentFrameType
     );
 
@@ -242,8 +242,8 @@ function renderCustomState() {
 // Helper to render standard size with default "Standard" aesthetics
 function renderStandardState(width, height) {
     renderWindow(
-        width, 
-        height, 
+        width,
+        height,
         'in', // Standard uses inches
         'rectangle', // Force Rectangle
         'tempered', // Force Standard Glass
@@ -259,9 +259,9 @@ window.onload = renderCustomState;
 // --- TOGGLE MODE LOGIC (UPDATED) ---
 
 btnCustomize.addEventListener('click', () => {
-    if (!isStandardMode) return; 
+    if (!isStandardMode) return;
     isStandardMode = false;
-    
+
     // UI Updates
     btnCustomize.classList.add('active'); btnCustomize.classList.remove('inactive');
     btnStandard.classList.remove('active'); btnStandard.classList.add('inactive');
@@ -274,9 +274,9 @@ btnCustomize.addEventListener('click', () => {
 });
 
 btnStandard.addEventListener('click', () => {
-    if (isStandardMode) return; 
+    if (isStandardMode) return;
     isStandardMode = true;
-    
+
     // UI Updates
     btnStandard.classList.add('active'); btnStandard.classList.remove('inactive');
     btnCustomize.classList.remove('active'); btnCustomize.classList.add('inactive');
@@ -298,7 +298,7 @@ btnStandard.addEventListener('click', () => {
 // --- STANDARD BUTTON LISTENERS (NEW) ---
 const standardCards = document.querySelectorAll('#standard-wrapper .option-card');
 standardCards.forEach(card => {
-    card.addEventListener('click', function() {
+    card.addEventListener('click', function () {
         // Visual toggle
         standardCards.forEach(c => c.classList.remove('active'));
         this.classList.add('active');
@@ -341,11 +341,11 @@ document.getElementById('dropdown-width').addEventListener('click', (e) => {
 
 // Shape Selection
 shapeCards.forEach(card => {
-    card.addEventListener('click', function() {
+    card.addEventListener('click', function () {
         const section = this.closest('div[class$="-section"]');
         if (section) section.querySelectorAll('.option-card').forEach(sib => sib.classList.remove('active'));
         this.classList.add('active');
-        currentShape = this.dataset.shape; 
+        currentShape = this.dataset.shape;
         renderCustomState();
     });
 });
@@ -353,7 +353,7 @@ shapeCards.forEach(card => {
 // Type & Thickness
 const glassTypeCards = document.querySelectorAll('.option-card[data-glass-type]');
 glassTypeCards.forEach(card => {
-    card.addEventListener('click', function() {
+    card.addEventListener('click', function () {
         const section = this.closest('.type-section');
         section.querySelectorAll('.option-card').forEach(sib => sib.classList.remove('active'));
         this.classList.add('active');
@@ -364,7 +364,7 @@ glassTypeCards.forEach(card => {
 
 const thicknessCards = document.querySelectorAll('.option-card[data-thickness]');
 thicknessCards.forEach(card => {
-    card.addEventListener('click', function() {
+    card.addEventListener('click', function () {
         const section = this.closest('.thickness-section');
         section.querySelectorAll('.option-card').forEach(sib => sib.classList.remove('active'));
         this.classList.add('active');
@@ -376,7 +376,7 @@ thicknessCards.forEach(card => {
 // Edge & Frame
 const edgeCards = document.querySelectorAll('.option-card[data-edge-work]');
 edgeCards.forEach(card => {
-    card.addEventListener('click', function() {
+    card.addEventListener('click', function () {
         const section = this.closest('.edge-section');
         section.querySelectorAll('.option-card').forEach(sib => sib.classList.remove('active'));
         this.classList.add('active');
@@ -387,7 +387,7 @@ edgeCards.forEach(card => {
 
 const frameCards = document.querySelectorAll('.option-card[data-frame-type]');
 frameCards.forEach(card => {
-    card.addEventListener('click', function() {
+    card.addEventListener('click', function () {
         const section = this.closest('.frame-section');
         section.querySelectorAll('.option-card').forEach(sib => sib.classList.remove('active'));
         this.classList.add('active');
@@ -444,6 +444,7 @@ nextBtn.addEventListener('click', () => {
             // Finalize standard order
             console.log('Finalizing Standard Order...');
             showOrderSummary();
+            logOrderSummary();
         }
         return;
     }
@@ -455,6 +456,7 @@ nextBtn.addEventListener('click', () => {
         // Step 3 -> Finalize custom order
         console.log('Finalizing Custom Order...');
         showOrderSummary();
+        logOrderSummary();
     }
 });
 
@@ -505,7 +507,7 @@ function resetBreadcrumbsToStandard() {
 
 
 function addBreadcrumb(text, id, isActive) {
-    if (document.getElementById(id)) return; 
+    if (document.getElementById(id)) return;
     const newChevron = document.createElement('span'); newChevron.className = 'chevron-right'; newChevron.id = 'chevron-' + id;
     const newCrumb = document.createElement('span'); newCrumb.className = isActive ? 'active' : ''; newCrumb.id = id; newCrumb.innerText = text;
     breadcrumbsContainer.appendChild(newChevron); breadcrumbsContainer.appendChild(newCrumb);
@@ -595,15 +597,14 @@ function deleteFile(e) {
 
 // --- PRICING LOGIC (Philippines Context) ---
 const pricingDatabase = {
-    baseRatePerSqIn: 2.5, // Approx ₱2.5 per square inch base price
-    
+    baseRatePerSqIn: productBasePrice, // Approx ₱2.5 per square inch base price
     multipliers: {
         // Shapes (Complexity)
         'rectangle': 1.0,
-        'square': 1.0,
+        'square': 1.2,
         'triangle': 1.3, // More cutting waste
         'pentagon': 1.4,
-        
+
         // Glass Types
         'tempered': 1.2,  // Standard + 20%
         'laminated': 1.4, // Safety + 40%
@@ -641,13 +642,13 @@ function calculateTotal() {
     // 1. Convert dimensions to Inches for calculation
     // If unit is cm/mm, convert to inches. (Simplified: We assume values are stored correctly or converted)
     // For this demo, we assume the numeric value stored in 'currentDimensions' matches the 'unit'.
-    
+
     let h_in = currentDimensions.height.value;
     let w_in = currentDimensions.width.value;
     const unit = currentDimensions.height.unit;
 
-    if(unit === 'cm') { h_in /= 2.54; w_in /= 2.54; }
-    if(unit === 'mm') { h_in /= 25.4; w_in /= 25.4; }
+    if (unit === 'cm') { h_in /= 2.54; w_in /= 2.54; }
+    if (unit === 'mm') { h_in /= 25.4; w_in /= 25.4; }
 
     const areaSqIn = h_in * w_in;
 
@@ -665,7 +666,7 @@ function calculateTotal() {
 
     // 4. Add Flat Fees
     const edgeFee = pricingDatabase.extras.edge[currentEdgeWork] || 0;
-    
+
     let total = materialCost + edgeFee;
 
     // Minimum order price constraint (e.g., nothing below ₱1,500)
@@ -692,6 +693,16 @@ function updateRealTimePriceDisplay() {
     }
 }
 
+console.log("Initial Price Display:");
+const total = calculateTotal();
+console.log("Total Price (PHP):", total);
+console.log("Current Dimensions:", currentDimensions);
+console.log("Shape Multiplier:", pricingDatabase.multipliers[currentShape]);
+console.log("Glass Type Multiplier:", pricingDatabase.multipliers[currentGlassType]);
+console.log("Thickness Multiplier:", pricingDatabase.multipliers[currentThickness]);
+console.log("Frame Multiplier:", pricingDatabase.multipliers[currentFrameType]);
+console.log("Edge Fee:", pricingDatabase.extras.edge[currentEdgeWork]);
+console.log("Base Rate per Sq In:", pricingDatabase.baseRatePerSqIn);
 
 // --- SUMMARY VIEW LOGIC ---
 
@@ -713,13 +724,13 @@ function showOrderSummary() {
 
     // 3. Update Summary Data
     document.getElementById('sum-shape').textContent = capitalize(currentShape);
-    document.getElementById('sum-dim').textContent = 
+    document.getElementById('sum-dim').textContent =
         `${currentDimensions.width.value}${currentDimensions.width.unit} x ${currentDimensions.height.value}${currentDimensions.height.unit}`;
     document.getElementById('sum-type').textContent = capitalize(currentGlassType);
-    document.getElementById('sum-thick').textContent = currentThickness; 
+    document.getElementById('sum-thick').textContent = currentThickness;
     document.getElementById('sum-edge').textContent = formatText(currentEdgeWork);
     document.getElementById('sum-frame').textContent = capitalize(currentFrameType);
-    
+
     // Check for engraving text
     const engravingInput = document.querySelector('#step-3 .engraving-section input');
     const engravingText = engravingInput ? engravingInput.value : '';
@@ -743,14 +754,14 @@ function showOrderSummary() {
 function editConfiguration() {
     // Hide Summary
     document.getElementById('summary-wrapper').classList.add('hidden-step');
-    
+
     // --- NEW: Show Related Products & Testimonials again ---
     document.getElementById('related-products-section').classList.remove('hidden-step');
     document.getElementById('testimonials-section').classList.remove('hidden-step');
 
     // Show Toggle and Subtitle
     document.querySelector('.build-toggle').classList.remove('hidden-step');
-    
+
     // Determine which wrapper to show based on mode
     if (isStandardMode) {
         standardWrapper.classList.remove('hidden-step');
@@ -765,11 +776,11 @@ function editConfiguration() {
 
 // Helper Utils
 function capitalize(str) {
-    if(!str) return '';
+    if (!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 function formatText(str) {
-    if(!str) return '';
+    if (!str) return '';
     return str.split('-').map(word => capitalize(word)).join(' ');
 }
 
@@ -784,6 +795,7 @@ if (stdFinalizeBtn) {
     stdFinalizeBtn.addEventListener('click', () => {
         console.log("Finalizing Standard Order...");
         showOrderSummary();
+        logOrderSummary();
     });
 }
 
@@ -804,10 +816,10 @@ if (previewLabel && previewModal && zoomedImg) {
         // 1. Generate a high-quality image from the Konva Stage
         // pixelRatio: 3 ensures it looks crisp even when zoomed in
         const dataUrl = stage.toDataURL({ pixelRatio: 3 });
-        
+
         // 2. Set the image source
         zoomedImg.src = dataUrl;
-        
+
         // 3. Show the modal
         previewModal.classList.remove('hidden-step');
     });
@@ -828,6 +840,35 @@ const buyBtn = document.querySelector('.buy-btn');
 if (buyBtn) {
     buyBtn.addEventListener('click', () => {
         // Redirects to the WaitingOrder page
-        window.location.href = 'checkout.html'; 
+        window.location.href = 'checkout.html';
     });
 }
+
+
+function logOrderSummary() {
+    console.log("=== ORDER SUMMARY (from database + customizations) ===");
+
+    // From PHP (database)
+    console.log("Product ID:", selectedProduct.id);
+    console.log("Product Name:", selectedProduct.name);
+    console.log("Category:", selectedProduct.category);
+    console.log("Material:", selectedProduct.material);
+    console.log("Base Price:", selectedProduct.price);
+
+    // From your customization UI
+    console.log("Shape:", currentShape);
+    console.log("Glass Type:", currentGlassType);
+    console.log("Thickness:", currentThickness);
+    console.log("Edge Work:", currentEdgeWork);
+    console.log("Frame Type:", currentFrameType);
+
+    console.log("Dimensions:", {
+        height: currentDimensions.height.value + currentDimensions.height.unit,
+        width: currentDimensions.width.value + currentDimensions.width.unit
+    });
+
+    console.log("=== END SUMMARY ===");
+}
+
+
+
