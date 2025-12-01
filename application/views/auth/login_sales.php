@@ -35,8 +35,7 @@
       <h3 class="login-title">Sales Sign In</h3>
 
       <!-- ✅ sales Login Form -->
-      <form action="<?= base_url('auth/process_login') ?>" method="post">
-     <input type="hidden" name="required_role" value="Sales Representative">
+      <form method="POST" action="<?= base_url('auth/process_role_login/Sales') ?>">
 
  
 

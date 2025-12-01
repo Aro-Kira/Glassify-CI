@@ -35,8 +35,7 @@
       <h3 class="login-title">Admin Sign In</h3>
 
       <!-- ✅ Admin Login Form -->
-      <form action="<?= base_url('auth/process_login') ?>" method="post">
-        <input type="hidden" name="required_role" value="Admin">
+  <form method="POST" action="<?= base_url('auth/process_role_login/Admin') ?>">
     
 
       <?php

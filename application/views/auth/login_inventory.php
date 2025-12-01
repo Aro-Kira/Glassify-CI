@@ -35,8 +35,8 @@
       <h3 class="login-title">Inventory Sign In</h3>
 
       <!-- ✅ Inventory Login Form -->
-        <form action="<?= base_url('auth/process_login') ?>" method="post">
-        <input type="hidden" name="required_role" value="Inventory Officer">
+        <form method="POST" action="<?= base_url('auth/process_role_login/Inventory') ?>">
+
 
 
         <?php
