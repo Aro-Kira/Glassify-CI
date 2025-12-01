@@ -8,8 +8,8 @@ class Auth extends CI_Controller
         parent::__construct();
         $this->load->library(['session', 'form_validation']);
         $this->load->helper(['url', 'form']);
-        $this->load->database(); // Load database
-        $this->load->model('User_model'); // We'll create this model
+        $this->load->database();
+        $this->load->model('User_model');
     }
 
     // ===================== REGISTER PAGE =====================
@@ -45,28 +45,25 @@ class Auth extends CI_Controller
             redirect(base_url('register'));
         }
 
-        // Prepare user data
+        // Save user data
         $data = [
-            'First_Name'   => $this->input->post('first_name'),
-            'Middle_Name'  => $this->input->post('middle_initial') ?: '',
-            'Last_Name'    => $this->input->post('surname'),
-            'Email'        => $email,
-            'Password'     => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
-            'PhoneNum'     => $this->input->post('phone'),
-            'Role'         => 'Customer', // default role
-            'Status'       => 'Active'
+            'First_Name' => $this->input->post('first_name'),
+            'Middle_Name' => $this->input->post('middle_initial') ?: '',
+            'Last_Name' => $this->input->post('surname'),
+            'Email' => $email,
+            'Password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
+            'PhoneNum' => $this->input->post('phone'),
+            'Role' => 'Customer', // default role
+            'Status' => 'Active'
         ];
 
-        if ($this->User_model->register($data)) {
-            $this->session->set_flashdata('success', 'Registration successful! You can now log in.');
-            redirect(base_url('login'));
-        } else {
-            $this->session->set_flashdata('error', 'Registration failed. Please try again.');
-            redirect(base_url('register'));
-        }
+        $this->db->insert('users', $data);
+
+        $this->session->set_flashdata('success', 'Registered successfully. Please log in.');
+        redirect(base_url('login'));
     }
 
-    // ===================== LOGIN =====================
+    // ===================== LOGIN PAGE =====================
     public function login()
     {
         $data['title'] = "Glassify - Login";
@@ -75,28 +72,95 @@ class Auth extends CI_Controller
         $this->load->view('includes/footer');
     }
 
-public function process_login()
+    public function admin_login()
+    {
+        $data['title'] = "Glassify - Admin Login";
+        $data['role_required'] = "Admin"; // Important
+        $this->load->view('includes/header', $data);
+        $this->load->view('auth/login_admin', $data);
+        $this->load->view('includes/footer');
+    }
+
+    public function sales_login()
+    {
+        $data['title'] = "Glassify - Sales Representative Login";
+        $data['role_required'] = "Sales Representative";
+        $this->load->view('includes/header', $data);
+        $this->load->view('auth/login_sales', $data);
+        $this->load->view('includes/footer');
+    }
+
+    public function inv_login()
+    {
+        $data['title'] = "Glassify - Inventory Login";
+        $data['role_required'] = "Inventory Officer";
+        $this->load->view('includes/header', $data);
+        $this->load->view('auth/login_inventory', $data);
+        $this->load->view('includes/footer');
+    }
+
+
+    // ===================== PROCESS LOGIN =====================
+   public function process_login()
 {
+    $this->form_validation->set_rules('email', 'Email', 'required|valid_email|trim');
+    $this->form_validation->set_rules('password', 'Password', 'required');
+
+    if ($this->form_validation->run() == FALSE) {
+        $this->session->set_flashdata('error', validation_errors());
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
     $email = $this->input->post('email');
     $password = $this->input->post('password');
+    $required_role = $this->input->post('required_role'); // from hidden input
 
-    $user = $this->User_model->get_by_email($email);
+    $user = $this->User_model->login($email);
 
-    if ($user && password_verify($password, $user->Password)) {
+    // Check user account
+    if (!$user) {
+        $this->session->set_flashdata('error', 'Email not found.');
+        redirect($_SERVER['HTTP_REFERER']);
+    }
 
-        // Store session including Customer_ID (same as UserID)
-        $this->session->set_userdata([
-            'user_id'      => $user->UserID,
-            'customer_id'  => $user->UserID, // <-- This is your Customer_ID
-            'user_name'    => $user->First_Name . ' ' . $user->Last_Name,
-            'user_role'    => $user->Role,
-            'is_logged_in' => true
-        ]);
+    // Check password
+    if (!password_verify($password, $user->Password)) {
+        $this->session->set_flashdata('error', 'Incorrect password.');
+        redirect($_SERVER['HTTP_REFERER']);
+    }
 
-        redirect(base_url('home-login'));
-    } else {
-        $this->session->set_flashdata('error', 'Invalid email or password.');
-        redirect(base_url('login'));
+    // Check if role matches the login page
+    if ($required_role != $user->Role) {
+        $this->session->set_flashdata('error', 'You are not allowed to log in on this page.');
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    // Set session
+    $session_data = [
+        'user_id' => $user->UserID,
+        'email'   => $user->Email,
+        'role'    => $user->Role,
+        'logged_in' => TRUE
+    ];
+    $this->session->set_userdata($session_data);
+
+    // Redirect based on role
+    switch ($user->Role) {
+        case 'Admin':
+            redirect(base_url('admin-dashboard'));
+            break;
+
+        case 'Sales Representative':
+            redirect(base_url('sales-dashboard'));
+            break;
+
+        case 'Inventory Officer':
+            redirect(base_url('inventory-dashboard'));
+            break;
+
+        default:
+            redirect(base_url('home-login'));
+            break;
     }
 }
 
@@ -105,6 +169,6 @@ public function process_login()
     public function logout()
     {
         $this->session->sess_destroy();
-        redirect(base_url());
+        redirect(base_url('login'));
     }
 }

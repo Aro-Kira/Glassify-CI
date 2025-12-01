@@ -111,4 +111,6 @@ class AdminCon extends CI_Controller
         $data['page_css'] = 'admin_css/admin_accounts.css';
         $this->load->view('admin_page/layout', $data);
     }
+
+  
 }

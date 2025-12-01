@@ -109,7 +109,10 @@ $route['logout'] = 'auth/logout';
 $route['auth/process_login'] = 'auth/process_login';
 $route['auth/process_register'] = 'auth/process_register';
 
-
+/*==============Custom URL================*/
+$route['Adlog'] = 'Auth/admin_login';
+$route['SLslog'] = 'Auth/sales_login';
+$route['Invlog'] = 'Auth/inv_login';
 
 /* 
 ======================================
@@ -118,8 +121,6 @@ $route['auth/process_register'] = 'auth/process_register';
  */
 
 $route['Profile'] = 'UserCon/profile';
-$route['Adlog'] = 'Auth/admin_login';
-$route['SlsLog'] = 'Auth/sales_login';
 
 
 /* 

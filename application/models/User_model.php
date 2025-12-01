@@ -20,4 +20,10 @@ class User_model extends CI_Model {
     public function get_by_email($email) {
         return $this->db->get_where($this->table, ['Email' => $email])->row();
     }
+
+    // ✅ REQUIRED BY Auth.php
+    public function login($email)
+    {
+        return $this->get_by_email($email);
+    }
 }
