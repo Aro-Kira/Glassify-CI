@@ -40,6 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         alert(data.message || 'Approval requested successfully!');
                         // Close popup
                         approvalPopup.style.display = 'none';
+                        // Store in sessionStorage that we need to switch to awaiting tab
+                        sessionStorage.setItem('switchToTab', 'awaiting');
                         // Reload page to refresh order list
                         window.location.reload();
                     } else {

@@ -165,6 +165,49 @@ class SalesCon extends CI_Controller
         ];
         
         $this->db->insert('system_activity_log', $data);
+        
+        // Also create notification in sales_notif table
+        $icon = $this->determine_notification_icon($action, $description);
+        $notification_description = $action . ': ' . $description;
+        $this->add_sales_notification($icon, $role, $notification_description, 'Unread', $related_id, $related_type);
+    }
+    
+    /**
+     * Determine notification icon based on action and description
+     * 
+     * @param string $action Action type
+     * @param string $description Description text
+     * @return string Font Awesome icon class
+     */
+    private function determine_notification_icon($action, $description)
+    {
+        $action_lower = strtolower($action ?? '');
+        $desc_lower = strtolower($description ?? '');
+        
+        // Inventory/Stock alerts
+        if (strpos($desc_lower, 'inventory') !== false || strpos($desc_lower, 'stock') !== false || $action_lower === 'warning' || strpos($action_lower, 'low stock') !== false) {
+            return 'fa-box-open';
+        }
+        // Employee/User related (requests, logout, etc.)
+        elseif (strpos($desc_lower, 'employee') !== false || strpos($desc_lower, 'request') !== false || strpos($desc_lower, 'logout') !== false || strpos($desc_lower, 'logged') !== false) {
+            return 'fa-user-tie';
+        }
+        // Order related
+        elseif (strpos($desc_lower, 'order') !== false || strpos($action_lower, 'order') !== false) {
+            return 'fa-shopping-cart';
+        }
+        // Payment related
+        elseif (strpos($desc_lower, 'payment') !== false || strpos($action_lower, 'payment') !== false) {
+            return 'fa-money-bill-wave';
+        }
+        // Issue related
+        elseif (strpos($desc_lower, 'issue') !== false || strpos($action_lower, 'issue') !== false) {
+            return 'fa-exclamation-circle';
+        }
+        // Default
+        else {
+            return 'fa-info-circle';
+        }
     }
     
     /**
@@ -868,6 +911,102 @@ class SalesCon extends CI_Controller
         $this->load->view('sales_page/layout', $data);
     }
 
+    // Notifications
+    public function sales_notif()
+    {
+        // Get ALL notifications from sales_notif table
+        $this->db->order_by('Created_Date', 'DESC');
+        $notifications = $this->db->get('sales_notif')->result();
+        
+        // Format notifications for display
+        $all_notifications = [];
+        foreach ($notifications as $notif) {
+            // Parse Action and Description from the stored Description field
+            // Format: "Action: Description" or just "Description"
+            $description = $notif->Description;
+            $action = '';
+            
+            if (strpos($description, ': ') !== false) {
+                $parts = explode(': ', $description, 2);
+                $action = $parts[0];
+                $description = $parts[1];
+            } else {
+                // If no action prefix, extract from description
+                if (stripos($description, 'inventory') !== false || stripos($description, 'stock') !== false) {
+                    $action = 'Inventory Alert';
+                } elseif (stripos($description, 'employee') !== false && stripos($description, 'request') !== false) {
+                    $action = 'Pending Request';
+                } elseif (stripos($description, 'logout') !== false || stripos($description, 'logged out') !== false) {
+                    $action = 'Logout Notice';
+                } else {
+                    $action = 'Notification';
+                }
+            }
+            
+            $all_notifications[] = (object)[
+                'Action' => $action,
+                'Description' => $description,
+                'Icon' => $notif->Icon,
+                'Role' => $notif->Role,
+                'Timestamp' => $notif->Created_Date,
+                'Status' => strtolower($notif->Status) // 'unread' or 'read'
+            ];
+        }
+        
+        // Count unread notifications
+        $this->db->where('Status', 'Unread');
+        $unread_count = $this->db->count_all_results('sales_notif');
+        
+        $data['notifications'] = $all_notifications;
+        $data['unread_count'] = $unread_count;
+        $data['title'] = "Glassify - Notifications";
+        $data['active'] = 'notif';
+        $data['content_view'] = 'sales_page/sales_notif';
+        $data['page_css'] = 'sales_css/sales_notif.css';
+        $this->load->view('sales_page/layout', $data);
+    }
+    
+    /**
+     * Add notification to sales_notif table
+     * 
+     * @param string $icon Font Awesome icon class (e.g., 'fa-box-open', 'fa-user-tie')
+     * @param string $role Role: 'System', 'Client/Customer', 'Admin', 'Inventory Officer', 'Sales Representative'
+     * @param string $description Notification message/description
+     * @param string $status Status: 'Unread' or 'Read' (default: 'Unread')
+     * @param int|null $related_id Related ID (OrderID, IssueID, etc.)
+     * @param string|null $related_type Related type ('Order', 'Issue', 'Inventory', 'Payment', etc.)
+     * @return int NotificationID of the created notification
+     */
+    public function add_sales_notification($icon, $role, $description, $status = 'Unread', $related_id = null, $related_type = null)
+    {
+        $data = [
+            'Icon' => $icon,
+            'Role' => $role,
+            'Description' => $description,
+            'Status' => $status,
+            'RelatedID' => $related_id,
+            'RelatedType' => $related_type,
+            'Created_Date' => date('Y-m-d H:i:s')
+        ];
+        
+        $this->db->insert('sales_notif', $data);
+        return $this->db->insert_id();
+    }
+    
+    /**
+     * Mark notification as read
+     * 
+     * @param int $notification_id NotificationID to mark as read
+     */
+    public function mark_notification_read($notification_id)
+    {
+        $this->db->where('NotificationID', $notification_id);
+        $this->db->update('sales_notif', [
+            'Status' => 'Read',
+            'Read_Date' => date('Y-m-d H:i:s')
+        ]);
+    }
+
     // Update account information via AJAX
     public function update_account()
     {
@@ -1277,6 +1416,21 @@ class SalesCon extends CI_Controller
         // Send notification to customer
         $this->notify_customer_approved($order->Customer_ID, $order_id_clean, $order->TotalQuotation);
         
+        // Get sales rep name for logging
+        $sales_rep = $this->User_model->get_by_id($sales_rep_id);
+        $sales_rep_name = $sales_rep ? trim($sales_rep->First_Name . ' ' . $sales_rep->Last_Name) : 'Sales Representative';
+        
+        // Log activity and create notification
+        $this->log_activity(
+            'Order Approved',
+            "Order {$order_id_clean} has been approved by {$sales_rep_name}. Customer can now proceed with payment.",
+            'Sales Representative',
+            $sales_rep_id,
+            $sales_rep_name,
+            $order_id_numeric,
+            'Order'
+        );
+        
         echo json_encode([
             'success' => true,
             'message' => 'Order approved successfully. Customer has been notified and can proceed with payment.',
@@ -1414,6 +1568,21 @@ class SalesCon extends CI_Controller
             'CustomerNotified_Date' => date('Y-m-d H:i:s')
         ]);
         
+        // Get sales rep name for logging
+        $sales_rep = $this->User_model->get_by_id($sales_rep_id);
+        $sales_rep_name = $sales_rep ? trim($sales_rep->First_Name . ' ' . $sales_rep->Last_Name) : 'Sales Representative';
+        
+        // Log activity and create notification
+        $this->log_activity(
+            'Order Disapproved',
+            "Order {$order_id_clean} has been disapproved by {$sales_rep_name}. Reason: {$reason}",
+            'Sales Representative',
+            $sales_rep_id,
+            $sales_rep_name,
+            $order_id_numeric,
+            'Order'
+        );
+        
         echo json_encode([
             'success' => true,
             'message' => 'Order disapproved and cancelled. Customer has been notified immediately.',
@@ -1426,6 +1595,9 @@ class SalesCon extends CI_Controller
      */
     public function request_approval()
     {
+        // Set JSON header
+        header('Content-Type: application/json');
+        
         $sales_rep_id = $this->get_current_sales_rep_id();
         $order_id = $this->input->post('order_id');
         
@@ -1434,11 +1606,16 @@ class SalesCon extends CI_Controller
             return;
         }
         
-        // Remove # prefix if present
+        // Remove # prefix if present and extract numeric part
         $order_id_clean = str_replace('#GI', '', $order_id);
         $order_id_clean = str_replace('#', '', $order_id_clean);
-        $order_id_clean = ltrim($order_id_clean, '0');
-        $order_id_clean = 'GI' . str_pad($order_id_clean, 3, '0', STR_PAD_LEFT);
+        $order_id_clean = str_replace('GI', '', $order_id_clean);
+        $order_id_numeric_part = ltrim($order_id_clean, '0');
+        if (empty($order_id_numeric_part)) {
+            $order_id_numeric_part = '1';
+        }
+        $order_id_clean = 'GI' . str_pad($order_id_numeric_part, 3, '0', STR_PAD_LEFT);
+        $order_id_numeric = (int)$order_id_numeric_part;
         
         // Start transaction
         $this->db->trans_start();
@@ -1493,6 +1670,26 @@ class SalesCon extends CI_Controller
         if ($this->db->trans_status() === FALSE) {
             echo json_encode(['success' => false, 'message' => 'Failed to request approval']);
             return;
+        }
+        
+        // Get sales rep name for logging
+        $sales_rep = $this->User_model->get_by_id($sales_rep_id);
+        $sales_rep_name = $sales_rep ? trim($sales_rep->First_Name . ' ' . $sales_rep->Last_Name) : 'Sales Representative';
+        
+        // Log activity and create notification (wrap in try-catch to prevent breaking the request)
+        try {
+            $this->log_activity(
+                'Approval Requested',
+                "Order {$order_id_clean} approval has been requested by {$sales_rep_name}. Order is now awaiting admin review.",
+                'Sales Representative',
+                $sales_rep_id,
+                $sales_rep_name,
+                $order_id_numeric,
+                'Order'
+            );
+        } catch (Exception $e) {
+            // Log error but don't break the request
+            log_message('error', 'Failed to log activity for request_approval: ' . $e->getMessage());
         }
         
         echo json_encode([
@@ -1763,6 +1960,27 @@ class SalesCon extends CI_Controller
             } else {
                 log_message('warning', 'Could not find product ID for order ' . $order_id_string . ' - materials not deducted');
             }
+            
+            // Get sales rep name for logging
+            $sales_rep = $this->User_model->get_by_id($sales_rep_id);
+            $sales_rep_name = $sales_rep ? trim($sales_rep->First_Name . ' ' . $sales_rep->Last_Name) : 'Sales Representative';
+            
+            // Get payment amount
+            $this->db->select('Amount');
+            $this->db->where('OrderID', $order_id_numeric);
+            $payment_info = $this->db->get('payment')->row();
+            $payment_amount = $payment_info ? $payment_info->Amount : 0;
+            
+            // Log activity and create notification
+            $this->log_activity(
+                'Payment Received',
+                "Payment for Order {$order_id_string} (Amount: ₱" . number_format($payment_amount, 2) . ") has been marked as paid by {$sales_rep_name}.",
+                'Sales Representative',
+                $sales_rep_id,
+                $sales_rep_name,
+                $order_id_numeric,
+                'Payment'
+            );
             
             $this->db->trans_complete();
             

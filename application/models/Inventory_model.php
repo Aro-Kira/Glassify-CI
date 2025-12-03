@@ -135,13 +135,27 @@ class Inventory_model extends CI_Model
         $this->db->where('Status', 'Unread');
         $existing = $this->db->get('inventory_notifications')->row();
         
+        $message = "Item {$item_id} ({$item_name}) is now out of stock. Please restock immediately.";
+        
         if (!$existing) {
+            // Insert into inventory_notifications (keep for backward compatibility)
             $this->db->insert('inventory_notifications', [
                 'InventoryItemID' => $inventory_item_id,
                 'ItemID' => $item_id,
                 'ItemName' => $item_name,
-                'Message' => "Item {$item_id} ({$item_name}) is now out of stock. Please restock immediately.",
+                'Message' => $message,
                 'Status' => 'Unread'
+            ]);
+            
+            // Also insert into sales_notif table
+            $this->db->insert('sales_notif', [
+                'Icon' => 'fa-box-open',
+                'Role' => 'System',
+                'Description' => 'Inventory Alert: ' . $message,
+                'Status' => 'Unread',
+                'RelatedID' => $inventory_item_id,
+                'RelatedType' => 'Inventory',
+                'Created_Date' => date('Y-m-d H:i:s')
             ]);
         }
     }

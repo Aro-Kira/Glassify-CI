@@ -54,4 +54,19 @@ document.addEventListener('DOMContentLoaded', function() {
             switchTab(clickedLink);
         }
     });
+    
+    // Check if we need to switch to a specific tab after page load (e.g., after order action)
+    const switchToTab = sessionStorage.getItem('switchToTab');
+    if (switchToTab) {
+        // Find the tab link with matching data-tab attribute
+        const targetLink = Array.from(tabLinks).find(link => link.getAttribute('data-tab') === switchToTab);
+        if (targetLink) {
+            // Small delay to ensure DOM is fully ready
+            setTimeout(() => {
+                switchTab(targetLink);
+                // Clear the sessionStorage after switching
+                sessionStorage.removeItem('switchToTab');
+            }, 100);
+        }
+    }
 });

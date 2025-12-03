@@ -160,6 +160,7 @@ $route['sales-endUser'] = 'SalesCon/sales_endUser';
 $route['sales-payments'] = 'SalesCon/sales_payments';
 $route['sales-issues'] = 'SalesCon/sales_issues';
 $route['sales-account'] = 'SalesCon/sales_account';
+$route['sales-notif'] = 'SalesCon/sales_notif';
 $route['SalesCon/update_account'] = 'SalesCon/update_account';
 $route['SalesCon/get_order_details'] = 'SalesCon/get_order_details';
 $route['SalesCon/filter_orders_by_date'] = 'SalesCon/filter_orders_by_date';
