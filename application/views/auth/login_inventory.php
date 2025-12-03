@@ -23,11 +23,8 @@
       <h2 class="login-brand">Glassify</h2>
       <p class="login-description">
         <span class="highlight">Inventory</span> Access Only.<br>
-        Manage <span class="highlight">Users</span>, Orders, and Settings.
+        Manage <span class="highlight">Products</span>, Stock, and Inventory.
       </p>
-      <div class="login-user-icon">
-        <img src="<?php echo base_url('assets/images/img-page/mdi_shield-account.svg'); ?>" alt="Inventory-icon">
-      </div>
     </div>
 
     <!-- Right Panel -->
@@ -35,9 +32,7 @@
       <h3 class="login-title">Inventory Sign In</h3>
 
       <!-- ✅ Inventory Login Form -->
-        <form method="POST" action="<?= base_url('auth/process_role_login/Inventory') ?>">
-
-
+      <form method="POST" action="<?= base_url('auth/process_role_login/Inventory') ?>">
 
         <?php
         $pending_email = $this->session->tempdata('pending_inventory_email');

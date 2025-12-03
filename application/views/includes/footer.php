@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" href="<?php echo base_url('assets/css/include/footer_style.css'); ?>">
 
-<footer class="site-footer">
+<footer id="contact-footer" class="site-footer">
     <div class="footer-container">
 
         <!-- Logo & About -->
@@ -26,11 +26,11 @@
         <div class="footer-section">
             <h3>Quick Links</h3>
             <ul>
-                <li><a href="<?php echo base_url('index.html'); ?>">Home</a></li>
-                <li><a href="<?php echo base_url('html/about_us.html'); ?>">About Us</a></li>
-                <li><a href="<?php echo base_url('html/products.html'); ?>">Products & Services</a></li>
-                <li><a href="<?php echo base_url('html/faq.html'); ?>">FAQ</a></li>
-                <li><a href="<?php echo base_url('html/projects.html'); ?>">Project Showcase</a></li>
+                <li><a href="<?php echo base_url(); ?>">Home</a></li>
+                <li><a href="<?php echo base_url('about'); ?>">About Us</a></li>
+                <li><a href="<?php echo base_url('products'); ?>">Products & Services</a></li>
+                <li><a href="<?php echo base_url('faq'); ?>">FAQ</a></li>
+                <li><a href="<?php echo base_url('projects'); ?>">Project Showcase</a></li>
             </ul>
         </div>
 

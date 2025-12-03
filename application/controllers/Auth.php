@@ -72,6 +72,7 @@ class Auth extends CI_Controller
         $this->load->view('includes/footer');
     }
 
+    // ===================== ADMIN LOGIN =====================
     public function admin_login()
     {
         $data['title'] = "Glassify - Admin Login";
@@ -80,6 +81,7 @@ class Auth extends CI_Controller
         $this->load->view('includes/footer');
     }
 
+    // ===================== SALES LOGIN =====================
     public function sales_login()
     {
         $data['title'] = "Glassify - Sales Login";
@@ -88,7 +90,8 @@ class Auth extends CI_Controller
         $this->load->view('includes/footer');
     }
 
-    public function inv_login()
+    // ===================== INVENTORY LOGIN =====================
+    public function inventory_login()
     {
         $data['title'] = "Glassify - Inventory Login";
         $this->load->view('includes/header', $data);
@@ -118,10 +121,20 @@ class Auth extends CI_Controller
 
             if ($user->Role !== $db_role) {
                 $this->session->set_flashdata('error', "You are not authorized as $role.");
-                redirect(base_url(strtolower($role) . '_login'));
+                // Redirect to appropriate login page based on role
+                if ($role === 'Admin') {
+                    redirect(base_url('Adlog'));
+                } elseif ($role === 'Sales') {
+                    redirect(base_url('SLslog'));
+                } elseif ($role === 'Inventory') {
+                    redirect(base_url('Invlog'));
+                } else {
+                    redirect(base_url('login'));
+                }
+                return;
             }
 
-            // Set session
+            // Set session including Customer_ID for customers
             $session_data = [
                 'user_id' => $user->UserID,
                 'user_name' => $user->First_Name . ' ' . $user->Last_Name,
@@ -156,7 +169,16 @@ class Auth extends CI_Controller
         } else {
             log_message('debug', 'Login attempt failed: email=' . $email . ', role=' . $role . ', DB role=' . ($user->Role ?? 'none'));
             $this->session->set_flashdata('error', 'Invalid email or password.');
-            redirect(base_url(strtolower($role) . '_login'));
+            // Redirect to appropriate login page based on role
+            if ($role === 'Admin') {
+                redirect(base_url('Adlog'));
+            } elseif ($role === 'Sales') {
+                redirect(base_url('SLslog'));
+            } elseif ($role === 'Inventory') {
+                redirect(base_url('Invlog'));
+            } else {
+                redirect(base_url('login'));
+            }
         }
     }
 
