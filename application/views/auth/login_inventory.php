@@ -32,8 +32,7 @@
       <h3 class="login-title">Inventory Sign In</h3>
 
       <!-- ✅ Inventory Login Form -->
-      <form id="inventoryLoginForm" class="login-form" method="post" action="<?php echo base_url('auth/process_login'); ?>">
-        <input type="hidden" name="is_inventory" value="1">
+      <form method="POST" action="<?= base_url('auth/process_role_login/Inventory') ?>">
 
         <?php
         $pending_email = $this->session->tempdata('pending_inventory_email');
@@ -73,4 +72,3 @@
     </div>
   </div>
 </section>
-

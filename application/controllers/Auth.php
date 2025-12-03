@@ -8,8 +8,8 @@ class Auth extends CI_Controller
         parent::__construct();
         $this->load->library(['session', 'form_validation']);
         $this->load->helper(['url', 'form']);
-        $this->load->database(); // Load database
-        $this->load->model('User_model'); // We'll create this model
+        $this->load->database();
+        $this->load->model('User_model');
     }
 
     // ===================== REGISTER PAGE =====================
@@ -24,7 +24,6 @@ class Auth extends CI_Controller
     // ===================== PROCESS REGISTER =====================
     public function process_register()
     {
-        // Form validation
         $this->form_validation->set_rules('first_name', 'First Name', 'required|trim');
         $this->form_validation->set_rules('surname', 'Surname', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email|trim');
@@ -39,22 +38,20 @@ class Auth extends CI_Controller
 
         $email = $this->input->post('email');
 
-        // Check if email already exists
         if ($this->User_model->email_exists($email)) {
             $this->session->set_flashdata('error', 'Email already registered.');
             redirect(base_url('register'));
         }
 
-        // Prepare user data
         $data = [
-            'First_Name'   => $this->input->post('first_name'),
-            'Middle_Name'  => $this->input->post('middle_initial') ?: '',
-            'Last_Name'    => $this->input->post('surname'),
-            'Email'        => $email,
-            'Password'     => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
-            'PhoneNum'     => $this->input->post('phone'),
-            'Role'         => 'Customer', // default role
-            'Status'       => 'Active'
+            'First_Name' => $this->input->post('first_name'),
+            'Middle_Name' => $this->input->post('middle_initial') ?: '',
+            'Last_Name' => $this->input->post('surname'),
+            'Email' => $email,
+            'Password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
+            'PhoneNum' => $this->input->post('phone'),
+            'Role' => 'Customer', // default role
+            'Status' => 'Active'
         ];
 
         if ($this->User_model->register($data)) {
@@ -66,21 +63,12 @@ class Auth extends CI_Controller
         }
     }
 
-    // ===================== LOGIN =====================
+    // ===================== LOGIN PAGES =====================
     public function login()
     {
         $data['title'] = "Glassify - Login";
         $this->load->view('includes/header', $data);
         $this->load->view('auth/login', $data);
-        $this->load->view('includes/footer');
-    }
-
-    // ===================== SALES LOGIN =====================
-    public function sales_login()
-    {
-        $data['title'] = "Glassify - Sales Login";
-        $this->load->view('includes/header', $data);
-        $this->load->view('auth/login_sales', $data);
         $this->load->view('includes/footer');
     }
 
@@ -93,6 +81,15 @@ class Auth extends CI_Controller
         $this->load->view('includes/footer');
     }
 
+    // ===================== SALES LOGIN =====================
+    public function sales_login()
+    {
+        $data['title'] = "Glassify - Sales Login";
+        $this->load->view('includes/header', $data);
+        $this->load->view('auth/login_sales', $data);
+        $this->load->view('includes/footer');
+    }
+
     // ===================== INVENTORY LOGIN =====================
     public function inventory_login()
     {
@@ -102,76 +99,88 @@ class Auth extends CI_Controller
         $this->load->view('includes/footer');
     }
 
-    // ===================== PROCESS LOGIN =====================
-    public function process_login()
+    // ===================== PROCESS ROLE LOGIN =====================
+    public function process_role_login($role)
     {
         $email = $this->input->post('email');
         $password = $this->input->post('password');
-        $is_sales = $this->input->post('is_sales');
-        $is_admin = $this->input->post('is_admin');
-        $is_inventory = $this->input->post('is_inventory');
 
         $user = $this->User_model->get_by_email($email);
 
         if ($user && password_verify($password, $user->Password)) {
-            
-            // Check if user is trying to login from sales page but doesn't have sales role
-            if ($is_sales && $user->Role !== 'Sales Representative') {
-                $this->session->set_flashdata('error', 'Access denied. This account is not authorized for sales login.');
-                redirect(base_url('SlsLog'));
+
+            // Map URL-friendly role names to DB roles
+            $role_map = [
+                'Admin' => 'Admin',
+                'Sales' => 'Sales Representative',
+                'Inventory' => 'Inventory Officer',
+                'Customer' => 'Customer'
+            ];
+
+            $db_role = $role_map[$role] ?? '';
+
+            if ($user->Role !== $db_role) {
+                $this->session->set_flashdata('error', "You are not authorized as $role.");
+                // Redirect to appropriate login page based on role
+                if ($role === 'Admin') {
+                    redirect(base_url('Adlog'));
+                } elseif ($role === 'Sales') {
+                    redirect(base_url('SLslog'));
+                } elseif ($role === 'Inventory') {
+                    redirect(base_url('Invlog'));
+                } else {
+                    redirect(base_url('login'));
+                }
                 return;
             }
 
-            // Check if user is trying to login from admin page but doesn't have admin role
-            if ($is_admin && $user->Role !== 'Admin') {
-                $this->session->set_flashdata('error', 'Access denied. This account is not authorized for admin login.');
-                redirect(base_url('Adlog'));
-                return;
-            }
-
-            // Check if user is trying to login from inventory page but doesn't have inventory role
-            if ($is_inventory && $user->Role !== 'Inventory Officer') {
-                $this->session->set_flashdata('error', 'Access denied. This account is not authorized for inventory login.');
-                redirect(base_url('InvLog'));
-                return;
-            }
-
-            // Store session including Customer_ID (same as UserID)
-            $this->session->set_userdata([
-                'user_id'      => $user->UserID,
-                'customer_id'  => $user->UserID, // <-- This is your Customer_ID
-                'user_name'    => $user->First_Name . ' ' . $user->Last_Name,
-                'user_role'    => $user->Role,
+            // Set session including Customer_ID for customers
+            $session_data = [
+                'user_id' => $user->UserID,
+                'user_name' => $user->First_Name . ' ' . $user->Last_Name,
+                'user_role' => $user->Role,
                 'is_logged_in' => true
-            ]);
+            ];
 
-            // Redirect based on user role
-            if ($user->Role === 'Sales Representative') {
-                redirect(base_url('sales-dashboard'));
-            } elseif ($user->Role === 'Admin') {
-                redirect(base_url('admin-dashboard'));
-            } elseif ($user->Role === 'Inventory Officer') {
-                redirect(base_url('inventory-dashboard'));
-            } else {
-                // Default to customer home
-                redirect(base_url('home-login'));
+            if ($user->Role === 'Customer') {
+                $session_data['customer_id'] = $user->UserID;
             }
+
+            $this->session->set_userdata($session_data);
+
+            // Redirect based on role
+            switch ($user->Role) {
+                case 'Admin':
+                    redirect(base_url('admin-dashboard'));
+                    break;
+                case 'Sales Representative':
+                    redirect(base_url('sales-dashboard'));
+                    break;
+                case 'Inventory Officer':
+                    redirect(base_url('inventory-dashboard'));
+                    break;
+                case 'Customer':
+                    redirect(base_url('home-login'));
+                    break;
+                default:
+                    redirect(base_url());
+            }
+
         } else {
+            log_message('debug', 'Login attempt failed: email=' . $email . ', role=' . $role . ', DB role=' . ($user->Role ?? 'none'));
             $this->session->set_flashdata('error', 'Invalid email or password.');
-            
-            // Redirect back to appropriate login page
-            if ($is_sales) {
-                redirect(base_url('SlsLog'));
-            } elseif ($is_admin) {
+            // Redirect to appropriate login page based on role
+            if ($role === 'Admin') {
                 redirect(base_url('Adlog'));
-            } elseif ($is_inventory) {
-                redirect(base_url('InvLog'));
+            } elseif ($role === 'Sales') {
+                redirect(base_url('SLslog'));
+            } elseif ($role === 'Inventory') {
+                redirect(base_url('Invlog'));
             } else {
                 redirect(base_url('login'));
             }
         }
     }
-
 
     // ===================== LOGOUT =====================
     public function logout()

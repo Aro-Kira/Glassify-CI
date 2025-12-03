@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 26, 2025 at 07:24 AM
+-- Generation Time: Dec 01, 2025 at 04:38 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -53,6 +53,15 @@ CREATE TABLE `cart` (
   `Added_Date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`Cart_ID`, `Customer_ID`, `Product_ID`, `CustomizationID`, `Quantity`, `Added_Date`) VALUES
+(10, 1, 2, 15, 1, '2025-11-27 05:11:20'),
+(11, 1, 1, 16, 1, '2025-11-27 06:25:50'),
+(12, 1, 2, 17, 1, '2025-12-01 12:30:13');
+
 -- --------------------------------------------------------
 
 --
@@ -85,6 +94,15 @@ CREATE TABLE `customization` (
   `EstimatePrice` decimal(10,2) DEFAULT 0.00,
   `Created_Date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `customization`
+--
+
+INSERT INTO `customization` (`CustomizationID`, `Customer_ID`, `Product_ID`, `Dimensions`, `GlassShape`, `GlassType`, `GlassThickness`, `EdgeWork`, `FrameType`, `Engraving`, `DesignRef`, `EstimatePrice`, `Created_Date`) VALUES
+(15, 1, 2, '45 x 35', 'rectangle', 'tempered', '5mm', 'flat-polish', 'vinyl', 'None', '', '189.00', '2025-11-27 05:11:20'),
+(16, 1, 1, '45 x 35', 'rectangle', 'tempered', '5mm', 'flat-polish', 'vinyl', 'None', '', '3.00', '2025-11-27 06:25:50'),
+(17, 1, 2, '45 x 35', 'rectangle', 'tempered', '5mm', 'flat-polish', 'vinyl', 'None', '', '189.00', '2025-12-01 12:30:13');
 
 -- --------------------------------------------------------
 
@@ -269,6 +287,7 @@ CREATE TABLE `user` (
   `PhoneNum` varchar(13) NOT NULL,
   `Role` enum('Admin','Sales Representative','Inventory Officer','Customer') NOT NULL,
   `Status` enum('Active','Inactive') DEFAULT 'Active',
+  `ImageUrl` varchar(255) DEFAULT NULL,
   `Date_Created` timestamp NOT NULL DEFAULT current_timestamp(),
   `Date_Updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -277,8 +296,11 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`UserID`, `First_Name`, `Last_Name`, `Middle_Name`, `Email`, `Password`, `PhoneNum`, `Role`, `Status`, `Date_Created`, `Date_Updated`) VALUES
-(1, 'Aro', 'Manantan', 'M.', 'manantan.aro@gmail.com', '$2y$10$dgpdMNnIdhWCa.z9iJ3bF.pvZcvPmv10/JoY3Uwiboqwb2Y906nMy', '09937568015', 'Customer', 'Active', '2025-11-26 04:39:15', '2025-11-26 04:39:15');
+INSERT INTO `user` (`UserID`, `First_Name`, `Last_Name`, `Middle_Name`, `Email`, `Password`, `PhoneNum`, `Role`, `Status`, `ImageUrl`, `Date_Created`, `Date_Updated`) VALUES
+(1, 'Aro', 'Manantan', 'M.', 'manantan.aro@gmail.com', '$2y$10$dgpdMNnIdhWCa.z9iJ3bF.pvZcvPmv10/JoY3Uwiboqwb2Y906nMy', '09937568015', 'Customer', 'Active', NULL, '2025-11-26 04:39:15', '2025-11-26 04:39:15'),
+(2, 'Sales', 'Representative', '', 'sales.rep@gmail.com', '$2y$10$53q803WjTa4Ru7Tgnc3RD.gdDjLiT0Ff5CMg8uEI1vzSenBKsBEU.', '09937568015', 'Sales Representative', 'Active', NULL, '2025-12-01 10:47:15', '2025-12-01 10:51:10'),
+(3, 'Admin', 'Log', '', 'admin.log@gmail.com', '$2y$10$lqgRqt8dQyMO23xzfXC7JuONanYPVgmpyxWTFrQ.yfglQFHWVHk1e', '09937568015', 'Admin', 'Active', NULL, '2025-12-01 10:49:13', '2025-12-01 10:50:38'),
+(4, 'Inventory', 'Manager', '', 'inv.manager@gmail.com', '$2y$10$E4qL5JBKyCzMucAhF9Sxm.7aYiSam693epAEKLua4JO7Kjn.cb/LC', '09937568015', 'Inventory Officer', 'Active', NULL, '2025-12-01 10:50:13', '2025-12-01 10:51:20');
 
 --
 -- Indexes for dumped tables
@@ -292,6 +314,12 @@ ALTER TABLE `appointment`
   ADD KEY `OrderID` (`OrderID`),
   ADD KEY `Admin_ID` (`Admin_ID`),
   ADD KEY `Customer_ID` (`Customer_ID`);
+
+--
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`Cart_ID`);
 
 --
 -- Indexes for table `customer`
@@ -377,6 +405,12 @@ ALTER TABLE `appointment`
   MODIFY `Appointment_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `cart`
+--
+ALTER TABLE `cart`
+  MODIFY `Cart_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
@@ -386,7 +420,7 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `customization`
 --
 ALTER TABLE `customization`
-  MODIFY `CustomizationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `CustomizationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `inventory`
@@ -434,7 +468,7 @@ ALTER TABLE `quotation`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

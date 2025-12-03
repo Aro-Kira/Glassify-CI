@@ -32,8 +32,10 @@
       <h3 class="login-title">Sales Sign In</h3>
 
       <!-- ✅ sales Login Form -->
-      <form id="salesLoginForm" class="login-form" method="post" action="<?php echo base_url('auth/process_login'); ?>">
-        <input type="hidden" name="is_sales" value="1">
+      <form method="POST" action="<?= base_url('auth/process_role_login/Sales') ?>">
+
+ 
+
 
         <?php
         $pending_email = $this->session->tempdata('pending_sales_email');

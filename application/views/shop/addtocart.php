@@ -44,7 +44,7 @@
             <?php foreach ($cart_items as $item): ?>
               <tr class="cart-row">
                 <td>
-                  <button class="remove-btn" data-id="<?= $item->Cart_ID ?>">X</button>
+                  <input type="checkbox" class="select-item" data-id="<?= $item->Cart_ID ?>">
                 </td>
                 <td>
                   <img src="<?= base_url('uploads/products/' . $item->ImageUrl) ?>" alt="<?= $item->ProductName ?>"
@@ -57,6 +57,10 @@
                     value="<?= $item->Quantity ?>">
                 </td>
                 <td class="item-total">₱<?= number_format($item->Price * $item->Quantity, 2) ?></td>
+                <td>
+                  <button class="remove-btn" data-id="<?= $item->Cart_ID ?>">X</button>
+                </td>
+
               </tr>
             <?php endforeach; ?>
           <?php else: ?>

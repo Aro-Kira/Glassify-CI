@@ -31,7 +31,8 @@
       <h3 class="login-title">Sign In</h3>
 
       <!-- ✅ Only ONE form -->
-      <form id="loginForm" class="login-form" method="post" action="<?php echo base_url('auth/process_login'); ?>">
+      <form method="POST" action="<?= base_url('auth/process_role_login/Customer') ?>">
+
         <div class="login-input-group">
           <label for="email">Email Address</label>
           <div class="login-input-row">
