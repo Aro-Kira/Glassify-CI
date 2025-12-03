@@ -1,6 +1,6 @@
 <section class="user-section-main">
-    <h1 class="page-title">Issue/Support</h1>
-    <p>Easily update user details, list of registered customer, and their contact information.</p>
+    <h1 class="page-title">Issue / Support</h1>
+    <p class="issue-summary" id="issueSummary">Loading...</p>
 
     <div class="controls-container">
         <div class="search-bar">
@@ -28,19 +28,16 @@
     </div>
 
     <div class="pagination">
-        <span>Showing 1-4 of 255 items</span>
-        <div class="pagination-controls">
-            <button class="page-btn prev">&lt;</button>
-            <span class="page-number active">1</span>
-            <span class="dots">...</span>
-            <span class="page-number">17</span>
-            <button class="page-btn next">&gt;</button>
+        <span id="paginationText">Loading...</span>
+        <div class="pagination-controls" id="paginationControls">
+            <!-- Pagination will be generated dynamically by JavaScript -->
         </div>
     </div>
 </section>
 </main>
 </div>
 
+<!-- Right Side Panel for Issue Details -->
 <div class="popup-overlay" id="popupOverlay">
     <div class="popup ticket-popup">
         <div class="popup-header">
@@ -49,7 +46,6 @@
         </div>
 
         <div class="customer-contact-info view-details">
-
             <div class="detail-row">
                 <label>Name:</label>
                 <span class="contact-name"></span>
@@ -66,36 +62,52 @@
                 <label>Order ID:</label>
                 <span class="contact-order-id"></span>
             </div>
-
         </div>
 
         <div class="issue-section">
             <h3 class="issue-section-title">Issue Category</h3>
             <div class="category-field">
-                <input type="text" value="General Inquiry" readonly class="category-input">
+                <input type="text" readonly class="category-input" id="issueCategory">
             </div>
         </div>
 
         <div class="priority-section">
             <h3 class="issue-section-title">Priority:</h3>
-            <div class="priority-tag">
+            <div class="priority-tag" id="priorityTag">
                 <span class="priority-dot"></span>
+                <span class="priority-text"></span>
             </div>
+            <select id="prioritySelect" class="priority-select">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
         </div>
 
         <div class="description-section">
             <h3 class="issue-section-title">Description</h3>
             <div class="description-section-text">
-                <textarea readonly class="description-textarea"></textarea>
+                <textarea readonly class="description-textarea" id="issueDescription"></textarea>
             </div>
         </div>
 
         <div class="popup-actions ticket-actions">
-            <button class="submit-btn resolved-btn">Mark as Resolved</button>
-            <button class="cancel-btn">Cancel</button>
+            <button class="submit-btn resolved-btn" id="markResolvedBtn">Mark as Resolved</button>
+            <button class="cancel-btn" id="cancelBtn">Cancel</button>
         </div>
     </div>
 </div>
 
-<script src="/Glassify/assets/js/admin-sidebar.js"></script>
-<script src="/Glassify/assets/js/sales-issues-pagination.js"></script>
+<!-- Action Dropdown Menu -->
+<div class="action-dropdown" id="actionDropdown">
+    <button class="dropdown-item" data-action="view">View</button>
+    <button class="dropdown-item" data-action="resolve">Mark as Resolved</button>
+    <button class="dropdown-item" data-action="cancel">Cancel</button>
+</div>
+
+<script>
+    // Pass base URL from PHP to JavaScript
+    var base_url = '<?php echo base_url(); ?>';
+</script>
+<script src="<?php echo base_url('assets/js/admin-sidebar.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/sales-issues-pagination.js'); ?>"></script>

@@ -24,15 +24,9 @@
 
   </div>
 
-  <!-- Order Status & Report Issue -->
+  <!-- Report Issue -->
   <section class="faq-section">
     <div class="faq-buttons">
-          <a href="<?php echo base_url('track_order'); ?>">
-        <div class="faq-btn blue">
-          <img src="<?php echo base_url('assets/images/img-page/order_status.png') ?>" alt="Order Status Icon">
-          <span>Order Status</span>
-        </div>
-      </a>
       <a href="<?php echo base_url('report-issue'); ?>">
         <div class="faq-btn blue">
           <img src="<?php echo base_url('assets/images/img-page/report.png') ?>" alt="Report Issue Icon">

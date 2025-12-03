@@ -75,30 +75,102 @@ class Auth extends CI_Controller
         $this->load->view('includes/footer');
     }
 
-public function process_login()
-{
-    $email = $this->input->post('email');
-    $password = $this->input->post('password');
-
-    $user = $this->User_model->get_by_email($email);
-
-    if ($user && password_verify($password, $user->Password)) {
-
-        // Store session including Customer_ID (same as UserID)
-        $this->session->set_userdata([
-            'user_id'      => $user->UserID,
-            'customer_id'  => $user->UserID, // <-- This is your Customer_ID
-            'user_name'    => $user->First_Name . ' ' . $user->Last_Name,
-            'user_role'    => $user->Role,
-            'is_logged_in' => true
-        ]);
-
-        redirect(base_url('home-login'));
-    } else {
-        $this->session->set_flashdata('error', 'Invalid email or password.');
-        redirect(base_url('login'));
+    // ===================== SALES LOGIN =====================
+    public function sales_login()
+    {
+        $data['title'] = "Glassify - Sales Login";
+        $this->load->view('includes/header', $data);
+        $this->load->view('auth/login_sales', $data);
+        $this->load->view('includes/footer');
     }
-}
+
+    // ===================== ADMIN LOGIN =====================
+    public function admin_login()
+    {
+        $data['title'] = "Glassify - Admin Login";
+        $this->load->view('includes/header', $data);
+        $this->load->view('auth/login_admin', $data);
+        $this->load->view('includes/footer');
+    }
+
+    // ===================== INVENTORY LOGIN =====================
+    public function inventory_login()
+    {
+        $data['title'] = "Glassify - Inventory Login";
+        $this->load->view('includes/header', $data);
+        $this->load->view('auth/login_inventory', $data);
+        $this->load->view('includes/footer');
+    }
+
+    // ===================== PROCESS LOGIN =====================
+    public function process_login()
+    {
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+        $is_sales = $this->input->post('is_sales');
+        $is_admin = $this->input->post('is_admin');
+        $is_inventory = $this->input->post('is_inventory');
+
+        $user = $this->User_model->get_by_email($email);
+
+        if ($user && password_verify($password, $user->Password)) {
+            
+            // Check if user is trying to login from sales page but doesn't have sales role
+            if ($is_sales && $user->Role !== 'Sales Representative') {
+                $this->session->set_flashdata('error', 'Access denied. This account is not authorized for sales login.');
+                redirect(base_url('SlsLog'));
+                return;
+            }
+
+            // Check if user is trying to login from admin page but doesn't have admin role
+            if ($is_admin && $user->Role !== 'Admin') {
+                $this->session->set_flashdata('error', 'Access denied. This account is not authorized for admin login.');
+                redirect(base_url('Adlog'));
+                return;
+            }
+
+            // Check if user is trying to login from inventory page but doesn't have inventory role
+            if ($is_inventory && $user->Role !== 'Inventory Officer') {
+                $this->session->set_flashdata('error', 'Access denied. This account is not authorized for inventory login.');
+                redirect(base_url('InvLog'));
+                return;
+            }
+
+            // Store session including Customer_ID (same as UserID)
+            $this->session->set_userdata([
+                'user_id'      => $user->UserID,
+                'customer_id'  => $user->UserID, // <-- This is your Customer_ID
+                'user_name'    => $user->First_Name . ' ' . $user->Last_Name,
+                'user_role'    => $user->Role,
+                'is_logged_in' => true
+            ]);
+
+            // Redirect based on user role
+            if ($user->Role === 'Sales Representative') {
+                redirect(base_url('sales-dashboard'));
+            } elseif ($user->Role === 'Admin') {
+                redirect(base_url('admin-dashboard'));
+            } elseif ($user->Role === 'Inventory Officer') {
+                redirect(base_url('inventory-dashboard'));
+            } else {
+                // Default to customer home
+                redirect(base_url('home-login'));
+            }
+        } else {
+            $this->session->set_flashdata('error', 'Invalid email or password.');
+            
+            // Redirect back to appropriate login page
+            if ($is_sales) {
+                redirect(base_url('SlsLog'));
+            } elseif ($is_admin) {
+                redirect(base_url('Adlog'));
+            } elseif ($is_inventory) {
+                redirect(base_url('InvLog'));
+            } else {
+                redirect(base_url('login'));
+            }
+        }
+    }
 
 
     // ===================== LOGOUT =====================

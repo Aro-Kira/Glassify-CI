@@ -3,7 +3,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class AdminCon extends CI_Controller
 {
-
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->library('session');
+        $this->load->helper('url');
+        
+        // Check if user is logged in and has Admin role
+        if (!$this->session->userdata('is_logged_in') || $this->session->userdata('user_role') !== 'Admin') {
+            $this->session->set_flashdata('error', 'Access denied. You must be logged in as an Admin.');
+            redirect(base_url('Adlog'));
+        }
+    }
     
     // Dashboard
     public function admin_dashboard()

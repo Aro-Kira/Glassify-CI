@@ -25,9 +25,6 @@
         <span class="highlight">Admin</span> Access Only.<br>
         Manage <span class="highlight">Users</span>, Orders, and Settings.
       </p>
-      <div class="login-user-icon">
-        <img src="<?php echo base_url('assets/images/img-page/mdi_shield-account.svg'); ?>" alt="admin-icon">
-      </div>
     </div>
 
     <!-- Right Panel -->

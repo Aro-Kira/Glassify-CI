@@ -30,8 +30,8 @@
     <span>Order</span> Online.
   </p>
 
-  <button class="buildtd-btn">Build Today</button>
-  <a href="contact_us.html" class="contus">Contact Us?</a>
+  <a href="<?php echo base_url('products'); ?>" class="buildtd-btn">Build Today</a>
+  <a href="#contact-footer" class="contus">Contact Us?</a>
 </div>
 
 <section class="what-we-offer">
@@ -39,7 +39,7 @@
     <div class="left">
       <h1>What We Offer</h1>
       <p><span>Expertly crafted</span> glass, aluminum, <br>and steel works.</p>
-      <button>Browse Products</button>
+      <a href="<?php echo base_url('products'); ?>" class="btn">Browse Products</a>
     </div>
 
     <div class="right">
@@ -85,25 +85,25 @@
       <div class="carousel-track">
         <div class="carousel-slide active">
           <div class="slide-content">
-            <div class="slide-image"></div>
+            <div class="slide-image" style="background-image: url('<?php echo base_url('assets/images/img-page/Glass_Aluminum_Home.png'); ?>'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
             <h3>Glass and Aluminum</h3>
           </div>
         </div>
         <div class="carousel-slide">
           <div class="slide-content">
-            <div class="slide-image"></div>
+            <div class="slide-image" style="background-image: url('<?php echo base_url('assets/images/img-page/Windows_Home.png'); ?>'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
             <h3>Windows</h3>
           </div>
         </div>
         <div class="carousel-slide">
           <div class="slide-content">
-            <div class="slide-image"></div>
+            <div class="slide-image" style="background-image: url('<?php echo base_url('assets/images/img-page/Aluminum_Kitchen_Home.png'); ?>'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
             <h3>Aluminum Kitchen</h3>
           </div>
         </div>
         <div class="carousel-slide">
           <div class="slide-content">
-            <div class="slide-image"></div>
+            <div class="slide-image" style="background-image: url('<?php echo base_url('assets/images/img-page/Shower_Enclosure_Home.png'); ?>'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
             <h3>Shower Enclosure</h3>
           </div>
         </div>
@@ -162,7 +162,7 @@
   </div>
 
   <div class="btn-container">
-    <a href="#" class="btn">BUILD TODAY</a>
+    <a href="<?php echo base_url('products'); ?>" class="btn">BUILD TODAY</a>
   </div>
 </section>
 

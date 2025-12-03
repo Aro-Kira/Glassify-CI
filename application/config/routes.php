@@ -62,6 +62,8 @@ $route['about'] = 'pages/about';
 $route['contact'] = 'pages/contact';
 $route['projects'] = 'pages/projects';
 $route['home-login'] = 'pages/home_login';
+$route['quote-request'] = 'pages/process_quote_request';
+$route['test-email'] = 'pages/test_email';
 
 
 /* 
@@ -78,6 +80,7 @@ $route['faq-warranty'] = 'FaqCon/faq_warranty';
 $route['faq-shipping'] = 'FaqCon/faq_shipping';
 $route['faq-account'] = 'FaqCon/faq_account';
 $route['report-issue'] = 'FaqCon/faq_report';
+$route['submit-issue'] = 'FaqCon/submit_issue';
 
 /* 
 ======================================
@@ -120,6 +123,7 @@ $route['auth/process_register'] = 'auth/process_register';
 $route['Profile'] = 'UserCon/profile';
 $route['Adlog'] = 'Auth/admin_login';
 $route['SlsLog'] = 'Auth/sales_login';
+$route['InvLog'] = 'Auth/inventory_login';
 
 
 /* 
@@ -153,6 +157,11 @@ $route['sales-endUser'] = 'SalesCon/sales_endUser';
 $route['sales-payments'] = 'SalesCon/sales_payments';
 $route['sales-issues'] = 'SalesCon/sales_issues';
 $route['sales-account'] = 'SalesCon/sales_account';
+$route['sales-get-issues'] = 'SalesCon/get_issues_ajax';
+$route['sales-get-issue-details/(:num)'] = 'SalesCon/get_issue_details_ajax/$1';
+$route['sales-mark-resolved'] = 'SalesCon/mark_resolved_ajax';
+$route['sales-update-priority'] = 'SalesCon/update_priority_ajax';
+$route['sales-get-issue-stats'] = 'SalesCon/get_issue_stats_ajax';
 
 /* 
 ======================================

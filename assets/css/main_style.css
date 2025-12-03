@@ -67,12 +67,32 @@ body {
   font-weight: normal;
   border-radius: 20px;
   cursor: pointer;
-  margin-top: 10%;
+  margin-top: 0;
+  text-decoration: none; /* Remove underline */
+  display: inline-block; /* Make it behave like a button */
   transition: background-color 0.3s ease;
 }
 
 .buildtd-btn:hover {
   background-color: #ffcf41; /* darker yellow on hover */
+  text-decoration: none; /* No underline on hover */
+}
+
+.buildtd-btn:active {
+  text-decoration: underline; /* Show underline only when clicked */
+  text-decoration-color: #ffffff; /* White underline */
+}
+
+.buildtd-btn:focus {
+  text-decoration: none; /* No underline on focus */
+  outline: none; /* Remove default focus outline */
+}
+
+.cta-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(-150px); /* Adjust this value: negative = up, positive = down */
 }
 
 .contus {
@@ -127,7 +147,8 @@ body {
   font-weight: bold;
 }
 
-.left button {
+.left button,
+.left a {
   padding: 20px 30px;
   border: 1px solid #00455a;
   background: transparent;
@@ -138,11 +159,27 @@ body {
   text-transform: uppercase;
   font-size: 20px;
   box-shadow: rgba(0, 0, 0, 0.37) 0px 4px 6px -1px;
+  text-decoration: none; /* Remove underline */
+  display: inline-block; /* Make it behave like a button */
 }
 
-.left button:hover {
+.left button:hover,
+.left a:hover {
   background: #00455a;
   color: #fff;
+  text-decoration: none; /* No underline on hover */
+}
+
+.left button:active,
+.left a:active {
+  text-decoration: underline; /* Show underline only when clicked */
+  text-decoration-color: #00455a; /* Match text color */
+}
+
+.left button:focus,
+.left a:focus {
+  text-decoration: none; /* No underline on focus */
+  outline: none; /* Remove default focus outline */
 }
 
 /* Right side */
@@ -271,6 +308,9 @@ body {
     width: 100%;
     height: 600px;
     background: linear-gradient(135deg, #ffffff 0%, #bdbdbd 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     border-radius: 10px;
     opacity: 0.9;
     transition: all 0.3s ease;
@@ -454,7 +494,8 @@ body {
   color: #fff;
   padding: 15px 30px;
   border-radius: 25px;
-  text-decoration: none;
+  text-decoration: none; /* Remove underline */
+  display: inline-block; /* Make it behave like a button */
   font-size: 1.3em;
   font-weight: 500;
   transition: background 0.3s;
@@ -462,4 +503,15 @@ body {
 
 .btn:hover {
   background: #e0a500;
+  text-decoration: none; /* No underline on hover */
+}
+
+.btn:active {
+  text-decoration: underline; /* Show underline only when clicked */
+  text-decoration-color: #fff; /* White underline */
+}
+
+.btn:focus {
+  text-decoration: none; /* No underline on focus */
+  outline: none; /* Remove default focus outline */
 }

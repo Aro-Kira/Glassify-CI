@@ -22,29 +22,29 @@
       </div>
       <h2 class="login-brand">Glassify</h2>
       <p class="login-description">
-        <span class="highlight">Sales</span> Access Only.<br>
-        Manage <span class="highlight">Users</span>, Orders, and Settings.
+        <span class="highlight">Inventory</span> Access Only.<br>
+        Manage <span class="highlight">Products</span>, Stock, and Inventory.
       </p>
     </div>
 
     <!-- Right Panel -->
     <div class="login-right">
-      <h3 class="login-title">Sales Sign In</h3>
+      <h3 class="login-title">Inventory Sign In</h3>
 
-      <!-- ✅ sales Login Form -->
-      <form id="salesLoginForm" class="login-form" method="post" action="<?php echo base_url('auth/process_login'); ?>">
-        <input type="hidden" name="is_sales" value="1">
+      <!-- ✅ Inventory Login Form -->
+      <form id="inventoryLoginForm" class="login-form" method="post" action="<?php echo base_url('auth/process_login'); ?>">
+        <input type="hidden" name="is_inventory" value="1">
 
         <?php
-        $pending_email = $this->session->tempdata('pending_sales_email');
+        $pending_email = $this->session->tempdata('pending_inventory_email');
         ?>
 
         <div class="login-input-group">
-          <label for="email">Sales Email</label>
+          <label for="email">Inventory Email</label>
           <div class="login-input-row">
             <img src="<?php echo base_url('assets/images/img-page/ic_outline-email.svg'); ?>" alt="Email Icon"
               class="login-input-icon">
-            <input type="email" id="email" name="email" placeholder="Enter your sales email"
+            <input type="email" id="email" name="email" placeholder="Enter your inventory email"
               value="<?= $pending_email ?? '' ?>" required>
           </div>
         </div>
@@ -58,7 +58,7 @@
           </div>
         </div>
 
-        <button type="submit" class="login-btn">Login as Sales</button>
+        <button type="submit" class="login-btn">Login as Inventory</button>
 
         <div class="login-options">
           <label><input type="checkbox"> Remember Me</label>
@@ -73,3 +73,4 @@
     </div>
   </div>
 </section>
+

@@ -3,6 +3,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class InventCon extends CI_Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->library('session');
+        $this->load->helper('url');
+        
+        // Check if user is logged in and has Inventory Officer role
+        if (!$this->session->userdata('is_logged_in') || $this->session->userdata('user_role') !== 'Inventory Officer') {
+            $this->session->set_flashdata('error', 'Access denied. You must be logged in as an Inventory Officer.');
+            redirect(base_url('InvLog'));
+        }
+    }
+    
     public function inventory_dashboard()
     {
         $data['title'] = "Glassify - Inventory Dashboard";

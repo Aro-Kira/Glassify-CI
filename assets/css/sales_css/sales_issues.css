@@ -620,14 +620,25 @@ tbody td:last-child, thead th:last-child {
   background: transparent;
   border: none;
   color: #02455F;
-  font-size: 18px;
+  font-size: 20px;
+  line-height: 1;
   cursor: pointer;
-  padding: 5px;
+  padding: 6px 8px;
   border-radius: 4px;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
 }
 
 .kebab-btn:hover {
+  background: #f0f0f0;
+  color: #02455F;
+}
+
+.kebab-btn:active {
   background: #e0e0e0;
 }
 
@@ -646,6 +657,112 @@ tbody td:nth-child(4):contains("Medium") {
 
 tbody td:nth-child(4):contains("High") {
   color: #dc3545; /* Red for high */
+}
+
+/* Issue Summary */
+.issue-summary {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Action Dropdown */
+.action-dropdown {
+  display: none;
+  position: fixed;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  min-width: 165px;
+  padding: 8px 0;
+  z-index: 10000;
+  font-family: 'DM Sans', sans-serif;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 10px 18px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333333;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  margin: 0;
+  line-height: 1.5;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+}
+
+.dropdown-item:hover {
+  background: #f5f5f5;
+  color: #02455F;
+}
+
+.dropdown-item:active {
+  background: #eeeeee;
+  color: #02455F;
+}
+
+/* Priority Selector */
+.priority-select {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  color: #02455F;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.priority-select:hover {
+  border-color: #02455F;
+}
+
+/* Resolved Badge */
+.resolved-badge {
+  color: #45A927;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Priority text in tag */
+.priority-text {
+  text-transform: capitalize;
+}
+
+/* Panel adjustments for right-side slide */
+.popup-overlay {
+  justify-content: flex-end;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.popup.ticket-popup {
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 

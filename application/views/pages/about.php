@@ -19,9 +19,9 @@
 
   <!-- Social Links -->
   <section class="social-links">
-    <a href="#"><img src="<?php echo base_url(''); ?>assets/images/img-page/Tiktok.svg" alt="TikTok"></a>
-    <a href="#"><img src="<?php echo base_url(''); ?>assets/images/img-page/logos_facebook.svg" alt="Facebook"></a>
-    <a href="#"><img src="<?php echo base_url(''); ?>assets/images/img-page/instagram.svg" alt="Instagram"></a>
+    <a href="https://www.tiktok.com/@glassworthbuilders" target="_blank" rel="noopener noreferrer"><img src="<?php echo base_url(''); ?>assets/images/img-page/Tiktok.svg" alt="TikTok"></a>
+    <a href="https://www.facebook.com/glassworthbuilders" target="_blank" rel="noopener noreferrer"><img src="<?php echo base_url(''); ?>assets/images/img-page/logos_facebook.svg" alt="Facebook"></a>
+    <a href="https://www.instagram.com/glassworthbuilders/?hl=en" target="_blank" rel="noopener noreferrer"><img src="<?php echo base_url(''); ?>assets/images/img-page/instagram.svg" alt="Instagram"></a>
   </section>
 
   <!-- Mission and Vision -->
@@ -70,7 +70,7 @@
   <section class="cta">
     <h3>Ready to Transform Your Space?</h3>
     <p><span class="highlight">Get a Free Quote Today!</span></p>
-    <a href="#" class="btn">View Products</a>
+    <a href="<?php echo base_url('products'); ?>" class="btn">View Products</a>
   </section>
 
 
