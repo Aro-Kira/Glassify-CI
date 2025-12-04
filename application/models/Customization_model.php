@@ -3,29 +3,36 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Customization_model extends CI_Model
 {
-    protected $table = 'customization';
+    protected $table = "customization";
 
-    public function __construct() {
-        parent::__construct();
-    }
-
-    public function add_customization($data) {
+    public function insert($data)
+    {
         $this->db->insert($this->table, $data);
-        return $this->db->insert_id(); // returns the new customization ID
+        return $this->db->insert_id();
     }
 
-    public function delete_customization($customization_id) {
-    $this->db->where('CustomizationID', $customization_id);
-    return $this->db->delete($this->table);
-}
+    public function get_customer_items($customer_id)
+    {
+        $this->db->select('cu.*, p.ProductName, p.ImageUrl');
+        $this->db->from('customization cu');
+        $this->db->join('product p', 'p.Product_ID = cu.Product_ID', 'left');
+        $this->db->where('cu.Customer_ID', $customer_id);
+        return $this->db->get()->result();
+    }
 
-public function delete_multiple($ids = [])
-{
-    if (empty($ids)) return false;
+    public function update($id, $data)
+    {
+        return $this->db->where('CustomizationID', $id)->update($this->table, $data);
+    }
 
-    $this->db->where_in('CustomizationID', $ids);
-    return $this->db->delete($this->table);
-}
+    public function delete($id)
+    {
+        return $this->db->where('CustomizationID', $id)->delete($this->table);
+    }
 
-
+    public function get_cart_count($customer_id)
+    {
+        $this->db->where('Customer_ID', $customer_id);
+        return $this->db->count_all_results($this->table);
+    }
 }

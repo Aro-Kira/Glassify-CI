@@ -76,7 +76,7 @@
             </div>
 
             <!-- Upload form: posts to ShopCon::ewallet_submit -->
-            <form id="ewalletForm" action="<?php echo site_url('waiting_order'); ?>" method="post"
+            <form id="ewalletForm" action="<?php echo site_url('complete'); ?>" method="post"
                 enctype="multipart/form-data">
                 <?php if ($this->config->item('csrf_protection')): ?>
                     <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>"
