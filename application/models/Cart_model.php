@@ -23,10 +23,19 @@ public function get_cart_items($customer_id)
     $this->db->select('
         c.Cart_ID,
         c.Product_ID,
+        c.CustomizationID,
         c.Quantity,
         p.ProductName,
         p.Price as BasePrice,
         p.ImageUrl,
+        cu.DesignRef,
+        cu.Dimensions,
+        cu.GlassShape,
+        cu.GlassType,
+        cu.GlassThickness,
+        cu.EdgeWork,
+        cu.FrameType,
+        cu.Engraving,
         cu.EstimatePrice,
         IF(cu.EstimatePrice IS NOT NULL AND cu.EstimatePrice > 0, cu.EstimatePrice, p.Price) as Price
     ');
