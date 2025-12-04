@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="<?php echo base_url('assets/css/general-customer/shop/order_tracking.css'); ?>">
 
 
-    <main class="order-status-page">
+    <div class="order-status-page">
         <!-- Title -->
         <section class="order-header">
             <h2>Order Status</h2>
@@ -144,6 +144,6 @@
                 </div>
             </div>
         </section>
-
+    </div>
 
     <script src="<?php echo base_url('js/order-status.js'); ?>"></script>
