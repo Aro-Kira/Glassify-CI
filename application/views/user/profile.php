@@ -100,21 +100,37 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($addresses as $addr): ?>
+                                    <?php 
+                                    $hasAddresses = false;
+                                    foreach ($addresses as $type => $addr): 
+                                        if ($addr): // Only display if address exists (not null)
+                                            $hasAddresses = true;
+                                    ?>
                                         <tr>
-                                            <td><?= $addr->AddressLine ?></td>
-                                            <td><?= $addr->City ?></td>
-                                            <td><?= $addr->Province ?></td>
-                                            <td><?= $addr->Country ?></td>
-                                            <td><?= $addr->ZipCode ?></td>
+                                            <td><?= htmlspecialchars($addr->AddressLine ?? '') ?></td>
+                                            <td><?= htmlspecialchars($addr->City ?? '') ?></td>
+                                            <td><?= htmlspecialchars($addr->Province ?? '') ?></td>
+                                            <td><?= htmlspecialchars($addr->Country ?? '') ?></td>
+                                            <td><?= htmlspecialchars($addr->ZipCode ?? '') ?></td>
                                             <td>
                                                 <button class="btn-select select-address"
-                                                    data-address="<?= $addr->AddressLine ?>, <?= $addr->City ?>, <?= $addr->Province ?>, <?= $addr->Country ?>, <?= $addr->ZipCode ?>">
+                                                    data-address="<?= htmlspecialchars(($addr->AddressLine ?? '') . ', ' . ($addr->City ?? '') . ', ' . ($addr->Province ?? '') . ', ' . ($addr->Country ?? '') . ', ' . ($addr->ZipCode ?? '')) ?>">
                                                     Select
                                                 </button>
                                             </td>
                                         </tr>
-                                    <?php endforeach; ?>
+                                    <?php 
+                                        endif;
+                                    endforeach; 
+                                    
+                                    if (!$hasAddresses): 
+                                    ?>
+                                        <tr>
+                                            <td colspan="6" style="text-align: center; color: #888; padding: 20px;">
+                                                No saved addresses. Add one below.
+                                            </td>
+                                        </tr>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>

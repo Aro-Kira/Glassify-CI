@@ -64,7 +64,7 @@
                                 <?php foreach ($order_items as $item): ?>
                                 <tr>
                                     <td>
-                                        <img src="<?= base_url('uploads/products/' . $item->ImageUrl) ?>" alt="<?= $item->ProductName ?>">
+                                        <img src="<?= base_url('uploads/products/' . ($item->ImageUrl ?? 'default.jpg')) ?>" alt="<?= htmlspecialchars($item->ProductName ?? 'Product') ?>">
                                     </td>
                                     <td><?= htmlspecialchars($item->ProductName ?? 'Product') ?></td>
                                     <td class="item-details">

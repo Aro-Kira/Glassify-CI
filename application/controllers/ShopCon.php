@@ -168,6 +168,56 @@ public function checkout()
     public function order_tracking()
     {
         $data['title'] = "Glassify - Order Tracking";
+
+        // Get order ID from URL parameter
+        $order_id = $this->input->get('order');
+
+        // Load models
+        $this->load->model('Order_model');
+        $this->load->model('User_model');
+
+        // Default values
+        $data['order'] = null;
+        $data['order_items'] = [];
+        $data['summary'] = [
+            'items' => 0,
+            'subtotal' => 0,
+            'shipping' => 0,
+            'handling' => 0,
+            'total' => 0
+        ];
+        $data['payment'] = null;
+        $data['progress'] = [];
+        $data['shipping_address'] = null;
+        $data['billing_address'] = null;
+
+        if ($order_id) {
+            // Get order tracking details
+            $data['order'] = $this->Order_model->get_order_tracking_details($order_id);
+
+            if ($data['order']) {
+                // Get order items
+                $data['order_items'] = $this->Order_model->get_order_customizations($order_id);
+
+                // Calculate summary
+                $data['summary'] = $this->Order_model->calculate_order_summary($order_id);
+
+                // Get payment info
+                $data['payment'] = $this->Order_model->get_order_payment($order_id);
+
+                // Get progress steps based on status
+                $data['progress'] = $this->Order_model->get_order_progress($data['order']->Status);
+
+                // Get customer addresses
+                $customer_id = $data['order']->Customer_ID;
+                if ($customer_id) {
+                    $addresses = $this->User_model->get_addresses($customer_id);
+                    $data['shipping_address'] = $addresses['Shipping'] ?? null;
+                    $data['billing_address'] = $addresses['Billing'] ?? null;
+                }
+            }
+        }
+
         $this->load->view('includes/header', $data);
         $this->load->view('shop/order_tracking', $data);
         $this->load->view('includes/footer');
@@ -338,5 +388,28 @@ public function checkout()
         ]);
     }
 
+    public function list_products()
+    {
+        $data['title'] = "Glassify - My Purchases";
+
+        // Check if user is logged in
+        $customer_id = $this->session->userdata('customer_id');
+        
+        if (!$customer_id) {
+            // Redirect to login if not logged in
+            redirect('login');
+            return;
+        }
+
+        // Load Order model
+        $this->load->model('Order_model');
+
+        // Get customer's order items (purchases) from database
+        $data['order_items'] = $this->Order_model->get_customer_order_items($customer_id);
+
+        $this->load->view('includes/header', $data);
+        $this->load->view('shop/list_product', $data);
+        $this->load->view('includes/footer');
+    }
     
 }

@@ -352,6 +352,37 @@ CREATE TABLE `order` (
 
 -- --------------------------------------------------------
 
+
+
+
+CREATE TABLE `order_customization` (
+  `OrderCustomizationID` int(11) NOT NULL,
+  `OrderID` int(11) NOT NULL,
+  `Product_ID` int(11) NOT NULL,
+  `DesignRef` varchar(255) DEFAULT NULL,
+  `Dimensions` varchar(255) DEFAULT NULL,
+  `GlassShape` varchar(50) DEFAULT NULL,
+  `GlassType` varchar(50) DEFAULT NULL,
+  `GlassThickness` varchar(50) DEFAULT NULL,
+  `EdgeWork` varchar(50) DEFAULT NULL,
+  `FrameType` varchar(50) DEFAULT NULL,
+  `Engraving` varchar(255) DEFAULT NULL,
+  `Quantity` int(11) DEFAULT 1,
+  `EstimatePrice` decimal(10,2) NOT NULL DEFAULT 0.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `order_customization`
+--
+
+
+
+
+
 --
 -- Table structure for table `order_page`
 --
@@ -569,6 +600,33 @@ CREATE TABLE `user` (
   `Date_Updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_address`
+--
+
+CREATE TABLE `user_address` (
+  `AddressID` int(11) NOT NULL AUTO_INCREMENT,
+  `UserID` int(11) NOT NULL,
+  `AddressType` enum('Shipping','Billing') NOT NULL DEFAULT 'Shipping',
+  `AddressLine` varchar(255) DEFAULT NULL,
+  `City` varchar(100) DEFAULT NULL,
+  `Province` varchar(100) DEFAULT NULL,
+  `Country` varchar(100) DEFAULT 'Philippines',
+  `ZipCode` varchar(20) DEFAULT NULL,
+  `Note` text DEFAULT NULL,
+  `IsDefault` tinyint(1) DEFAULT 0,
+  `Created_Date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `Updated_Date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`AddressID`),
+  KEY `UserID` (`UserID`),
+  KEY `AddressType` (`AddressType`),
+  CONSTRAINT `user_address_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
 --
 -- Dumping data for table `user`
 --
@@ -690,6 +748,21 @@ ALTER TABLE `order_page`
   ADD KEY `idx_customer` (`Customer_ID`),
   ADD KEY `idx_salesrep` (`SalesRep_ID`);
 
+
+
+ALTER TABLE `order_customization`
+  ADD PRIMARY KEY (`OrderCustomizationID`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `order_customization`
+--
+ALTER TABLE `order_customization`
+  MODIFY `OrderCustomizationID` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
 --
 -- Indexes for table `payment`
 --
