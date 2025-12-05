@@ -28,12 +28,23 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Do not mark icons (like cart/wishlist) active if they just redirect to login
+    // For icon links: only remove active if they redirect to login (not on actual page)
     if (link.classList.contains("icon-link")) {
-      link.classList.remove("active");
+      // If link has redirect param, it means user is not logged in and it goes to login
+      // Only highlight if we're actually on the target page (no redirect param in link)
+      if (linkRedirect) {
+        link.classList.remove("active");
+      }
     }
   });
 
-  
+  // Handle profile dropdown button highlighting
+  const profileBtn = document.querySelector('.header-dropbtn');
+  if (profileBtn) {
+    const currentLower = currentFile ? currentFile.toLowerCase() : '';
+    if (currentLower === 'profile') {
+      profileBtn.classList.add('active');
+    }
+  }
 
 });

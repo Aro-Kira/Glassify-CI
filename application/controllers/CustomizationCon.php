@@ -32,12 +32,10 @@ $customer_id = $this->session->userdata('customer_id');
         'DesignRef'     => $this->input->post('design_ref') ?? ''
     ];
 
-    $customization_id = $this->Customization_model->add_customization($data);
+    // Use insert() method (not add_customization which doesn't exist)
+    $customization_id = $this->Customization_model->insert($data);
 
     echo json_encode(['status' => 'success', 'customization_id' => $customization_id]);
-
-    $post = $this->input->post();
-    file_put_contents('debug.log', print_r($post, true));
 }
 
 public function remove_customization() {
@@ -48,7 +46,8 @@ public function remove_customization() {
         return;
     }
 
-    $result = $this->Customization_model->delete_customization($customization_id);
+    // Use delete() method (refactored from delete_customization, now includes design image cleanup)
+    $result = $this->Customization_model->delete($customization_id);
 
     if ($result) {
         echo json_encode(['status' => 'success']);

@@ -103,6 +103,36 @@ public function checkout()
     public function ewallet()
     {
         $data['title'] = "Glassify - Payment";
+        
+        // Get pending order data from session
+        $data['pending_summary'] = $this->session->userdata('pending_order_summary');
+        $data['pending_cart_ids'] = $this->session->userdata('pending_cart_ids');
+        
+        // Log session data for debugging
+        log_message('debug', 'Ewallet Page - Session Data: ' . json_encode([
+            'pending_summary' => $data['pending_summary'],
+            'pending_cart_ids' => $data['pending_cart_ids'],
+            'all_session_keys' => array_keys($this->session->all_userdata())
+        ]));
+        
+        // Check if we have valid pending order data (with actual values)
+        $has_valid_order = false;
+        if (is_array($data['pending_summary']) && 
+            isset($data['pending_summary']['total']) && 
+            $data['pending_summary']['total'] > 0) {
+            $has_valid_order = true;
+        }
+        
+        log_message('debug', 'Ewallet Page - Has valid order: ' . ($has_valid_order ? 'YES' : 'NO'));
+        
+        // If no valid pending order, redirect back to checkout
+        if (!$has_valid_order) {
+            log_message('error', 'Ewallet Page - Redirecting: No valid pending order');
+            $this->session->set_flashdata('error', 'No pending order found. Please place an order first.');
+            redirect('payment');
+            return;
+        }
+        
         $this->load->view('includes/header', $data);
         $this->load->view('shop/ewallet', $data);
         $this->load->view('includes/footer');
@@ -247,8 +277,14 @@ public function checkout()
         // Set JSON response header
         header('Content-Type: application/json');
 
+        // Initialize log array for debugging
+        $debug_log = [];
+        $debug_log['timestamp'] = date('Y-m-d H:i:s');
+
         // Check if user is logged in
         $customer_id = $this->session->userdata('customer_id');
+        $debug_log['customer_id'] = $customer_id;
+        
         if (!$customer_id) {
             echo json_encode([
                 'status' => 'error',
@@ -260,6 +296,11 @@ public function checkout()
         // Get POST data
         $payment_method = $this->input->post('payment_method');
         $terms_accepted = $this->input->post('terms_accepted');
+        $selected_cart_ids = $this->input->post('selected_cart_ids');
+        
+        $debug_log['payment_method'] = $payment_method;
+        $debug_log['terms_accepted'] = $terms_accepted;
+        $debug_log['selected_cart_ids'] = $selected_cart_ids;
 
         // Validate payment method
         if (empty($payment_method)) {
@@ -286,25 +327,71 @@ public function checkout()
 
         // Get cart items
         $cart_items = $this->Cart_model->get_cart_items($customer_id);
+        $debug_log['cart_items_count_before_filter'] = count($cart_items);
+        $debug_log['cart_items_raw'] = array_map(function($item) {
+            return [
+                'Cart_ID' => $item->Cart_ID ?? 'N/A',
+                'Product_ID' => $item->Product_ID ?? 'N/A',
+                'Quantity' => $item->Quantity ?? 0,
+                'EstimatePrice' => $item->EstimatePrice ?? 'N/A',
+                'Price' => $item->Price ?? 'N/A'
+            ];
+        }, $cart_items);
+        
+        // Filter to only selected items if IDs provided
+        if (!empty($selected_cart_ids)) {
+            $selected_ids = array_filter(array_map('intval', explode(',', $selected_cart_ids)));
+            $debug_log['selected_ids_parsed'] = $selected_ids;
+            
+            if (!empty($selected_ids)) {
+                $cart_items = array_filter($cart_items, function($item) use ($selected_ids) {
+                    return in_array($item->Cart_ID, $selected_ids);
+                });
+                // Re-index array
+                $cart_items = array_values($cart_items);
+            }
+        }
+        
+        $debug_log['cart_items_count_after_filter'] = count($cart_items);
+
         if (empty($cart_items)) {
+            $debug_log['error'] = 'No items after filter';
+            log_message('error', 'Place Order Debug: ' . json_encode($debug_log));
+            
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Your cart is empty.'
+                'message' => 'No items selected for checkout.',
+                'debug' => $debug_log
             ]);
             return;
         }
 
-        // Calculate totals
+        // Calculate totals for selected items only
         $subtotal = 0;
         $total_items = 0;
         foreach ($cart_items as $item) {
             $price = $item->EstimatePrice ?? $item->Price ?? 0;
+            $debug_log['item_prices'][] = [
+                'Cart_ID' => $item->Cart_ID,
+                'EstimatePrice' => $item->EstimatePrice ?? 'null',
+                'Price' => $item->Price ?? 'null',
+                'used_price' => $price,
+                'Quantity' => $item->Quantity
+            ];
             $subtotal += $price * $item->Quantity;
             $total_items += $item->Quantity;
         }
         $shipping = $total_items * 25;
         $handling = $total_items * 10;
         $total_amount = $subtotal + $shipping + $handling;
+        
+        $debug_log['calculated_totals'] = [
+            'subtotal' => $subtotal,
+            'total_items' => $total_items,
+            'shipping' => $shipping,
+            'handling' => $handling,
+            'total_amount' => $total_amount
+        ];
 
         // Get shipping address
         $addresses = $this->User_model->get_addresses($customer_id);
@@ -351,7 +438,59 @@ public function checkout()
             'SpecialInstructions' => $note
         ];
 
-        // Create order
+        // For E-Wallet: Store order data in session and redirect to payment page
+        // Don't create order yet - wait for payment submission
+        if ($payment_method === 'E-Wallet') {
+            // Validate we have actual items with value
+            if ($total_items <= 0 || $total_amount <= 0) {
+                $debug_log['error'] = 'Invalid order amount';
+                log_message('error', 'Place Order Debug: ' . json_encode($debug_log));
+                
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Invalid order amount. Please try again.',
+                    'debug' => $debug_log
+                ]);
+                return;
+            }
+
+            // Prepare summary data
+            $summary_data = [
+                'items' => $total_items,
+                'subtotal' => $subtotal,
+                'shipping' => $shipping,
+                'handling' => $handling,
+                'total' => $total_amount
+            ];
+            
+            $debug_log['summary_to_store'] = $summary_data;
+
+            // Store pending order data in session (cart items remain intact)
+            $this->session->set_userdata('pending_order_data', $order_data);
+            $this->session->set_userdata('pending_cart_ids', $selected_cart_ids);
+            $this->session->set_userdata('pending_order_summary', $summary_data);
+            $this->session->set_userdata('last_payment_method', $payment_method);
+            
+            // Verify session was stored
+            $stored_summary = $this->session->userdata('pending_order_summary');
+            $debug_log['session_verification'] = [
+                'stored_successfully' => !empty($stored_summary),
+                'stored_data' => $stored_summary
+            ];
+            
+            // Log to file
+            log_message('debug', 'E-Wallet Order - Session stored: ' . json_encode($debug_log));
+
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Redirecting to payment...',
+                'redirect_url' => base_url('paying'),
+                'debug' => $debug_log
+            ]);
+            return;
+        }
+
+        // For COD: Create order immediately
         $order_id = $this->Order_model->create_order($order_data);
 
         if (!$order_id) {
@@ -362,30 +501,133 @@ public function checkout()
             return;
         }
 
-        // Save order customizations from cart items
+        // Save order customizations from selected cart items only
         $this->Order_model->save_order_customizations($order_id, $cart_items);
 
-        // Store order info in session for payment/complete page
+        // Store order info in session for complete page
         $this->session->set_userdata([
             'last_order_id' => $order_id,
             'last_order_total' => $total_amount,
             'last_payment_method' => $payment_method
         ]);
 
-        // Clear cart after successful order
-        $this->Cart_model->clear_cart($customer_id);
-
-        // Determine redirect URL based on payment method
-        $redirect_url = ($payment_method === 'E-Wallet') 
-            ? base_url('paying') 
-            : base_url('complete');
+        // Remove only the selected items from cart (not entire cart)
+        if (!empty($selected_cart_ids)) {
+            $selected_ids = array_filter(array_map('intval', explode(',', $selected_cart_ids)));
+            foreach ($selected_ids as $cart_id) {
+                $this->Cart_model->remove_item($cart_id);
+            }
+        } else {
+            // If no selection specified, clear entire cart (fallback)
+            $this->Cart_model->clear_cart($customer_id);
+        }
 
         echo json_encode([
             'status' => 'success',
             'message' => 'Order placed successfully!',
             'order_id' => $order_id,
-            'redirect_url' => $redirect_url
+            'redirect_url' => base_url('complete')
         ]);
+    }
+
+    /**
+     * Submit E-Wallet Payment - Create order after payment receipt is uploaded
+     */
+    public function submit_ewallet_payment()
+    {
+        // Check if user is logged in
+        $customer_id = $this->session->userdata('customer_id');
+        if (!$customer_id) {
+            $this->session->set_flashdata('error', 'Please log in to complete payment.');
+            redirect('login');
+            return;
+        }
+
+        // Get pending order data from session
+        $order_data = $this->session->userdata('pending_order_data');
+        $selected_cart_ids = $this->session->userdata('pending_cart_ids');
+
+        if (empty($order_data)) {
+            $this->session->set_flashdata('error', 'No pending order found. Please try again.');
+            redirect('payment');
+            return;
+        }
+
+        // Handle file upload
+        $config['upload_path'] = './uploads/receipts/';
+        $config['allowed_types'] = 'gif|jpg|jpeg|png|pdf';
+        $config['max_size'] = 5120; // 5MB
+        $config['file_name'] = 'receipt_' . $customer_id . '_' . time();
+
+        // Create upload directory if not exists
+        if (!is_dir($config['upload_path'])) {
+            mkdir($config['upload_path'], 0755, true);
+        }
+
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload('receipt')) {
+            $this->session->set_flashdata('error', 'Failed to upload receipt: ' . $this->upload->display_errors('', ''));
+            redirect('paying');
+            return;
+        }
+
+        $upload_data = $this->upload->data();
+        $receipt_path = 'uploads/receipts/' . $upload_data['file_name'];
+
+        // Load models
+        $this->load->model('Cart_model');
+        $this->load->model('Order_model');
+
+        // Now create the order
+        $order_id = $this->Order_model->create_order($order_data);
+
+        if (!$order_id) {
+            $this->session->set_flashdata('error', 'Failed to create order. Please try again.');
+            redirect('paying');
+            return;
+        }
+
+        // Get cart items for order customizations
+        $cart_items = $this->Cart_model->get_cart_items($customer_id);
+        
+        // Filter to only selected items
+        if (!empty($selected_cart_ids)) {
+            $selected_ids = array_filter(array_map('intval', explode(',', $selected_cart_ids)));
+            if (!empty($selected_ids)) {
+                $cart_items = array_filter($cart_items, function($item) use ($selected_ids) {
+                    return in_array($item->Cart_ID, $selected_ids);
+                });
+                $cart_items = array_values($cart_items);
+            }
+        }
+
+        // Save order customizations
+        $this->Order_model->save_order_customizations($order_id, $cart_items);
+
+        // Save payment receipt reference
+        $this->Order_model->save_payment_receipt($order_id, $receipt_path, $order_data['TotalAmount']);
+
+        // Store order info in session for complete page
+        $this->session->set_userdata([
+            'last_order_id' => $order_id,
+            'last_order_total' => $order_data['TotalAmount'],
+            'last_payment_method' => 'E-Wallet'
+        ]);
+
+        // Remove selected items from cart
+        if (!empty($selected_cart_ids)) {
+            $selected_ids = array_filter(array_map('intval', explode(',', $selected_cart_ids)));
+            foreach ($selected_ids as $cart_id) {
+                $this->Cart_model->remove_item($cart_id);
+            }
+        }
+
+        // Clear pending order data from session
+        $this->session->unset_userdata(['pending_order_data', 'pending_cart_ids', 'pending_order_summary']);
+
+        // Redirect to order complete page
+        redirect('complete');
     }
 
     public function list_products()

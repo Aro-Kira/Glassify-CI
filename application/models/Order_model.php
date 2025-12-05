@@ -291,5 +291,153 @@ class Order_model extends CI_Model
 
         return $steps;
     }
+
+    // ====================================
+    // DASHBOARD FUNCTIONS
+    // ====================================
+
+    /**
+     * Get orders for dashboard display with product names
+     * Limits to recent orders for performance
+     */
+    public function get_customer_orders_with_products($customer_id, $limit = 10)
+    {
+        $this->db->select('
+            o.OrderID,
+            o.OrderDate,
+            o.Status,
+            o.PaymentStatus,
+            oc.Product_ID,
+            p.ProductName,
+            p.ImageUrl
+        ');
+        $this->db->from('`order` o');
+        $this->db->join('order_customization oc', 'oc.OrderID = o.OrderID', 'left');
+        $this->db->join('product p', 'p.Product_ID = oc.Product_ID', 'left');
+        $this->db->where('o.Customer_ID', $customer_id);
+        $this->db->order_by('o.OrderDate', 'DESC');
+        $this->db->group_by('o.OrderID');
+        $this->db->limit($limit);
+        
+        return $this->db->get()->result();
+    }
+
+    /**
+     * Count orders by status for a customer
+     */
+    public function count_orders_by_status($customer_id, $status = null)
+    {
+        $this->db->where('Customer_ID', $customer_id);
+        if ($status) {
+            if (is_array($status)) {
+                $this->db->where_in('Status', $status);
+            } else {
+                $this->db->where('Status', $status);
+            }
+        }
+        return $this->db->count_all_results('order');
+    }
+
+    /**
+     * Get the most recent order activity for a customer
+     */
+    public function get_recent_order_activity($customer_id)
+    {
+        $this->db->select('
+            o.OrderID,
+            o.Status,
+            o.OrderDate,
+            p.ProductName
+        ');
+        $this->db->from('`order` o');
+        $this->db->join('order_customization oc', 'oc.OrderID = o.OrderID', 'left');
+        $this->db->join('product p', 'p.Product_ID = oc.Product_ID', 'left');
+        $this->db->where('o.Customer_ID', $customer_id);
+        $this->db->where('o.Status !=', 'Completed');
+        $this->db->order_by('o.OrderDate', 'DESC');
+        $this->db->limit(1);
+        
+        return $this->db->get()->row();
+    }
+
+    /**
+     * Get activity feed for dashboard
+     * Returns recent order status changes with timestamps
+     */
+    public function get_activity_feed($customer_id, $limit = 5)
+    {
+        $this->db->select('
+            o.OrderID,
+            o.Status,
+            o.OrderDate,
+            p.ProductName
+        ');
+        $this->db->from('`order` o');
+        $this->db->join('order_customization oc', 'oc.OrderID = o.OrderID', 'left');
+        $this->db->join('product p', 'p.Product_ID = oc.Product_ID', 'left');
+        $this->db->where('o.Customer_ID', $customer_id);
+        $this->db->order_by('o.OrderDate', 'DESC');
+        $this->db->group_by('o.OrderID');
+        $this->db->limit($limit);
+        
+        return $this->db->get()->result();
+    }
+
+    /**
+     * Get the time since last update for dashboard
+     */
+    public function get_last_update_time($customer_id)
+    {
+        $this->db->select('OrderDate');
+        $this->db->where('Customer_ID', $customer_id);
+        $this->db->order_by('OrderDate', 'DESC');
+        $this->db->limit(1);
+        $result = $this->db->get('order')->row();
+        
+        return $result ? $result->OrderDate : null;
+    }
+
+    /**
+     * Save payment receipt for E-Wallet orders
+     */
+    public function save_payment_receipt($order_id, $receipt_path, $amount = 0)
+    {
+        // Get order details for payment record
+        $order = $this->get_order_with_customer($order_id);
+        if ($order && $amount <= 0) {
+            $amount = $order->TotalAmount;
+        }
+
+        // Check if payment record exists
+        $existing = $this->db->where('OrderID', $order_id)->get('payment')->row();
+        
+        if ($existing) {
+            // Update existing payment record
+            return $this->db->where('OrderID', $order_id)
+                            ->update('payment', [
+                                'ReceiptPath' => $receipt_path,
+                                'Amount' => $amount,
+                                'Status' => 'Pending'
+                            ]);
+        } else {
+            // Create new payment record
+            return $this->db->insert('payment', [
+                'OrderID' => $order_id,
+                'Amount' => $amount,
+                'ReceiptPath' => $receipt_path,
+                'Status' => 'Pending'
+            ]);
+        }
+    }
+
+    /**
+     * Update order payment method
+     */
+    public function update_payment_method($order_id, $payment_method)
+    {
+        // Check if order table has PaymentMethod column, otherwise skip
+        return $this->db->where('OrderID', $order_id)
+                        ->update('order', ['PaymentMethod' => $payment_method]);
+    }
 }
 

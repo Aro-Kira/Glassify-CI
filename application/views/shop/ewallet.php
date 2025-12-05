@@ -1,19 +1,37 @@
 <link rel="stylesheet" href="<?php echo base_url('assets/css/general-customer/shop/ewallet_style.css'); ?>">
 
+<?php
+// Get pending order summary from controller (passed as $pending_summary)
+// Default values if no pending order
+$items_count = isset($pending_summary['items']) ? $pending_summary['items'] : 0;
+$subtotal = isset($pending_summary['subtotal']) ? $pending_summary['subtotal'] : 0;
+$shipping = isset($pending_summary['shipping']) ? $pending_summary['shipping'] : 0;
+$handling = isset($pending_summary['handling']) ? $pending_summary['handling'] : 0;
+$total = isset($pending_summary['total']) ? $pending_summary['total'] : 0;
+
+// Build back URL with selected cart IDs to preserve checkout state
+$back_url = site_url('payment');
+if (!empty($pending_cart_ids)) {
+    $back_url .= '?selected=' . $pending_cart_ids;
+}
+
+// Debug removed - issue was cart.js overwriting values
+?>
+
 <script>
     const BASE_URL = "<?= base_url(); ?>";
 </script>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="<?= base_url('assets/js/cart.js'); ?>"></script>
+<!-- cart.js removed - it was overwriting the order summary values with 0 -->
 
 
 <!-- Back + Progress -->
 <div class="payOrder-header">
     <div class="back-btn">
-        <a href="<?php echo site_url('shopcon/checkout'); ?>">
-            <img src="<?php echo base_url('assets/img/back_button.png'); ?>" alt="Back Icon">
+        <a href="<?php echo $back_url; ?>">
+            <img src="<?php echo base_url('assets/images/img-page/back_button.png'); ?>" alt="Back Icon">
             <span>Back</span>
         </a>
     </div>
@@ -52,31 +70,30 @@
 
             <div class="order-summary">
                 <div class="summary-header">Order Summary</div>
-                <!-- These values can be replaced with dynamic variables from controller: $items_count, $subtotal, etc. -->
-                <div class="summary-row"><span>Items:</span> <span id="summary-items">0</span></div>
+                <div class="summary-row"><span>Items:</span> <span id="summary-items"><?= $items_count ?></span></div>
                 <div class="summary-row">
                     <span>Subtotal:</span>
-                    <span class="price">₱<span id="summary-subtotal">0.00</span></span>
+                    <span class="price">₱<span id="summary-subtotal"><?= number_format($subtotal, 2) ?></span></span>
                 </div>
                 <div class="summary-row">
                     <span>Shipping Fee:</span>
-                    <span class="price">₱<span id="summary-shipping">0.00</span></span>
+                    <span class="price">₱<span id="summary-shipping"><?= number_format($shipping, 2) ?></span></span>
                 </div>
 
                 <div class="summary-row">
                     <span>Handling Fee:</span>
-                    <span class="price">₱<span id="summary-handling">0.00</span></span>
+                    <span class="price">₱<span id="summary-handling"><?= number_format($handling, 2) ?></span></span>
                 </div>
 
                 <div class="summary-row total">
                     <span>Total:</span>
-                    <span class="price">₱<span id="summary-total">0.00</span></span>
+                    <span class="price">₱<span id="summary-total"><?= number_format($total, 2) ?></span></span>
                 </div>
 
             </div>
 
-            <!-- Upload form: posts to ShopCon::ewallet_submit -->
-            <form id="ewalletForm" action="<?php echo site_url('complete'); ?>" method="post"
+            <!-- Upload form: posts to ShopCon::submit_ewallet_payment -->
+            <form id="ewalletForm" action="<?php echo site_url('shopcon/submit_ewallet_payment'); ?>" method="post"
                 enctype="multipart/form-data">
                 <?php if ($this->config->item('csrf_protection')): ?>
                     <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>"
@@ -95,8 +112,8 @@
                 <div class="terms">
                     <input type="checkbox" id="terms">
                     <label for="terms">
-                        I have read and agree to Glassify’s
-                        <a href="<?php echo site_url('shopcon/terms_order'); ?>">Terms and Conditions of Purchase</a>
+                        I have read and agree to Glassify's
+                        <a href="<?php echo site_url('terms_order'); ?>">Terms and Conditions of Purchase</a>
                     </label>
                 </div>
             </form>
@@ -128,7 +145,12 @@
             return;
         }
 
-        // Optionally show a loading state here
+        // Disable button and show loading state
+        const btn = document.querySelector('.payment-btn');
+        btn.disabled = true;
+        btn.textContent = 'Processing...';
+
+        // Submit the form
         document.getElementById('ewalletForm').submit();
     }
 </script>

@@ -95,7 +95,25 @@ $route['payment'] = 'ShopCon/checkout';
 $route['paying'] = 'ShopCon/ewallet';
 $route['complete'] = 'ShopCon/complete';
 $route['terms_order'] = 'ShopCon/terms_order';
-$route['wishlist'] = 'ShopCon/wishlist';
+
+/* 
+|----------------------------------------------------------------------
+| WISHLIST ROUTES (Added December 2025)
+|----------------------------------------------------------------------
+| Handles wishlist functionality for saving products for later purchase.
+| - Main page: /wishlist
+| - AJAX endpoints for add, remove, clear, move-to-cart operations
+|----------------------------------------------------------------------
+*/
+$route['wishlist'] = 'WishlistCon/index';                        // Display wishlist page
+$route['wishlist/add/(:num)'] = 'WishlistCon/add/$1';           // Add simple product (redirect)
+$route['wishlist/add-ajax'] = 'WishlistCon/add_ajax';           // Add with customization (AJAX)
+$route['wishlist/remove-ajax'] = 'WishlistCon/remove_ajax';     // Remove single item (AJAX)
+$route['wishlist/clear-ajax'] = 'WishlistCon/clear_ajax';       // Clear all items (AJAX)
+$route['wishlist/move-to-cart'] = 'WishlistCon/move_to_cart_ajax'; // Move to cart (AJAX)
+$route['wishlist/count'] = 'WishlistCon/get_count_ajax';        // Get count for header badge
+$route['wishlist/check'] = 'WishlistCon/check_ajax';            // Check if product in wishlist
+
 $route['track_order'] = 'ShopCon/order_tracking';
 $route['waiting_order'] = 'ShopCon/waiting_order';
 $route['cartsave'] = 'AddtoCartCon/save';

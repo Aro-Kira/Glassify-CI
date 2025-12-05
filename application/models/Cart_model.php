@@ -55,7 +55,7 @@ public function get_cart_items($customer_id)
     // ===================== ADD TO CART =====================
     public function add_to_cart($data)
     {
-        // Check if product already in cart
+        // Check if product already in cart with same customization
         $this->db->where('Customer_ID', $data['Customer_ID']);
         $this->db->where('Product_ID', $data['Product_ID']);
         $this->db->where('CustomizationID', $data['CustomizationID']);
@@ -66,10 +66,11 @@ public function get_cart_items($customer_id)
             $row = $query->row();
             $this->db->where('Cart_ID', $row->Cart_ID);
             $this->db->update('cart', ['Quantity' => $row->Quantity + $data['Quantity']]);
+            return $row->Cart_ID;
         } else {
             $this->db->insert('cart', $data);
+            return $this->db->insert_id();
         }
-        return true;
     }
 
     // ===================== REMOVE ITEM =====================

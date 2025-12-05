@@ -31,9 +31,21 @@
 
                     <label for="address">Address</label>
                     <div class="input-group">
-                        <input type="text" id="address" name="address" readonly
-                            value="<?= isset($addresses['Shipping']) ? $addresses['Shipping']->AddressLine : '' ?>"
+                        <input type="text" id="address-display" readonly
+                            value="<?php 
+                                if (isset($addresses['Shipping']) && $addresses['Shipping']->AddressLine) {
+                                    $parts = array_filter([
+                                        $addresses['Shipping']->AddressLine,
+                                        $addresses['Shipping']->City,
+                                        $addresses['Shipping']->Province,
+                                        $addresses['Shipping']->Country,
+                                        $addresses['Shipping']->ZipCode
+                                    ]);
+                                    echo htmlspecialchars(implode(', ', $parts));
+                                }
+                            ?>"
                             placeholder="Select an address">
+                        <input type="hidden" id="address" name="address" value="<?= isset($addresses['Shipping']) ? $addresses['Shipping']->AddressLine : '' ?>">
                         <button type="button" id="chooseAddressBtn" title="Select address">
                             <!-- Location Pin Icon SVG -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
@@ -43,6 +55,11 @@
                             </svg>
                         </button>
                     </div>
+                    <!-- Hidden fields for individual address components -->
+                    <input type="hidden" id="city" name="city" value="<?= isset($addresses['Shipping']) ? $addresses['Shipping']->City : '' ?>">
+                    <input type="hidden" id="province" name="province" value="<?= isset($addresses['Shipping']) ? $addresses['Shipping']->Province : '' ?>">
+                    <input type="hidden" id="country" name="country" value="<?= isset($addresses['Shipping']) ? $addresses['Shipping']->Country : '' ?>">
+                    <input type="hidden" id="zipcode" name="zipcode" value="<?= isset($addresses['Shipping']) ? $addresses['Shipping']->ZipCode : '' ?>">
 
 
 
@@ -114,7 +131,11 @@
                                             <td><?= htmlspecialchars($addr->ZipCode ?? '') ?></td>
                                             <td>
                                                 <button class="btn-select select-address"
-                                                    data-address="<?= htmlspecialchars(($addr->AddressLine ?? '') . ', ' . ($addr->City ?? '') . ', ' . ($addr->Province ?? '') . ', ' . ($addr->Country ?? '') . ', ' . ($addr->ZipCode ?? '')) ?>">
+                                                    data-addressline="<?= htmlspecialchars($addr->AddressLine ?? '') ?>"
+                                                    data-city="<?= htmlspecialchars($addr->City ?? '') ?>"
+                                                    data-province="<?= htmlspecialchars($addr->Province ?? '') ?>"
+                                                    data-country="<?= htmlspecialchars($addr->Country ?? '') ?>"
+                                                    data-zipcode="<?= htmlspecialchars($addr->ZipCode ?? '') ?>">
                                                     Select
                                                 </button>
                                             </td>
@@ -253,7 +274,11 @@
                             <td>${a.ZipCode}</td>
                             <td>
                                 <button class="btn-select select-address"
-                                    data-address="${a.AddressLine}, ${a.City}, ${a.Province}, ${a.Country}, ${a.ZipCode}">
+                                    data-addressline="${a.AddressLine}"
+                                    data-city="${a.City}"
+                                    data-province="${a.Province}"
+                                    data-country="${a.Country}"
+                                    data-zipcode="${a.ZipCode}">
                                     Select
                                 </button>
                             </td>
@@ -266,15 +291,47 @@
 
             // ========= SELECT ADDRESS =========
             $(document).on("click", ".select-address", function () {
-                $("#address").val($(this).data("address"));
-                modal.hide();
+                const btn = $(this);
+                const addressLine = btn.data("addressline") || '';
+                const city = btn.data("city") || '';
+                const province = btn.data("province") || '';
+                const country = btn.data("country") || '';
+                const zipcode = btn.data("zipcode") || '';
+                
+                // Build full address for display
+                const fullAddress = [addressLine, city, province, country, zipcode].filter(Boolean).join(', ');
+                
+                // Set visible display field (full address)
+                $("#address-display").val(fullAddress);
+                
+                // Set hidden address field (just AddressLine for form submission)
+                $("#address").val(addressLine);
+                
+                // Set hidden fields for individual components
+                $("#city").val(city);
+                $("#province").val(province);
+                $("#country").val(country);
+                $("#zipcode").val(zipcode);
+                
+                // Trigger change event for save button
+                $("#address-display").trigger("change");
+                
+                modal.removeClass("show").fadeOut(200);
             });
 
             // ========= ADD NEW ADDRESS (AJAX + AUTO REFRESH) =========
             $("#newAddressForm").submit(function (e) {
                 e.preventDefault();
 
+                const form = $(this);
                 const fd = new FormData(this);
+                
+                // Get individual field values before form reset
+                const addressLine = form.find("input[name='AddressLine']").val() || '';
+                const city = form.find("input[name='City']").val() || '';
+                const province = form.find("input[name='Province']").val() || '';
+                const country = form.find("input[name='Country']").val() || '';
+                const zipcode = form.find("input[name='ZipCode']").val() || '';
 
                 fetch("<?= base_url('UserCon/add_address') ?>", {
                     method: "POST",
@@ -283,7 +340,24 @@
                     .then(res => res.json())
                     .then(data => {
                         if (data.success) {
-                            $("#address").val(data.full_address);
+                            // Build full address for display
+                            const fullAddress = [addressLine, city, province, country, zipcode].filter(Boolean).join(', ');
+                            
+                            // Set visible display field (full address)
+                            $("#address-display").val(fullAddress);
+                            
+                            // Set hidden address field (just AddressLine)
+                            $("#address").val(addressLine);
+                            
+                            // Set hidden fields for individual components
+                            $("#city").val(city);
+                            $("#province").val(province);
+                            $("#country").val(country);
+                            $("#zipcode").val(zipcode);
+                            
+                            // Trigger change event for save button
+                            $("#address-display").trigger("change");
+                            
                             this.reset();
                             loadAddresses(); // refresh list
                         } else {
@@ -296,6 +370,7 @@
             const saveBtn = $("#saveBtn");
             const accountForm = $("#accountForm");
             const originalValues = {};
+            let originalDisplayAddress = $("#address-display").val();
 
             accountForm.find("input").each(function () {
                 originalValues[$(this).attr("name")] = $(this).val();
@@ -316,12 +391,14 @@
                 saveBtn.prop("disabled", !checkFormChanged());
             });
 
-            $("#address").on("input change", function () {
-                saveBtn.prop("disabled", checkFormChanged());
+            $("#address-display").on("input change", function () {
+                saveBtn.prop("disabled", !checkFormChanged());
             });
 
             $(".btn-cancel").click(function () {
                 accountForm[0].reset();
+                // Also restore the display address field
+                $("#address-display").val(originalDisplayAddress);
                 saveBtn.prop("disabled", true);
             });
 
@@ -343,6 +420,8 @@
                             accountForm.find("input").each(function () {
                                 originalValues[$(this).attr("name")] = $(this).val();
                             });
+                            // Update original display address value
+                            originalDisplayAddress = $("#address-display").val();
                         } else {
                             alert(res.message || "Failed to update profile.");
                         }

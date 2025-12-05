@@ -52,9 +52,6 @@ class CartCon extends CI_Controller
         // 2️⃣ Get POST data
         $post = $this->input->post();
 
-        // Optional: log POST data for debugging
-        file_put_contents('debug.log', "POST DATA:\n" . print_r($post, true), FILE_APPEND);
-
         // 3️⃣ Prepare customization data
         $custom_data = [
             'Customer_ID' => $customer_id,
@@ -87,9 +84,6 @@ class CartCon extends CI_Controller
             'Quantity' => $post['quantity'] ?? 1
         ];
 
-        // Optional: log cart data for debugging
-        file_put_contents('debug.log', "CART DATA:\n" . print_r($cart_data, true), FILE_APPEND);
-
         // 6️⃣ Add to cart
         $this->Cart_model->add_to_cart($cart_data);
 
@@ -100,15 +94,21 @@ class CartCon extends CI_Controller
 
     public function add_customized_ajax()
     {
-        $customer_id = $this->session->userdata('customer_id'); // use customer_id consistently
+        $customer_id = $this->session->userdata('customer_id');
         if (!$customer_id) {
             echo json_encode(['status' => 'error', 'message' => 'User not logged in']);
             return;
         }
 
         $post = $this->input->post();
+        $design_ref = null;
 
-        // 1️⃣ Prepare customization data
+        // 1️⃣ Handle design image upload (base64 to file)
+        if (!empty($post['design_image'])) {
+            $design_ref = $this->save_design_image($post['design_image'], $customer_id);
+        }
+
+        // 2️⃣ Prepare customization data
         $custom_data = [
             'Customer_ID' => $customer_id,
             'Product_ID' => $post['product_id'] ?? null,
@@ -119,11 +119,12 @@ class CartCon extends CI_Controller
             'EdgeWork' => $post['edge'] ?? null,
             'FrameType' => $post['frame'] ?? null,
             'Engraving' => $post['engraving'] ?? null,
-            'DesignRef' => $post['design_ref'] ?? null,
-            'EstimatePrice' => $post['price'] ?? 0
+            'DesignRef' => $design_ref,
+            'EstimatePrice' => $this->clean_price($post['price'] ?? 0),
+            'PriceBreakdown' => $post['price_breakdown'] ?? null
         ];
 
-        // 2️⃣ Save customization
+        // 3️⃣ Save customization
         $this->load->model('Cart_model');
         $customization_id = $this->Cart_model->save_customization($custom_data);
 
@@ -132,7 +133,7 @@ class CartCon extends CI_Controller
             return;
         }
 
-        // 3️⃣ Add to cart
+        // 4️⃣ Add to cart
         $cart_data = [
             'Customer_ID' => $customer_id,
             'Product_ID' => $post['product_id'] ?? null,
@@ -140,9 +141,9 @@ class CartCon extends CI_Controller
             'Quantity' => $post['quantity'] ?? 1
         ];
 
-        $this->Cart_model->add_to_cart($cart_data);
+        $cart_id = $this->Cart_model->add_to_cart($cart_data);
 
-        // 4️⃣ Return updated cart info
+        // 5️⃣ Return updated cart info
         $cart_items = $this->Cart_model->get_cart_items($customer_id);
         $cart_count = count($cart_items);
 
@@ -150,8 +151,74 @@ class CartCon extends CI_Controller
             'status' => 'success',
             'message' => 'Customized item added to cart',
             'customization_id' => $customization_id,
-            'cart_count' => $cart_count
+            'cart_id' => $cart_id,
+            'cart_count' => $cart_count,
+            'design_ref' => $design_ref
         ]);
+    }
+
+    /**
+     * Save base64 design image to file
+     * Preserves the original image format (png, jpeg, gif, webp) from the data URL
+     */
+    private function save_design_image($base64_data, $customer_id)
+    {
+        // Create designs directory if it doesn't exist
+        $upload_dir = FCPATH . 'uploads/designs/';
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0755, true);
+        }
+
+        // Extract image format from data URL (default to png if not found)
+        $extension = 'png';
+        if (preg_match('/^data:image\/(\w+);base64,/', $base64_data, $matches)) {
+            $format = strtolower($matches[1]);
+            // Map common formats to file extensions
+            $format_map = [
+                'jpeg' => 'jpg',
+                'jpg' => 'jpg',
+                'png' => 'png',
+                'gif' => 'gif',
+                'webp' => 'webp',
+                'svg+xml' => 'svg'
+            ];
+            $extension = isset($format_map[$format]) ? $format_map[$format] : 'png';
+        }
+
+        // Remove data URL prefix if present
+        if (strpos($base64_data, 'data:image') === 0) {
+            $base64_data = preg_replace('/^data:image\/[\w+]+;base64,/', '', $base64_data);
+        }
+
+        // Decode base64 data
+        $image_data = base64_decode($base64_data);
+        if ($image_data === false) {
+            return null;
+        }
+
+        // Generate unique filename with correct extension
+        $filename = 'design_' . $customer_id . '_' . time() . '_' . uniqid() . '.' . $extension;
+        $filepath = $upload_dir . $filename;
+
+        // Save image file
+        if (file_put_contents($filepath, $image_data)) {
+            return 'uploads/designs/' . $filename;
+        }
+
+        return null;
+    }
+
+    /**
+     * Clean price string to decimal
+     */
+    private function clean_price($price)
+    {
+        if (is_numeric($price)) {
+            return floatval($price);
+        }
+        // Remove currency symbols and commas
+        $cleaned = preg_replace('/[^0-9.]/', '', $price);
+        return floatval($cleaned);
     }
 
 
@@ -168,9 +235,28 @@ class CartCon extends CI_Controller
         }
 
         $cart_items = $this->Cart_model->get_cart_items($customer_id);
+        
+        // Fetch user data for quotation (customer table only has Customer_ID and UserID,
+        // but we need First_Name, Email, PhoneNum, Address from the user table)
+        $user_id = $this->session->userdata('user_id');
+        $this->load->model('User_model');
+        $customer = $this->User_model->get_by_id($user_id);
+        
+        // Fallback if user not found
+        if (!$customer) {
+            $customer = (object)[
+                'First_Name' => '',
+                'Middle_Name' => '',
+                'Last_Name' => '',
+                'Email' => '',
+                'PhoneNum' => '',
+                'Address' => ''
+            ];
+        }
 
         $data['title'] = "Glassify - MY CART";
         $data['cart_items'] = $cart_items;
+        $data['customer'] = $customer;
         $data['summary'] = $this->calculate_summary($cart_items);
 
         $this->load->view('includes/header', $data);
@@ -266,7 +352,7 @@ class CartCon extends CI_Controller
     // 3. Remove customization if exists
     if (!empty($cart_item->CustomizationID)) {
         $this->load->model('Customization_model');
-        $this->Customization_model->delete_customization($cart_item->CustomizationID);
+        $this->Customization_model->delete($cart_item->CustomizationID);
     }
 
     // 4. Refresh updated cart list
@@ -342,16 +428,106 @@ class CartCon extends CI_Controller
         $items = [];
         foreach ($cart_items as $item) {
             $price = $item->Price ?? 0;
+            
+            // Build customization details string
+            $customization = '';
+            if (!empty($item->CustomizationID)) {
+                $details = [];
+                if (!empty($item->Dimensions)) $details[] = "Size: {$item->Dimensions}";
+                if (!empty($item->GlassShape)) $details[] = "Shape: " . ucfirst($item->GlassShape);
+                if (!empty($item->GlassType)) $details[] = "Type: " . ucfirst($item->GlassType);
+                if (!empty($item->GlassThickness)) $details[] = "Thickness: {$item->GlassThickness}";
+                if (!empty($item->EdgeWork)) $details[] = "Edge: " . ucfirst(str_replace('-', ' ', $item->EdgeWork));
+                if (!empty($item->FrameType)) $details[] = "Frame: " . ucfirst($item->FrameType);
+                $customization = implode(' | ', $details);
+            }
+            
             $items[] = [
+                'cart_id' => $item->Cart_ID,
                 'description' => $item->ProductName,
                 'quantity' => $item->Quantity,
                 'unit_price' => $price,
-                'total' => $price * $item->Quantity
+                'total' => $price * $item->Quantity,
+                'customization' => $customization,
+                'image' => !empty($item->ImageUrl) ? base_url('uploads/products/' . $item->ImageUrl) : null,
+                'design_ref' => !empty($item->DesignRef) ? base_url($item->DesignRef) : null,
+                'has_design' => !empty($item->DesignRef)
             ];
         }
 
         echo json_encode(['status' => 'success', 'items' => $items, 'summary' => $summary]);
 
+    }
+
+    // ===================== GET SELECTED CART ITEMS =====================
+    public function get_selected_cart_ajax()
+    {
+        $customer_id = $this->session->userdata('customer_id');
+
+        if (!$customer_id) {
+            echo json_encode(['status' => 'error', 'message' => 'Not logged in']);
+            return;
+        }
+
+        // Get selected cart IDs from POST or GET
+        $selected_ids = $this->input->get('selected');
+        if (empty($selected_ids)) {
+            $selected_ids = $this->input->post('selected');
+        }
+
+        // Convert comma-separated string to array
+        if (is_string($selected_ids)) {
+            $selected_ids = array_filter(array_map('intval', explode(',', $selected_ids)));
+        }
+
+        // Get all cart items
+        $cart_items = $this->Cart_model->get_cart_items($customer_id);
+
+        // Filter to only selected items if IDs provided
+        if (!empty($selected_ids)) {
+            $cart_items = array_filter($cart_items, function($item) use ($selected_ids) {
+                return in_array($item->Cart_ID, $selected_ids);
+            });
+        }
+
+        $summary = $this->calculate_summary($cart_items);
+
+        $items = [];
+        foreach ($cart_items as $item) {
+            $price = $item->Price ?? 0;
+            
+            // Build customization details string
+            $customization = '';
+            if (!empty($item->CustomizationID)) {
+                $details = [];
+                if (!empty($item->Dimensions)) $details[] = "Size: {$item->Dimensions}";
+                if (!empty($item->GlassShape)) $details[] = "Shape: " . ucfirst($item->GlassShape);
+                if (!empty($item->GlassType)) $details[] = "Type: " . ucfirst($item->GlassType);
+                if (!empty($item->GlassThickness)) $details[] = "Thickness: {$item->GlassThickness}";
+                if (!empty($item->EdgeWork)) $details[] = "Edge: " . ucfirst(str_replace('-', ' ', $item->EdgeWork));
+                if (!empty($item->FrameType)) $details[] = "Frame: " . ucfirst($item->FrameType);
+                $customization = implode(' | ', $details);
+            }
+            
+            $items[] = [
+                'cart_id' => $item->Cart_ID,
+                'description' => $item->ProductName,
+                'quantity' => $item->Quantity,
+                'unit_price' => $price,
+                'total' => $price * $item->Quantity,
+                'customization' => $customization,
+                'image' => !empty($item->ImageUrl) ? base_url('uploads/products/' . $item->ImageUrl) : null,
+                'design_ref' => !empty($item->DesignRef) ? base_url($item->DesignRef) : null,
+                'has_design' => !empty($item->DesignRef)
+            ];
+        }
+
+        echo json_encode([
+            'status' => 'success', 
+            'items' => $items, 
+            'summary' => $summary,
+            'selected_ids' => $selected_ids
+        ]);
     }
 
     // ===================== HELPER =====================
