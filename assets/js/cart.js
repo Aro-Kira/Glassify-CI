@@ -316,10 +316,10 @@ $(document).on('change', '.qty-input', function () {
     }
 
     $('#openModal').click(function () {
-        // Get selected cart IDs
+        // Get selected cart IDs - convert to integers for consistent comparison
         const selectedIds = [];
         $('.item-checkbox:checked').each(function() {
-            selectedIds.push($(this).data('id'));
+            selectedIds.push(parseInt($(this).data('id')));
         });
 
         if (selectedIds.length === 0) {
@@ -343,8 +343,8 @@ $(document).on('change', '.qty-input', function () {
 
                 // Only show selected items
                 res.items.forEach((item, index) => {
-                    // Check if this item is selected
-                    if (!selectedIds.includes(item.cart_id)) {
+                    // Check if this item is selected - convert cart_id to int for comparison
+                    if (!selectedIds.includes(parseInt(item.cart_id))) {
                         return; // Skip unselected items
                     }
 

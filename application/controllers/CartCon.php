@@ -252,6 +252,39 @@ class CartCon extends CI_Controller
                 'PhoneNum' => '',
                 'Address' => ''
             ];
+        } else {
+            // Fetch address from user_address table (get Shipping address by default)
+            $addresses = $this->User_model->get_user_addresses($user_id);
+            $full_address = '';
+            
+            if (!empty($addresses)) {
+                // Find shipping address first, fallback to any address
+                $addr = null;
+                foreach ($addresses as $a) {
+                    if ($a->AddressType === 'Shipping') {
+                        $addr = $a;
+                        break;
+                    }
+                }
+                // If no shipping address, use first available
+                if (!$addr && count($addresses) > 0) {
+                    $addr = $addresses[0];
+                }
+                
+                if ($addr) {
+                    $address_parts = array_filter([
+                        $addr->AddressLine ?? '',
+                        $addr->City ?? '',
+                        $addr->Province ?? '',
+                        $addr->Country ?? '',
+                        $addr->ZipCode ?? ''
+                    ]);
+                    $full_address = implode(', ', $address_parts);
+                }
+            }
+            
+            // Add the formatted address to the customer object
+            $customer->Address = $full_address;
         }
 
         $data['title'] = "Glassify - MY CART";
